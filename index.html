@@ -564,7 +564,7 @@ function userMenu(){
   <button role="menuitem" data-act="signout">${ic('logout')}<span><b>Sign out</b></span></button></div>`;
 }
 function protoBar(){
- const R=[['brand','Maya'],['smm','Priya'],['creator','Jules']];const cur=S.auth==='out'?S.pick:S.role;
+ const R=[['brand','Brand marketer'],['smm','Social manager'],['creator','Creator']];const cur=S.auth==='out'?S.pick:S.role;
  return `<div class="proto" role="region" aria-label="Prototype controls"><span class="ptag">Prototype</span><span class="plab">View as</span>
   <span class="pseg" role="radiogroup" aria-label="Role">${R.map(r=>`<button role="radio" aria-checked="${cur===r[0]}" class="${cur===r[0]?'on':''}" data-role="${r[0]}">${r[1]}</button>`).join('')}</span>
   <button class="prp" data-act="signout" ${S.auth==='out'?'disabled':''}>${ic('refresh',14)}<span>Replay sign-in</span></button></div>`;
@@ -1245,7 +1245,7 @@ document.addEventListener('click',e=>{
  if(ds.role){const v=ds.role;if(S.auth==='out'){S.pick=v;overlay();return}
   S.role=v;S.pick=v;S.filter='all';S.prof=null;S.camp=null;S.conv=null;S.ai=[];S.ideas=[];S.drawer=null;S.menu=null;
   if(S.view!=='hub'&&S.view!=='settings'&&!ROLES[v].order.includes(S.view)&&!ROLES[v].more.includes(S.view))S.view='hub';
-  render();toast('Viewing as '+ROLES[v].name);return}
+  render();toast('Viewing as '+{brand:'brand marketer',smm:'social manager',creator:'creator'}[v]);return}
  if(ds.pick){S.pick=ds.pick;overlay();const b=document.querySelector(`[data-pick="${ds.pick}"]`);b&&b.focus();return}
 
  const a=ds.act;if(!a)return;
