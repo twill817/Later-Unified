@@ -293,6 +293,31 @@ textarea.inp{min-height:110px;resize:vertical;line-height:1.5}
 .stbar i{display:block;height:100%}
 .range{width:100%;accent-color:var(--accent);margin-top:4px}
 
+/* user widget + prototype controls */
+.userbtn{display:flex;align-items:center;gap:10px;border:0;background:none;border-radius:10px;padding:4px 8px 4px 4px;text-align:left}
+.userbtn:hover{background:var(--sunk)}
+.userbtn .ut b{display:block;font-size:13.5px;line-height:1.25}.userbtn .ut small{display:block;font-size:12px;color:var(--ink2);line-height:1.25}
+.userbtn .svg{color:var(--ink3);transform:rotate(90deg)}
+.ava.lg{width:40px;height:40px;font-size:14px}
+.umenu{min-width:280px}
+.uh{display:flex;gap:12px;align-items:center;padding:10px 10px 12px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.uh b{display:block}.uh small{display:block;font-size:12px;color:var(--ink2)}
+.proto{position:fixed;left:calc(16px + env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:center;gap:10px;flex-wrap:wrap;max-width:calc(100% - 32px - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px));background:#1C1B22;color:#F2F1F5;border:1px dashed #6E6A82;border-radius:12px;padding:7px 8px 7px 10px;font-size:12.5px;box-shadow:0 10px 28px rgba(0,0,0,.28)}
+.ptag{background:#FFC95C;color:#2B1D00;font-weight:700;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;border-radius:5px;padding:2px 7px}
+.plab{color:#9B98A8}
+.pseg{display:inline-flex;background:#2C2B35;border-radius:8px;padding:2px}
+.pseg button{border:0;background:none;color:#C9C6D3;padding:5px 11px;border-radius:6px;font-weight:600;font-size:12.5px}
+.pseg button:hover{color:#FFFFFF}
+.pseg button.on{background:#F2F1F5;color:#121214}
+.prp{border:0;background:none;color:#C9C6D3;font-weight:600;font-size:12.5px;display:inline-flex;gap:6px;align-items:center;padding:5px 6px;border-radius:6px}
+.prp:hover{color:#FFFFFF;background:#2C2B35}
+.prp:disabled{opacity:.4;cursor:default;background:none}
+.proto .svg{width:14px;height:14px}
+.toast{bottom:calc(76px + env(safe-area-inset-bottom,0px))!important}
+body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+.rail{height:calc(100vh - 32px - 68px - env(safe-area-inset-bottom,0px))}
+.searchbtn span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+@media (max-width:860px){.userbtn .ut{display:none}.plab,.prp span{display:none}}
 /* sign in */
 .app.locked{filter:blur(18px) saturate(.7);pointer-events:none;user-select:none}
 .app.blank .main *{color:transparent!important;border-color:transparent}
@@ -341,6 +366,7 @@ textarea.inp{min-height:110px;resize:vertical;line-height:1.5}
 
 <div class="app" id="app"></div>
 <div id="ov"></div>
+<div id="proto"></div>
 
 <script>
 (function(){
@@ -369,6 +395,7 @@ copy:"M8 8h12v12H8zM4 16V4h12",
 chevl:"M15 6l-6 6 6 6",chevr:"M9 6l6 6-6 6",
 send:"M4 12l16-8-6 16-3-7z",
 logout:"M9 4H5v16h4M14 8l4 4-4 4M18 12H9",
+refresh:"M20 11a8 8 0 1 0-2.3 5.6M20 4v7h-7",
 };
 (()=>{const k=[
  "<circle cx='12' cy='12' r='9'/><path d='M15 9.2c-.6-1-1.7-1.5-3-1.5-1.7 0-3 .9-3 2.1s1.3 1.8 3 2.1 3 .9 3 2.1-1.3 2.1-3 2.1c-1.4 0-2.5-.5-3-1.5M12 6v12'/>",
@@ -521,17 +548,26 @@ function rail(){
 function top(){
  const r=ROLES[S.role];
  return `<div class="top">
-  <div class="who f-${S.role==='creator'?'crt':S.role==='brand'?'crt':'pub'}"><span class="ava">${r.ini}</span>
-   <select id="role" aria-label="Switch role">
-    <option value="smm" ${S.role==='smm'?'selected':''}>Priya · Social media manager</option>
-    <option value="brand" ${S.role==='brand'?'selected':''}>Maya · Influencer marketing lead</option>
-    <option value="creator" ${S.role==='creator'?'selected':''}>Jules · Creator</option>
-   </select></div>
   <button class="searchbtn" data-act="palette">${ic('search',16)}<span>Search posts, creators, links, spokes</span><kbd>⌘K</kbd></button>
   <button class="iconbtn" data-act="notif" aria-label="Notifications">${ic('bell')}<span class="dot"></span></button>
-  <button class="iconbtn" data-act="signout" aria-label="Sign out" title="Sign out">${ic('logout')}</button>
   <div class="rel"><button class="btn pri" data-act="create">${ic('plus',16)}Create</button>${S.menu==='create'?createMenu():''}</div>
+  <div class="rel"><button class="userbtn" data-act="user" aria-haspopup="menu" aria-expanded="${S.menu==='user'}"><span class="ava">${r.ini}</span><span class="ut"><b>${r.name}</b><small>${r.title.split(' ·')[0]}</small></span>${ic('chevr',14)}</button>${S.menu==='user'?userMenu():''}</div>
  </div>`;
+}
+const EMAIL={brand:'maya@fernway.example',smm:'priya@fernway.example',creator:'jules@julesoutside.example'};
+function userMenu(){
+ const r=ROLES[S.role];
+ return `<div class="menu umenu" role="menu"><div class="uh"><span class="ava lg">${r.ini}</span><span style="min-width:0"><b>${r.name}</b><small>${EMAIL[S.role]}</small><small>${r.ws} · ${r.plan}</small></span></div>
+  <button role="menuitem" data-go="settings">${ic('settings')}<span><b>Workspace settings</b><small>Profiles, people, AI credits, plan</small></span></button>
+  <button role="menuitem" data-act="notyet">${ic('home')}<span><b>Switch workspace</b><small>${S.role==='creator'?'1 workspace':'Fernway Outdoor, Fernway Kids'}</small></span></button>
+  <button role="menuitem" data-act="helpctr">${ic('spark')}<span><b>Help center</b><small>Guides and support</small></span></button>
+  <button role="menuitem" data-act="signout">${ic('logout')}<span><b>Sign out</b></span></button></div>`;
+}
+function protoBar(){
+ const R=[['brand','Maya'],['smm','Priya'],['creator','Jules']];const cur=S.auth==='out'?S.pick:S.role;
+ return `<div class="proto" role="region" aria-label="Prototype controls"><span class="ptag">Prototype</span><span class="plab">View as</span>
+  <span class="pseg" role="radiogroup" aria-label="Role">${R.map(r=>`<button role="radio" aria-checked="${cur===r[0]}" class="${cur===r[0]?'on':''}" data-role="${r[0]}">${r[1]}</button>`).join('')}</span>
+  <button class="prp" data-act="signout" ${S.auth==='out'?'disabled':''}>${ic('refresh',14)}<span>Replay sign-in</span></button></div>`;
 }
 function createMenu(){
  const items={smm:[['post','Post','Schedule to any connected profile'],['block','Link in bio block','Add a banner, product or form'],['report','Report','Share analytics with a link']],
@@ -1100,6 +1136,7 @@ function loginCard(){
 }
 function overlay(){
  let h='';
+ drawProto();
  if(S.auth==='out'){ov.innerHTML=loginCard();return}
  if(S.drawer||S.palette||S.aiOpen||S.prof)h+=`<div class="scrim" data-act="close"></div>`;
  if(S.drawer)h+=composer(S.drawer);
@@ -1154,7 +1191,8 @@ function signIn(){
 }
 let tt;
 function toast(m){S.toast=m;overlay();clearTimeout(tt);tt=setTimeout(()=>{S.toast=null;overlay()},2400)}
-function render(){app.className='app'+(S.auth==='out'?' locked blank':'');if(S.auth==='out')app.setAttribute('aria-hidden','true');else app.removeAttribute('aria-hidden');app.innerHTML=rail()+`<div class="main">${top()}<main id="view">${VIEWS[S.view]()}</main></div><button class="help" data-act="ai">${ic('spark',18)}<span>Ask EdgeAI</span></button>`;overlay()}
+function drawProto(){document.getElementById('proto').innerHTML=protoBar()}
+function render(){drawProto();app.className='app'+(S.auth==='out'?' locked blank':'');if(S.auth==='out')app.setAttribute('aria-hidden','true');else app.removeAttribute('aria-hidden');app.innerHTML=rail()+`<div class="main">${top()}<main id="view">${VIEWS[S.view]()}</main></div><button class="help" data-act="ai">${ic('spark',18)}<span>Ask EdgeAI</span></button>`;overlay()}
 function go(v){S.view=v;S.menu=null;S.drawer=null;try{history.replaceState(null,'','#'+v)}catch(e){}render();window.scrollTo({top:0})}
 function findPost(id){return POSTS[team()].find(p=>p.id===id)||POSTS.team.find(p=>p.id===id)}
 function openPost(id){const p=findPost(id);if(!p)return;S.view='plan';S.drawer={...p};render()}
@@ -1204,10 +1242,15 @@ document.addEventListener('click',e=>{
   if(n==='block'){go('linkinbio');return}
   if(n==='report'){go('analyze');toast('Report link copied');return}
  }
+ if(ds.role){const v=ds.role;if(S.auth==='out'){S.pick=v;overlay();return}
+  S.role=v;S.pick=v;S.filter='all';S.prof=null;S.camp=null;S.conv=null;S.ai=[];S.ideas=[];S.drawer=null;S.menu=null;
+  if(S.view!=='hub'&&S.view!=='settings'&&!ROLES[v].order.includes(S.view)&&!ROLES[v].more.includes(S.view))S.view='hub';
+  render();toast('Viewing as '+ROLES[v].name);return}
  if(ds.pick){S.pick=ds.pick;overlay();const b=document.querySelector(`[data-pick="${ds.pick}"]`);b&&b.focus();return}
+
  const a=ds.act;if(!a)return;
  if(a==='signin'){signIn();return}
- if(a==='signout'){S.auth='out';S.drawer=null;S.aiOpen=false;S.palette=false;S.menu=null;S.view='hub';render();return}
+ if(a==='signout'){S.pick=S.role;S.auth='out';S.drawer=null;S.aiOpen=false;S.palette=false;S.menu=null;S.view='hub';render();return}
  if(a==='close'){S.drawer=null;S.palette=false;S.aiOpen=false;S.prof=null;overlay();return}
  if(a==='mkcamp'){const n=S.nb;if(!n.prods.length){toast('Pick at least one product first');return}const id='c'+Date.now();
   CAMPS.splice(1,0,{id,n:n.name.trim()||'Untitled campaign',st:'draft',goal:{sales:'Drive sales',launch:'Launch a product',aware:'Build awareness'}[n.goal],dates:'Not scheduled',mode:'Self-run',budget:n.budget,spent:0,sales:0,roas:'—',cr:'Not started',nb:{...n,prods:[...n.prods],aud:[...n.aud]}});
@@ -1222,6 +1265,8 @@ document.addEventListener('click',e=>{
  if(a==='palette'){S.palette=true;overlay();return}
  if(a==='ai'){S.aiOpen=true;overlay();return}
  if(a==='create'){S.menu=S.menu==='create'?null:'create';render();return}
+ if(a==='user'){S.menu=S.menu==='user'?null:'user';render();return}
+ if(a==='helpctr'){S.menu=null;render();toast('Help center opens in a new tab in the real product');return}
  if(a==='notif'){go('hub');toast('Notifications live in Needs you now');return}
  if(a==='approve'){commit('scheduled','Approved and scheduled');return}
  if(a==='changes'){readComposer();(COMMENTS[S.drawer.id]=COMMENTS[S.drawer.id]||[]).push({w:ROLES[S.role].name,ini:ROLES[S.role].ini,t:'Requested changes',when:'Just now'});commit('changes','Changes requested. The author was notified.');return}
@@ -1252,7 +1297,7 @@ document.addEventListener('input',e=>{if(e.target.id==='pal')palList(e.target.va
  if(e.target.id==='nb-name')S.nb.name=e.target.value;
  if(e.target.id==='nb-b'){S.nb.budget=+e.target.value;document.getElementById('nb-bv').textContent=$m(S.nb.budget);document.getElementById('fc').innerHTML=forecast(S.nb)}});
 document.addEventListener('keydown',e=>{
- if(S.auth==='out'){if(e.key==='Enter'&&!e.target.closest('.acct')){e.preventDefault();signIn()}return}
+ if(S.auth==='out'){if(e.key==='Enter'&&!e.target.closest('.acct,.proto')){e.preventDefault();signIn()}return}
  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();S.palette=!S.palette;overlay();return}
  if(e.key==='Escape'&&(S.palette||S.drawer||S.aiOpen||S.menu||S.prof)){S.palette=false;S.drawer=null;S.aiOpen=false;S.menu=null;S.prof=null;render();return}
  if(S.palette&&e.target.id==='pal'){if(e.key==='ArrowDown'){palSel=Math.min(palRes.length-1,palSel+1);drawPal();e.preventDefault()}if(e.key==='ArrowUp'){palSel=Math.max(0,palSel-1);drawPal();e.preventDefault()}if(e.key==='Enter'&&palRes[palSel])palGo(palRes[palSel])}
