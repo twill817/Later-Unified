@@ -17,7 +17,7 @@
 
 1. **Brand influencer marketer.** Highest value; where Later's positioning now leads.
 2. **Creator.** Supply side of the marketplace; their sales data powers EdgeAI.
-3. **Social media manager.** Self-serve base and funnel. Agency and team leads are a scale and permission variant of this role, not a separate hub.
+3. **Social media manager.** Self-serve base and funnel. Agency and team leads are a scale and permission variant of this role, not a separate home screen.
 
 These roles form a loop: social posts and creator links generate the data behind brand campaign decisions, and brand campaigns become creator earning opportunities.
 
