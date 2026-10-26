@@ -71,7 +71,8 @@ p{margin:0}
 .concept{margin-top:auto;padding:14px 10px 8px;font-size:11.5px;color:var(--ink3);line-height:1.45}
 .wsw{display:flex;gap:10px;align-items:center;border-top:1px solid var(--line);padding:12px 6px 2px;width:100%;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left}
 .wsw .sq{width:40px;height:40px;border:1.5px solid var(--accent);color:var(--accent);display:grid;place-items:center;border-radius:4px;font-size:16px;flex:none}
-.wsw b{display:block;font-size:13.5px;font-weight:600}.wsw small{color:var(--ink2);font-size:12.5px}
+.wsw b{display:block;font-size:13.5px;font-weight:600}.wsw small{display:block;color:var(--ink2);font-size:12.5px}
+.wsw{border-radius:0}.wsw:hover b{color:var(--accent)}
 
 .main{min-width:0;display:flex;flex-direction:column;gap:20px}
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--panel);border-radius:12px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 12px}
@@ -354,7 +355,8 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 @media (max-width:860px){
   .app{grid-template-columns:1fr}
   .rail{position:static;height:auto;flex-direction:row;align-items:center;overflow-x:auto;padding:8px;gap:4px}
-  .rail .sect,.concept,.nav .badge,.wsw{display:none}
+  .rail .sect,.concept,.nav .badge,.wsw .wt,.wsw>.svg{display:none}
+  .wsw{width:auto;border:0;padding:0 4px;flex:none}
   .mark{padding:0 10px 0 6px}.mark b{font-size:22px}
   .nav{width:auto}
   .top{margin-top:0;border-radius:12px;position:static}
@@ -548,7 +550,7 @@ function rail(){
   ${r.more.map(id=>navBtn(id).replace('class="nav','class="nav dim')).join('')}
   <button class="nav ${S.view==='settings'?'on':''}" data-go="settings">${ic('settings')}<span>Workspace</span></button>
   <p class="concept">Unofficial concept prototype. Not affiliated with Later. All people, brands and figures are fictional.</p>
-  <button class="wsw" data-go="settings"><span class="sq">${S.role==='creator'?'JO':'FO'}</span><span style="flex:1;min-width:0"><b>${r.ws}</b><small>${S.role==='creator'?'4 social profiles':'9 social profiles'}</small></span>${ic('chevr',16)}</button>
+  <button class="wsw" id="user-btn" data-act="user" aria-haspopup="menu" aria-expanded="${S.menu==='user'}"><span class="ava lg">${r.ini}</span><span class="wt" style="flex:1;min-width:0"><b>${r.name}</b><small>${r.ws}</small></span>${ic('chevr',16)}</button>
  </nav>`;
 }
 function top(){
@@ -556,7 +558,6 @@ function top(){
  return `<div class="top">
   <button class="searchbtn" data-act="palette">${ic('search',16)}<span>Search posts, creators, links, spokes</span><kbd>⌘K</kbd></button>
   <button class="iconbtn" data-act="notif" aria-label="Notifications">${ic('bell')}<span class="dot"></span></button>
-  <div class="rel"><button class="userbtn" data-act="user" aria-haspopup="menu" aria-expanded="${S.menu==='user'}"><span class="ava">${r.ini}</span><span class="ut"><b>${r.name}</b><small>${r.title.split(' ·')[0]}</small></span>${ic('chevr',14)}</button>${S.menu==='user'?userMenu():''}</div>
  </div>`;
 }
 const EMAIL={brand:'maya@fernway.example',smm:'priya@fernway.example',creator:'jules@julesoutside.example'};
@@ -1152,6 +1153,7 @@ function overlay(){
   <span class="eyebrow">Try asking</span>${AIQ[S.role].map((q,i)=>`<button class="ai-q" data-aiq="${i}">${q[0]}</button>`).join('')}</div></div>`;
  if(S.palette)h+=`<div class="palette" role="dialog" aria-label="Search"><input id="pal" placeholder="Search posts, creators, links, spokes" autocomplete="off"><div class="plist" id="plist"></div></div>`;
  if(S.menu==='create'&&S.mpos)h+=`<div class="rel fxm" style="left:${S.mpos.l}px;top:${S.mpos.t}px">${createMenu()}</div>`;
+ if(S.menu==='user'&&S.upos)h+=`<div class="rel fxm" style="left:${S.upos.l}px;${S.upos.up?`bottom:${S.upos.b}px`:`top:${S.upos.t}px`}">${userMenu()}</div>`;
  if(S.toast)h+=`<div class="toast" role="status">${ic('check',16)}${esc(S.toast)}</div>`;
  ov.innerHTML=h;
  if(S.palette){const i=document.getElementById('pal');i.focus();palList('')}
@@ -1271,7 +1273,7 @@ document.addEventListener('click',e=>{
  if(a==='palette'){S.palette=true;overlay();return}
  if(a==='ai'){S.aiOpen=true;overlay();return}
  if(a==='create'){if(S.menu==='create'){S.menu=null}else{const b=document.getElementById('create-btn').getBoundingClientRect();S.mpos={l:Math.max(16,Math.min(b.left,innerWidth-276)),t:b.bottom+6};S.menu='create'}render();return}
- if(a==='user'){S.menu=S.menu==='user'?null:'user';render();return}
+ if(a==='user'){if(S.menu==='user'){S.menu=null}else{const b=document.getElementById('user-btn').getBoundingClientRect();S.upos={l:Math.max(16,Math.min(b.left,innerWidth-296)),b:innerHeight-b.top+8,t:b.bottom+6,up:b.top>innerHeight/2};S.menu='user'}render();return}
  if(a==='helpctr'){S.menu=null;render();toast('Help center opens in a new tab in the real product');return}
  if(a==='notif'){go('hub');toast('Notifications live in Needs you now');return}
  if(a==='approve'){commit('scheduled','Approved and scheduled');return}

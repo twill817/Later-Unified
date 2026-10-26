@@ -22,7 +22,7 @@ Open `index.html` in a browser. It is a single self-contained file with no build
 
 A shared Workspace layer holds social sets, people and roles, AI credits, plan and integrations.
 
-**The roles.** Switch between three roles (Brand marketer, Social manager, Creator) with the "View as" control in the prototype bar at the bottom left. It sits outside the product UI on purpose; inside the app, the signed-in person appears in the user menu at the top right.
+**The roles.** Switch between three roles (Brand marketer, Social manager, Creator) with the "View as" control in the prototype bar at the bottom left. It sits outside the product UI on purpose; inside the app, the signed-in person appears at the bottom of the sidebar, with a menu for settings and sign-out.
 
 - **Maya**, influencer marketing lead at a brand
 - **Jules**, a creator in that brand's campaign
