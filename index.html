@@ -293,6 +293,11 @@ textarea.inp{min-height:110px;resize:vertical;line-height:1.5}
 .stbar i{display:block;height:100%}
 .range{width:100%;accent-color:var(--accent);margin-top:4px}
 
+/* create in sidebar */
+.railcreate{width:100%;justify-content:center;padding:10px 14px;margin:0 0 10px;font-size:14.5px}
+.fxm{position:fixed;z-index:35}
+.fxm .menu{position:static}
+@media (max-width:860px){.railcreate{width:auto;margin:0;flex:none}}
 /* user widget + prototype controls */
 .userbtn{display:flex;align-items:center;gap:10px;border:0;background:none;border-radius:10px;padding:4px 8px 4px 4px;text-align:left}
 .userbtn:hover{background:var(--sunk)}
@@ -535,6 +540,7 @@ function rail(){
  const r=ROLES[S.role];
  return `<nav class="rail" aria-label="Spokes">
   <div class="mark" aria-label="Later One"><b>Later</b><span class="one">One</span></div>
+  <button class="btn pri railcreate" id="create-btn" data-act="create" aria-haspopup="menu" aria-expanded="${S.menu==='create'}">${ic('plus',16)}Create</button>
   <button class="nav f-hub ${S.view==='hub'?'on':''}" data-go="hub">${ic('home')}<span>Home</span></button>
   <div class="sect eyebrow">Your spokes</div>
   ${r.order.map(navBtn).join('')}
@@ -550,7 +556,6 @@ function top(){
  return `<div class="top">
   <button class="searchbtn" data-act="palette">${ic('search',16)}<span>Search posts, creators, links, spokes</span><kbd>⌘K</kbd></button>
   <button class="iconbtn" data-act="notif" aria-label="Notifications">${ic('bell')}<span class="dot"></span></button>
-  <div class="rel"><button class="btn pri" data-act="create">${ic('plus',16)}Create</button>${S.menu==='create'?createMenu():''}</div>
   <div class="rel"><button class="userbtn" data-act="user" aria-haspopup="menu" aria-expanded="${S.menu==='user'}"><span class="ava">${r.ini}</span><span class="ut"><b>${r.name}</b><small>${r.title.split(' ·')[0]}</small></span>${ic('chevr',14)}</button>${S.menu==='user'?userMenu():''}</div>
  </div>`;
 }
@@ -1146,6 +1151,7 @@ function overlay(){
   ${S.ai.map(a=>`<div class="stack" style="gap:8px"><div class="msg me" style="max-width:100%">${a[0]}</div><div class="ai-a">${a[1]}</div></div>`).join('')}
   <span class="eyebrow">Try asking</span>${AIQ[S.role].map((q,i)=>`<button class="ai-q" data-aiq="${i}">${q[0]}</button>`).join('')}</div></div>`;
  if(S.palette)h+=`<div class="palette" role="dialog" aria-label="Search"><input id="pal" placeholder="Search posts, creators, links, spokes" autocomplete="off"><div class="plist" id="plist"></div></div>`;
+ if(S.menu==='create'&&S.mpos)h+=`<div class="rel fxm" style="left:${S.mpos.l}px;top:${S.mpos.t}px">${createMenu()}</div>`;
  if(S.toast)h+=`<div class="toast" role="status">${ic('check',16)}${esc(S.toast)}</div>`;
  ov.innerHTML=h;
  if(S.palette){const i=document.getElementById('pal');i.focus();palList('')}
@@ -1264,7 +1270,7 @@ document.addEventListener('click',e=>{
  if(a==='sharebrief'){toast('Shareable campaign report link created');return}
  if(a==='palette'){S.palette=true;overlay();return}
  if(a==='ai'){S.aiOpen=true;overlay();return}
- if(a==='create'){S.menu=S.menu==='create'?null:'create';render();return}
+ if(a==='create'){if(S.menu==='create'){S.menu=null}else{const b=document.getElementById('create-btn').getBoundingClientRect();S.mpos={l:Math.max(16,Math.min(b.left,innerWidth-276)),t:b.bottom+6};S.menu='create'}render();return}
  if(a==='user'){S.menu=S.menu==='user'?null:'user';render();return}
  if(a==='helpctr'){S.menu=null;render();toast('Help center opens in a new tab in the real product');return}
  if(a==='notif'){go('hub');toast('Notifications live in Needs you now');return}
