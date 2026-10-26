@@ -53,11 +53,11 @@ p{margin:0}
 
 .app{display:grid;grid-template-columns:232px minmax(0,1fr);gap:20px;max-width:1440px;margin:0 auto;align-items:start}
 .rail{position:sticky;top:calc(16px + env(safe-area-inset-top,0px));background:var(--panel);border-radius:12px;box-shadow:var(--shadow);padding:16px 12px 12px;display:flex;flex-direction:column;gap:2px;height:calc(100vh - 32px);overflow:auto}
-.mark{display:flex;align-items:center;gap:7px;padding:2px 10px 18px}
+.mark{display:flex;align-items:center;gap:7px;padding:2px 10px 14px}
 .mark b{font:900 27px/1 var(--f-body);letter-spacing:-.06em;color:var(--ink)}
 .mark .one,.mmark .one{display:inline-grid;place-items:center;height:22px;padding:0 7px;border-radius:6px;background:var(--accent);color:var(--on-accent);font:800 13px/1 var(--f-body);letter-spacing:-.01em;transform:translateY(1px)}
-.rail .sect{padding:12px 10px 6px;font-size:12px;color:var(--ink3);font-weight:500;border-top:1px solid var(--line);margin-top:8px}
-.nav{display:flex;align-items:center;gap:12px;width:100%;padding:9px 10px;border:0;border-radius:8px;background:none;color:var(--ink);font-weight:500;font-size:14.5px;text-align:left;white-space:nowrap}
+.rail .sect{padding:10px 10px 4px;font-size:12px;color:var(--ink3);font-weight:500;border-top:1px solid var(--line);margin-top:8px}
+.nav{display:flex;align-items:center;gap:12px;width:100%;padding:7px 10px;border:0;border-radius:8px;background:none;color:var(--ink);font-weight:500;font-size:14.5px;text-align:left;white-space:nowrap}
 .nav:hover{background:var(--sunk)}
 .nav .svg{color:var(--ink)}
 .nav.on{background:var(--accent-soft);color:var(--accent)}
@@ -68,7 +68,10 @@ p{margin:0}
 .f-grow{--fam:var(--grow);--fam-soft:var(--grow-soft)}
 .f-crt{--fam:var(--crt);--fam-soft:var(--crt-soft)}
 .f-hub{--fam:var(--accent);--fam-soft:var(--accent-soft)}
-.concept{margin-top:auto;padding:14px 10px 8px;font-size:11.5px;color:var(--ink3);line-height:1.45}
+.notifnav{margin-top:8px}
+.railnav{flex:1 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:2px;margin:0 -4px;padding:0 4px}
+.rail{overflow:hidden}
+.concept{padding:8px 10px 6px!important;padding:14px 10px 8px;font-size:11.5px;color:var(--ink3);line-height:1.45}
 .wsw{display:flex;gap:10px;align-items:center;border-top:1px solid var(--line);padding:12px 6px 2px;width:100%;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left}
 .wsw .sq{width:40px;height:40px;border:1.5px solid var(--accent);color:var(--accent);display:grid;place-items:center;border-radius:4px;font-size:16px;flex:none}
 .wsw b{display:block;font-size:13.5px;font-weight:600}.wsw small{display:block;color:var(--ink2);font-size:12.5px}
@@ -594,13 +597,16 @@ function rail(){
  return `<nav class="rail" aria-label="Main navigation">
   <div class="mark" aria-label="Later One"><b>Later</b><span class="one">One</span></div>
   <button class="btn pri railcreate" id="create-btn" data-act="create" aria-haspopup="menu" aria-expanded="${S.menu==='create'}">${ic('plus',16)}Create</button>
+  <div class="railnav">
   <button class="nav f-hub ${S.view==='hub'?'on':''}" data-go="hub">${ic('home')}<span>Home</span></button>
   <div class="sect eyebrow">Your tools</div>
   ${r.order.map(navBtn).join('')}
   <div class="sect eyebrow">More from Later</div>
   ${r.more.map(id=>navBtn(id).replace('class="nav','class="nav dim')).join('')}
   <button class="nav ${S.view==='settings'?'on':''}" data-go="settings">${ic('settings')}<span>Workspace</span></button>
-  <p class="concept">Unofficial concept prototype. Not affiliated with Later. All people, brands and figures are fictional.</p>
+  </div>
+  <button class="nav notifnav" data-act="notif">${ic('bell')}<span>Notifications</span><span class="badge">${QUEUE[S.role].length}</span></button>
+  <p class="concept">Unofficial concept, not affiliated with Later. All data is fictional.</p>
   <button class="wsw" id="user-btn" data-act="user" aria-haspopup="menu" aria-expanded="${S.menu==='user'}"><span class="ava lg">${r.ini}</span><span class="wt" style="flex:1;min-width:0"><b>${r.name}</b><small>${r.ws}</small></span>${ic('chevr',16)}</button>
  </nav>`;
 }
@@ -611,7 +617,6 @@ function top(){
   <span class="mmark m-only" aria-label="Later One"><b>Later</b><span class="one">One</span></span>
   <button class="searchbtn d-only" data-act="palette">${ic('search',16)}<span>Search posts, creators and links</span><kbd>⌘K</kbd></button>
   <button class="iconbtn m-only" data-act="palette" aria-label="Search">${ic('search')}</button>
-  <button class="iconbtn" data-act="notif" aria-label="Notifications">${ic('bell')}<span class="dot"></span></button>
   <button class="iconbtn m-only" data-act="user" aria-label="Account menu"><span class="ava">${r.ini}</span></button>
  </div>`;
 }
