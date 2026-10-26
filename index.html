@@ -346,6 +346,18 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 @media (prefers-reduced-motion:no-preference){.hhreveal{animation:pulse 2.2s ease-in-out infinite}@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(90,43,216,.35)}50%{box-shadow:0 0 0 8px rgba(90,43,216,0)}}}
 .hh3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 @media (max-width:980px){.hhgrid{grid-template-columns:1fr}.hh3{grid-template-columns:1fr}}
+/* polish pass */
+.pnote{color:#9B98A8;font-size:11.5px;max-width:200px;line-height:1.35;padding-left:10px;border-left:1px solid #3A3946}
+@media (min-width:861px){.rail .concept{display:none}}
+@media (max-width:860px){.pnote{display:none}}
+.kpi[data-ki="1"]{--ki:var(--k1)}.kpi[data-ki="2"]{--ki:var(--k2)}.kpi[data-ki="3"]{--ki:var(--k3)}.kpi[data-ki="4"]{--ki:var(--k4)}.kpi[data-ki="5"]{--ki:var(--k5)}
+.best{display:flex;align-items:center;gap:5px;background:none!important;color:var(--ink3)!important;font-weight:500!important;padding:0 4px 2px!important;text-align:left!important}
+.best .svg{width:12px;height:12px;color:var(--accent)}
+.conv .x{display:block}
+.conv>span:last-child{overflow:hidden}
+.conv .faint{display:block}
+.searchbtn{max-width:560px}
+.head h1{margin:0}
 /* sign in */
 .app.locked{filter:blur(18px) saturate(.7);pointer-events:none;user-select:none}
 .app.blank .main *{color:transparent!important;border-color:transparent}
@@ -603,9 +615,9 @@ function rail(){
   ${r.order.map(navBtn).join('')}
   <div class="sect eyebrow">More from Later</div>
   ${r.more.map(id=>navBtn(id).replace('class="nav','class="nav dim')).join('')}
-  <button class="nav ${S.view==='settings'?'on':''}" data-go="settings">${ic('settings')}<span>Workspace</span></button>
   </div>
   <button class="nav notifnav" data-act="notif">${ic('bell')}<span>Notifications</span><span class="badge">${QUEUE[S.role].length}</span></button>
+  <button class="nav ${S.view==='settings'?'on':''}" data-go="settings">${ic('settings')}<span>Workspace</span></button>
   <p class="concept">Unofficial concept, not affiliated with Later. All data is fictional.</p>
   <button class="wsw" id="user-btn" data-act="user" aria-haspopup="menu" aria-expanded="${S.menu==='user'}"><span class="ava lg">${r.ini}</span><span class="wt" style="flex:1;min-width:0"><b>${r.name}</b><small>${r.ws}</small></span>${ic('chevr',16)}</button>
  </nav>`;
@@ -633,7 +645,7 @@ function protoBar(){
  const R=[['brand','Brand marketer'],['smm','Social manager'],['creator','Creator']];const cur=S.auth==='out'?S.pick:S.role;
  return `<div class="proto" role="region" aria-label="Prototype controls"><span class="ptag">Prototype</span><span class="plab">View as</span>
   <span class="pseg" role="radiogroup" aria-label="Role">${R.map(r=>`<button role="radio" aria-checked="${cur===r[0]}" class="${cur===r[0]?'on':''}" data-role="${r[0]}">${r[1]}</button>`).join('')}</span>
-  <button class="prp" data-act="signout" ${S.auth==='out'?'disabled':''}>${ic('refresh',14)}<span>Replay sign-in</span></button></div>`;
+  <button class="prp" data-act="signout" ${S.auth==='out'?'disabled':''}>${ic('refresh',14)}<span>Replay sign-in</span></button><span class="pnote">Unofficial concept, not affiliated with Later. All data is fictional.</span></div>`;
 }
 function createMenu(){
  const items={smm:[['post','Post','Schedule to any connected profile'],['block','Link in bio block','Add a banner, product or form'],['report','Report','Share analytics with a link']],
@@ -643,7 +655,7 @@ function createMenu(){
 }
 function head(id,title,sub,actions=''){
  const s=SPOKES[id];
- return `<div class="head f-${s?s.fam:'hub'}"><div><span class="famtag"><i></i>${s?s.famName+' · '+label(id):'Home'}</span><h1 style="margin-top:6px">${title}</h1>${sub?`<p class="muted">${sub}</p>`:''}</div><div class="row">${actions}</div></div>`;
+ return `<div class="head f-${s?s.fam:'hub'}"><div><h1>${title}</h1>${sub?`<p class="muted">${sub}</p>`:''}</div><div class="row">${actions}</div></div>`;
 }
 
 /* ---------- charts ---------- */
@@ -754,7 +766,7 @@ function plan(){
  ${head('plan',S.role==='creator'?'Your content calendar':'Content calendar','Plan, approve and publish in one place. Creator collabs land here for approval, then publish from the creator’s own account.',`<button class="btn" data-act="notyet">${ic('chevl',16)}</button><span class="mono" style="font-size:13px">Oct 26 – Nov 1</span><button class="btn" data-act="notyet">${ic('chevr',16)}</button><button class="btn pri" data-new="post">${ic('plus',16)}New post</button>`)}
  <div class="row between"><div class="chips">${[['all','All'],['approval','Approvals'],['draft','Drafts'],['issues','Issues']].map(c=>`<button class="chip ${S.filter===c[0]?'on':''}" data-filter="${c[0]}">${c[1]}</button>`).join('')}</div>
   <div class="legend">${Object.entries(ST).map(([k,v])=>`<span><span class="sdot s-${k}" style="display:inline-block;vertical-align:middle;margin-right:5px"></span>${v[0]}</span>`).join('')}</div></div>
- <div class="scrollx"><div class="cal">${DAYS.map((d,i)=>`<div class="day ${i===0?'today':''}"><div class="dh"><b>${d}</b>${i===0?'<span class="faint" style="font-size:11.5px">Today</span>':''}</div><div class="best" title="Best time to post on Instagram">Best ${BEST[i]}</div>
+ <div class="scrollx"><div class="cal">${DAYS.map((d,i)=>`<div class="day ${i===0?'today':''}"><div class="dh"><b>${d}</b></div><div class="best" title="Best time to post on Instagram">${ic('spark',12)}Best time ${BEST[i]}</div>
    ${ps.filter(p=>p.d===i&&show(p)).map(p=>`<button class="post" data-open="${p.id}"><span class="tm"><span class="sdot s-${p.st}"></span>${p.t}</span><span class="tt">${esc(p.ti)}</span><span class="row" style="gap:4px">${p.pl.map(x=>`<span class="plat">${x}</span>`).join('')}${p.collab?'<span class="pill f-crt fam" style="font-size:10.5px">Collab</span>':''}</span></button>`).join('')}
   </div>`).join('')}</div></div>
  <section class="card"><div class="card-h"><h2>${S.role==='creator'?'Waiting on you':'Approval queue'}</h2><span class="faint" style="font-size:13px">${queue.length} items</span></div>
@@ -1387,7 +1399,9 @@ function tabbar(){
  const ids=['hub'].concat(ROLES[S.role].order.slice(0,3));
  return `<nav class="tabbar" aria-label="Primary">${ids.map(id=>{const b=id==='hub'?0:badgeFor(id);const l=id==='hub'?'Home':id==='campaigns'?(S.role==='creator'?'Deals':'Campaigns'):SHORT[id];return `<button class="tab-i ${S.view===id?'on':''}" data-go="${id}" ${S.view===id?'aria-current="page"':''}>${ic(id==='hub'?'home':id)}<span>${l}</span>${b?`<i class="badge">${b}</i>`:''}</button>`}).join('')}<button class="tab-i ${S.navOpen?'on':''}" data-act="nav">${ic('menu')}<span>More</span></button></nav>`;
 }
-function render(){drawProto();app.className='app'+(S.auth==='out'?' locked blank':'')+(S.navOpen?' navopen':'');if(S.auth==='out')app.setAttribute('aria-hidden','true');else app.removeAttribute('aria-hidden');app.innerHTML=rail()+`<div class="main">${top()}<main id="view">${VIEWS[S.view]()}</main></div>${tabbar()}<div class="navscrim" data-act="navclose"></div><button class="help" data-act="ai">${ic('spark',18)}<span>Ask EdgeAI</span></button>`;overlay();if(document.getElementById('hh'))drawHH()}
+function tagKpis(root){root.querySelectorAll('.kpi:not([style])').forEach(k=>{const l=(k.querySelector('.eyebrow')||{}).textContent||'',t=l.toLowerCase(),v=(k.querySelector('.v')||{}).textContent||'';
+ const n=/roas|rate|click-through|health|conversion/.test(t)?4:/click/.test(t)?3:/creator|follower|people|orders|matches|worked|groups/.test(t)?5:/sale|budget|spent|commission|earning|payout|pending|october/.test(t)||v.trim().startsWith('$')?1:2;k.dataset.ki=n})}
+function render(){drawProto();app.className='app'+(S.auth==='out'?' locked blank':'')+(S.navOpen?' navopen':'');if(S.auth==='out')app.setAttribute('aria-hidden','true');else app.removeAttribute('aria-hidden');app.innerHTML=rail()+`<div class="main">${top()}<main id="view">${VIEWS[S.view]()}</main></div>${tabbar()}<div class="navscrim" data-act="navclose"></div><button class="help" data-act="ai">${ic('spark',18)}<span>Ask EdgeAI</span></button>`;overlay();tagKpis(app);if(document.getElementById('hh'))drawHH()}
 function go(v){S.view=v;S.navOpen=false;S.menu=null;S.drawer=null;try{history.replaceState(null,'','#'+v)}catch(e){}render();window.scrollTo({top:0})}
 function findPost(id){return POSTS[team()].find(p=>p.id===id)||POSTS.team.find(p=>p.id===id)}
 function openPost(id){const p=findPost(id);if(!p)return;S.view='plan';S.drawer={...p};render()}
