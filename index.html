@@ -566,11 +566,11 @@ function navBtn(id){
 }
 function rail(){
  const r=ROLES[S.role];
- return `<nav class="rail" aria-label="Spokes">
+ return `<nav class="rail" aria-label="Main navigation">
   <div class="mark" aria-label="Later One"><b>Later</b><span class="one">One</span></div>
   <button class="btn pri railcreate" id="create-btn" data-act="create" aria-haspopup="menu" aria-expanded="${S.menu==='create'}">${ic('plus',16)}Create</button>
   <button class="nav f-hub ${S.view==='hub'?'on':''}" data-go="hub">${ic('home')}<span>Home</span></button>
-  <div class="sect eyebrow">Your spokes</div>
+  <div class="sect eyebrow">Your tools</div>
   ${r.order.map(navBtn).join('')}
   <div class="sect eyebrow">More from Later</div>
   ${r.more.map(id=>navBtn(id).replace('class="nav','class="nav dim')).join('')}
@@ -584,7 +584,7 @@ function top(){
  return `<div class="top">
   <button class="iconbtn m-only" data-act="nav" aria-label="Open menu" aria-expanded="${!!S.navOpen}">${ic('menu')}</button>
   <span class="mmark m-only" aria-label="Later One"><b>Later</b><span class="one">One</span></span>
-  <button class="searchbtn d-only" data-act="palette">${ic('search',16)}<span>Search posts, creators, links, spokes</span><kbd>⌘K</kbd></button>
+  <button class="searchbtn d-only" data-act="palette">${ic('search',16)}<span>Search posts, creators and links</span><kbd>⌘K</kbd></button>
   <button class="iconbtn m-only" data-act="palette" aria-label="Search">${ic('search')}</button>
   <button class="iconbtn" data-act="notif" aria-label="Notifications">${ic('bell')}<span class="dot"></span></button>
   <button class="iconbtn m-only" data-act="user" aria-label="Account menu"><span class="ava">${r.ini}</span></button>
@@ -682,7 +682,7 @@ function hub(){
   </section>
   ${hubSide()}
  </div>
- <section class="stack" style="gap:10px"><div class="row between"><h2>Your spokes</h2><span class="faint" style="font-size:13px">Ordered for ${r.title.split(' ·')[0].toLowerCase()}s. Everything else is under More.</span></div>
+ <section class="stack" style="gap:10px"><div class="row between"><h2>Your tools</h2><span class="faint" style="font-size:13px">Ordered for ${r.title.split(' ·')[0].toLowerCase()}s. Everything else is under More.</span></div>
   <div class="spokes">${r.order.map(id=>{const s=SPOKES[id],t=TILE[S.role][id];return `<button class="spoke f-${s.fam}" data-go="${id}"><span class="t">${ic(id)}${label(id)}</span><span class="s">${t[0]}</span><span class="c">${t[1]}</span></button>`}).join('')}</div>
  </section>
  </div>`;
@@ -1131,7 +1131,7 @@ function services(){
 function settings(){
  const r=ROLES[S.role];
  return `<div class="view stack">
- <div class="head"><div><span class="eyebrow">Shared layer</span><h1 style="margin-top:6px">Workspace</h1><p class="muted">One account across every spoke: profiles, people, credits and plan.</p></div></div>
+ <div class="head"><div><span class="eyebrow">Shared layer</span><h1 style="margin-top:6px">Workspace</h1><p class="muted">One account for everything in Later One: profiles, people, credits and plan.</p></div></div>
  <div class="g2e">
   <section class="card"><div class="card-h"><h2>Social sets</h2><span class="faint" style="font-size:12.5px">${r.plan}</span></div>
    ${(S.role==='creator'?[['Jules Ortiz','IG, TT, YT, PIN',true]]:[['Fernway Outdoor','IG, TT, FB, TH, YT, PIN, LI',false],['Fernway Kids','IG, FB',true]]).map(s=>`<div class="li"><div class="grow"><b>${s[0]}</b><div class="faint mono" style="font-size:12px">${s[1]}</div></div>${s[2]?'<span class="pill ok">Connected</span>':'<span class="pill bad">TikTok expired</span>'}</div>`).join('')}
@@ -1178,10 +1178,10 @@ function overlay(){
  if(S.drawer)h+=composer(S.drawer);
  else if(S.prof)h+=profileDrawer(S.prof);
  if(S.aiOpen)h+=`<div class="drawer f-grow" role="dialog" aria-modal="true" aria-label="Ask EdgeAI"><div class="dhd"><div><span class="famtag"><i></i>Assistant</span><h2 style="margin-top:4px">Ask EdgeAI</h2></div><button class="iconbtn" data-act="close" aria-label="Close">${ic('x')}</button></div>
-  <div class="dbd"><p class="muted" style="font-size:13.5px">Answers draw on every spoke you can see: posts, inbox, analytics, campaigns and earnings.</p>
+  <div class="dbd"><p class="muted" style="font-size:13.5px">Answers draw on everything you can see in Later One: posts, inbox, analytics, campaigns and earnings.</p>
   ${S.ai.map(a=>`<div class="stack" style="gap:8px"><div class="msg me" style="max-width:100%">${a[0]}</div><div class="ai-a">${a[1]}</div></div>`).join('')}
   <span class="eyebrow">Try asking</span>${AIQ[S.role].map((q,i)=>`<button class="ai-q" data-aiq="${i}">${q[0]}</button>`).join('')}</div></div>`;
- if(S.palette)h+=`<div class="palette" role="dialog" aria-label="Search"><input id="pal" placeholder="Search posts, creators, links, spokes" autocomplete="off"><div class="plist" id="plist"></div></div>`;
+ if(S.palette)h+=`<div class="palette" role="dialog" aria-label="Search"><input id="pal" placeholder="Search posts, creators and links" autocomplete="off"><div class="plist" id="plist"></div></div>`;
  if(S.menu==='create'&&S.mpos)h+=`<div class="rel fxm" style="left:${S.mpos.l}px;top:${S.mpos.t}px">${createMenu()}</div>`;
  if(S.menu==='user'&&S.upos)h+=`<div class="rel fxm" style="left:${S.upos.l}px;${S.upos.up?`bottom:${S.upos.b}px`:`top:${S.upos.t}px`}">${userMenu()}</div>`;
  if(S.toast)h+=`<div class="toast" role="status">${ic('check',16)}${esc(S.toast)}</div>`;
@@ -1189,8 +1189,8 @@ function overlay(){
  if(S.palette){const i=document.getElementById('pal');i.focus();palList('')}
 }
 function palItems(){
- const out=[{l:'Home',k:'Hub',go:'hub',i:'home'}];
- ROLES[S.role].order.concat(ROLES[S.role].more).forEach(id=>out.push({l:label(id),k:'Spoke',go:id,i:id}));
+ const out=[{l:'Home',k:'Page',go:'hub',i:'home'}];
+ ROLES[S.role].order.concat(ROLES[S.role].more).forEach(id=>out.push({l:label(id),k:'Page',go:id,i:id}));
  out.push({l:'Workspace',k:'Settings',go:'settings',i:'settings'});
  POSTS[team()].forEach(p=>out.push({l:p.ti,k:'Post · '+DAYS[p.d],open:p.id,i:'plan'}));
  if(S.role!=='creator'){PIPE.concat(DISC).forEach(c=>out.push({l:c.n+' '+c.h,k:'Creator',go:'campaigns',camp:'ft',tab:'creators',prof:c.id,i:'campaigns'}));

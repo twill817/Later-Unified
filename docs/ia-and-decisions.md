@@ -23,14 +23,14 @@ These roles form a loop: social posts and creator links generate the data behind
 
 ## Design positions
 
-- **The hub is a queue, not a menu.** It lists what needs the user and reorders spokes by role.
-- **Shared objects cross spokes.** A post, creator, link or campaign is the same object everywhere.
-- **Approvals stay inside Plan.** A separate spoke would split one workflow.
-- **Locked features stay visible.** Plan-gated spokes show a preview and an upgrade path instead of disappearing.
+- **The home screen is a queue, not a menu.** It lists what needs the user and reorders tools by role.
+- **Shared objects cross tools.** A post, creator, link or campaign is the same object everywhere.
+- **Approvals stay inside Plan.** A separate tool would split one workflow.
+- **Locked features stay visible.** Plan-gated tools show a preview and an upgrade path instead of disappearing.
 
-## Campaigns spoke (deep dive)
+## Campaigns (deep dive)
 
-Campaigns is the deepest spoke because brand influencer marketing is where Later now leads.
+Campaigns is the deepest tool because brand influencer marketing is where Later now leads.
 
 - **Portfolio.** Every campaign in one list, whether self-run or run by Later's full-service team, with budget used, sales and ROAS.
 - **Plan with EdgeAI.** Goal, budget, products and audience produce a live forecast: sales and ROAS ranges, impressions, recommended creator mix by tier, and first-pick creators. Large budgets surface the full-service option.
