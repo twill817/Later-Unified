@@ -356,7 +356,10 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .conv .x{display:block}
 .conv>span:last-child{overflow:hidden}
 .conv .faint{display:block}
-.searchbtn{max-width:560px}
+.searchbtn{max-width:560px;background:transparent;border-color:transparent;padding-left:8px;transition:background .15s,border-color .15s}
+.searchbtn:hover{background:var(--sunk)}
+.searchbtn:focus-visible{background:var(--sunk);border-color:var(--line2)}
+.searchbtn kbd{background:transparent}
 .head h1{margin:0}
 /* sign in */
 .app.locked{filter:blur(18px) saturate(.7);pointer-events:none;user-select:none}
