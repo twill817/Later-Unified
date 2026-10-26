@@ -27,3 +27,19 @@ These roles form a loop: social posts and creator links generate the data behind
 - **Shared objects cross spokes.** A post, creator, link or campaign is the same object everywhere.
 - **Approvals stay inside Plan.** A separate spoke would split one workflow.
 - **Locked features stay visible.** Plan-gated spokes show a preview and an upgrade path instead of disappearing.
+
+## Campaigns spoke (deep dive)
+
+Campaigns is the deepest spoke because brand influencer marketing is where Later now leads.
+
+- **Portfolio.** Every campaign in one list, whether self-run or run by Later's full-service team, with budget used, sales and ROAS.
+- **Plan with EdgeAI.** Goal, budget, products and audience produce a live forecast: sales and ROAS ranges, impressions, recommended creator mix by tier, and first-pick creators. Large budgets surface the full-service option.
+- **Campaign workspace** with six tabs:
+  - *Overview:* KPIs, spend pacing vs. plan, EdgeAI suggestions you can apply, deliverable status, top creators by return.
+  - *Brief:* the single brief creators see in Opportunities.
+  - *Creators:* pipeline from Discover to Live, plus recommended creators with fit, fair rate, overlap and brand-safety status.
+  - *Content:* every deliverable with due date, status and usage rights. Approval happens in Plan, so the status here is the same post's status.
+  - *Payments:* agreed rates against the incentive advisor's fair range, with counter-offers; creators are paid through Earn.
+  - *Results:* sales by creator and by source, and per-creator reach, cost per order and ROAS.
+- **Creator profile** opens from any creator name across the app: audience, performance, brand-safety checks, past brand work and fair rate.
+- **Managed and completed campaigns** get their own views: a program timeline with the Later strategist for full-service, and results plus "reuse this brief" for completed ones.
