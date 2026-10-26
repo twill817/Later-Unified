@@ -411,6 +411,7 @@ engage:"M4 13l3-8h10l3 8v6H4zM4 13h5l1 2h4l1-2h5",
 analyze:"M4 20V4M4 20h16M8 16v-5M12 16V8M16 16v-3",
 listen:"M4 12a8 8 0 1 0 16 0 8 8 0 1 0-16 0M8 12a4 4 0 1 0 8 0 4 4 0 1 0-8 0M12 12l6-6",
 campaigns:"M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 6.5M18 14a6 6 0 0 1 3.5 6",
+insights:"M4 19h16M5 15l4-4 3 3 6-7M18 7h-3M18 7v3",
 earn:"M4 7h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4zM4 7V5a1 1 0 0 1 1-1h11M16 13.5h.01",
 services:"M4 8h16v11H4zM9 8V5h6v3M4 13h16",
 settings:"M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M14 4v4M8 10v4M16 16v4",
@@ -452,12 +453,13 @@ const SPOKES={
  campaigns:{label:'Campaigns',fam:'crt',famName:'Creators'},
  earn:{label:'Earn',fam:'crt',famName:'Creators'},
  services:{label:'Services',fam:'crt',famName:'Creators'},
+ insights:{label:'Insights',fam:'grow',famName:'Grow'},
 };
 const ROLES={
  smm:{name:'Priya Shah',ini:'PS',title:'Social media manager',ws:'Fernway Outdoor',plan:'Growth plan',
-   order:['plan','engage','analyze','create','linkinbio','listen','campaigns'],more:['earn','services']},
+   order:['plan','engage','analyze','create','linkinbio','listen','campaigns'],more:['insights','earn','services']},
  brand:{name:'Maya Chen',ini:'MC',title:'Influencer marketing lead',ws:'Fernway Outdoor',plan:'Enterprise',
-   order:['campaigns','analyze','listen','plan','engage','services'],more:['create','linkinbio','earn']},
+   order:['campaigns','insights','analyze','listen','plan','engage','services'],more:['create','linkinbio','earn']},
  creator:{name:'Jules Ortiz',ini:'JO',title:'Creator · @julesoutside',ws:'Jules Ortiz',plan:'Creator',
    order:['earn','campaigns','linkinbio','plan','analyze','create','engage'],more:['listen','services']},
 };
@@ -542,7 +544,7 @@ const MEDIA=[
  {t:'Tent pitch b-roll',src:'Upload',fam:'pub'},{t:'Gear care graphic',src:'Canva',fam:'pub'},{t:'@lenatrails reel',src:'Creator',fam:'crt'},{t:'Lake camp at dusk',src:'Upload',fam:'pub'},
 ];
 
-const S={auth:'out',pick:'brand',signing:false,camp:null,ctab:'overview',prof:null,recs:{},cf:'all',nb:{goal:'sales',budget:40000,prods:['Alder jacket'],aud:['Hikers 25–34'],name:''},
+const S={itab:'halo',af:'all',auth:'out',pick:'brand',signing:false,camp:null,ctab:'overview',prof:null,recs:{},cf:'all',nb:{goal:'sales',budget:40000,prods:['Alder jacket'],aud:['Hikers 25–34'],name:''},
  role:'smm',view:'hub',filter:'all',mediaF:'All',conv:null,mode:'both',listenPreview:false,drawer:null,palette:false,menu:null,toast:null,
  credits:{smm:31,brand:88,creator:12},ideas:[],ai:[],
  blocks:{team:[['Featured banner','Fall drop: layers that pack small',true,'1,912 clicks'],['Linked posts','Shoppable feed of your IG and TikTok posts',true,'2,204 clicks'],['Product carousel','Ridge 28, Alder jacket, Basecamp 2',true,'640 clicks'],['Email signup','Trail notes newsletter',true,'150 signups'],['Social links','Instagram, TikTok, YouTube, Pinterest',false,'—']],
@@ -654,7 +656,8 @@ const QUEUE={
   {f:'crt',i:'plan',t:'Jules Ortiz sent a draft for your review',m:"Fall Trail '26 · approves in Plan, publishes from Jules’s account",go:'plan',open:'p3'},
   {f:'crt',i:'alert',k:'warn',t:'1 recommended creator needs a brand-safety review',m:'@grayholloway · flagged by EdgeAI',go:'campaigns',camp:'ft',tab:'creators',prof:'d3'},
   {f:'crt',i:'campaigns',t:'Ben Kalu asked for $6,500, above the fair range',m:"Fall Trail '26 · incentive advisor suggests $4,200–5,300",go:'campaigns',camp:'ft',tab:'payments'},
-  {f:'grow',i:'analyze',t:'Creator content earns 2.3× more saves than brand posts',m:'Last 30 days across Instagram and TikTok',go:'analyze'},
+  {f:'grow',i:'insights',t:'Creators drove an estimated $38–52K beyond their links',m:"Fall Trail '26 · sales through your own Link in bio after creator posts",go:'insights',itab:'halo'},
+  {f:'grow',i:'campaigns',t:'6 fans already sell your products and could be creators',m:'Found across UGC, your inbox and Later Creator links',go:'insights',itab:'aud'},
  ],
  creator:[
   {f:'crt',i:'plan',t:'Fernway asked for a small revision',m:'Summit morning · name the pack first and add #ad · due Wed',go:'plan',open:'p3'},
@@ -664,8 +667,8 @@ const QUEUE={
  ],
 };
 const TILE={
- smm:{plan:['8','scheduled this week'],engage:['3','unread'],analyze:['412K','reach, 30 days'],create:['248','assets'],linkinbio:['26.6%','click-through'],listen:['+212%','top trend'],campaigns:['9','creators live or in content'],earn:['—','for creators'],services:['—','managed programs']},
- brand:{campaigns:['6.3×',"ROAS, Fall Trail '26"],analyze:['$186K','creator-attributed sales'],listen:['78','brand health'],plan:['2','awaiting approval'],engage:['3','unread'],services:['1','program in planning'],create:['248','assets'],linkinbio:['18.4K','page views'],earn:['—','for creators']},
+ smm:{insights:['$38–52K','creator halo sales'],plan:['8','scheduled this week'],engage:['3','unread'],analyze:['412K','reach, 30 days'],create:['248','assets'],linkinbio:['26.6%','click-through'],listen:['+212%','top trend'],campaigns:['9','creators live or in content'],earn:['—','for creators'],services:['—','managed programs']},
+ brand:{insights:['$38–52K','creator halo sales'],campaigns:['6.3×',"ROAS, Fall Trail '26"],analyze:['$186K','creator-attributed sales'],listen:['78','brand health'],plan:['2','awaiting approval'],engage:['3','unread'],services:['1','program in planning'],create:['248','assets'],linkinbio:['18.4K','page views'],earn:['—','for creators']},
  creator:{earn:['$4,812','October earnings'],campaigns:['1','new invite'],linkinbio:['9.1K','clicks this month'],plan:['3','scheduled'],analyze:['184K','followers'],create:['96','assets'],engage:['3','unread'],listen:['—','brand tool'],services:['—','brand tool']},
 };
 function hub(){
@@ -910,7 +913,7 @@ const RECS=[
  {id:'r2',t:'Boost @mofl’s Reel with partnership ads',i:'+$6–8K sales, about 5.9× ROAS',m:'Highest purchase rate in the campaign (9.3% of clicks).'},
  {id:'r3',t:'Extend Lena Tor’s usage rights by 60 days',i:'Your best-performing ad creative',m:'2.1% click-through as a paid ad vs. a 0.9% average.'},
 ];
-const cname=id=>(PIPE.find(x=>x.id===id)||DISC.find(x=>x.id===id)||{n:id}).n;
+const cname=id=>(PIPE.find(x=>x.id===id)||DISC.find(x=>x.id===id)||AUD.find(x=>x.id===id)||{n:id}).n;
 const inits=n=>n.split(' ').map(w=>w[0]).join('').slice(0,2);
 const fmtK=v=>v>=1e6?(v/1e6).toFixed(1)+'M':v>=1000?Math.round(v/1000)+'K':String(v);
 function dst(d){if(!d.post)return d.st;const p=POSTS.team.find(x=>x.id===d.post);return p.st==='approval'?'review':p.st==='changes'?'changes':p.st==='scheduled'||p.st==='published'?'sched':'todo'}
@@ -1026,11 +1029,11 @@ function tResults(){
 
 /* creator profile */
 function prof(id){
- const b=PIPE.find(x=>x.id===id)||DISC.find(x=>x.id===id);if(!b)return null;
+ const b=PIPE.find(x=>x.id===id)||DISC.find(x=>x.id===id)||AUD.find(x=>x.id===id);if(!b)return null;
  const s=[...id].reduce((a,c)=>a+c.charCodeAt(0),0);
  const a1=12+s%9,a2=36+s%13,a3=20+s%8,ages=[['18–24',a1],['25–34',a2],['35–44',a3],['45+',100-a1-a2-a3]];
  const st=['Washington','Colorado','Oregon','California','Utah','Montana'];const loc=[0,1,2,3].map(i=>[st[(s+i)%6],[26,18,13,9][i]]);
- const d=DISC.find(x=>x.id===id),p=PIPE.find(x=>x.id===id);
+ const d=DISC.find(x=>x.id===id)||AUD.find(x=>x.id===id),p=PIPE.find(x=>x.id===id);
  return {b,ages,loc,eng:(3.6+(s%45)/10).toFixed(1),saves:((s%30)/10+1.2).toFixed(1)+'K',reach:fmtK(Math.round(parseFloat(b.f)*1000*(0.32+(s%20)/100))),
   rate:d?d.rate:(PAY[id]||{}).adv||'—',risk:d?d.risk:'none',ov:d?d.ov:((s%15)+3)+'%',why:d?d.why:'Booked for Fall Trail ’26 after a strong Spring Trail ’26 result',
   stage:p?STAGES[p.st]:null,women:48+s%22,collabs:[['Pinecrest Supply','Mar 2026','4.8% engagement'],['Northline Coffee','Jan 2026','212 orders'],['Altus Optics','Sep 2025','1.3K saves']].slice(0,1+s%3)};
@@ -1146,7 +1149,80 @@ function settings(){
  </div></div>`;
 }
 
-const VIEWS={hub,plan,create,linkinbio,engage,analyze,listen,campaigns,earn,services,settings};
+/* ---------- INSIGHTS ---------- */
+const AUD=[
+ {id:'a1',n:'Kai Morales',h:'@wanderwithkai',f:'12.4K',fit:93,ugc:4,inbox:true,sold:1840,rate:'$300–450',risk:'none',ov:'31%',why:'Posted about Fernway 4 times this year, already sells the Ridge 28 through Later links, and asked a sizing question in your inbox'},
+ {id:'a3',n:'Lu Andersen',h:'@lake.days.lu',f:'22K',fit:91,ugc:3,inbox:false,sold:2960,rate:'$450–700',risk:'none',ov:'18%',why:'Earned commission on $2,960 of Fernway gear in 90 days without being asked; audience skews to families who camp'},
+ {id:'a4',n:'Nina Okafor',h:'@northbound.nina',f:'41K',fit:89,ugc:0,inbox:true,sold:4120,rate:'$800–1,200',risk:'none',ov:'12%',why:'Your top unpaid seller: $4,120 in Fernway sales through her links, plus 2 product questions in your DMs'},
+ {id:'a2',n:'Sierra Patel',h:'@sierrahikes',f:'8.9K',fit:88,ugc:3,inbox:true,sold:0,rate:'$200–350',risk:'none',ov:'36%',why:'Tagged Fernway in 3 stories, including “best $90 I spent this year”; not on Later Creator yet'},
+ {id:'a5',n:'Mo Reyes',h:'@mo.miles',f:'5.4K',fit:84,ugc:2,inbox:true,sold:610,rate:'$150–250',risk:'none',ov:'40%',why:'Small but loyal audience; 11% of his link clicks become orders'},
+ {id:'a6',n:'Kaia Brooks',h:'@kai.wanders',f:'3.1K',fit:79,ugc:0,inbox:true,sold:390,rate:'$100–200',risk:'none',ov:'44%',why:'Asked about the Ridge 28 in DMs, then sold 3 of them through her own Later link'},
+];
+const HALO=[
+ {id:'lt',posts:2,tr:39260,lo:15000,hi:20000,fol:2310,men:'+38%',conf:['High','ok']},
+ {id:'ar',posts:3,tr:27820,lo:11000,hi:14000,fol:1640,men:'+21%',conf:['High','ok']},
+ {id:'mo',posts:1,tr:34840,lo:7000,hi:10000,fol:880,men:'+12%',conf:['Medium','warn']},
+ {id:'jo',posts:1,tr:2410,lo:5000,hi:8000,fol:1120,men:'+17%',conf:['Medium','warn']},
+];
+function haloChart(){
+ const N=26,W=640,H=250,L=44,R=12,T=34,B=30;
+ const base=[],act=[],posts=[[14,'AB',3.2],[15,'LT',4.5],[19,'MF',2.4],[20,'JO',1.6],[21,'AB',2.0],[22,'LT',3.8]];
+ for(let d=1;d<=N;d++){const b=1.2+0.28*Math.sin(d*0.9)+(d%7===6||d%7===0?0.35:0);let l=0;posts.forEach(p=>{if(d>=p[0])l+=p[2]*Math.exp(-(d-p[0])/2)});base.push(b);act.push(b+l+0.06*Math.cos(d*2.1))}
+ const max=8,x=d=>L+(d-1)*(W-L-R)/(N-1),y=v=>T+(H-T-B)*(1-v/max);
+ const band=base.map((b,i)=>`${x(i+1).toFixed(1)},${y(b*1.15).toFixed(1)}`).join(' ')+' '+base.map((b,i)=>`${x(i+1).toFixed(1)},${y(b*.85).toFixed(1)}`).reverse().join(' ');
+ const line=a=>a.map((v,i)=>(i?'L':'M')+x(i+1).toFixed(1)+' '+y(v).toFixed(1)).join(' ');
+ const lift=act.map((v,i)=>`${x(i+1).toFixed(1)},${y(v).toFixed(1)}`).join(' ')+' '+base.map((v,i)=>`${x(i+1).toFixed(1)},${y(v).toFixed(1)}`).reverse().join(' ');
+ let g=[0,4,8].map(t=>`<line class="grid" x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}"/><text x="${L-8}" y="${y(t)+4}" text-anchor="end">$${t}K</text>`).join('');
+ g+=[1,8,15,22,26].map(d=>`<text x="${x(d)}" y="${H-9}" text-anchor="${d===1?'start':d===26?'end':'middle'}">Oct ${d}</text>`).join('');
+ g+=`<line x1="${x(8)}" x2="${x(8)}" y1="${T}" y2="${y(0)}" stroke="var(--line2)" stroke-dasharray="3 4"/><text x="${x(8)+6}" y="${T+12}" style="font-size:11px">Campaign starts</text>`;
+ g+=`<polygon points="${band}" fill="var(--c5)" opacity=".55"/><polygon points="${lift}" fill="var(--accent)" opacity=".14"/>`;
+ g+=`<path d="${line(base)}" fill="none" stroke="var(--ink3)" stroke-width="1.5" stroke-dasharray="5 5"/><path d="${line(act)}" fill="none" stroke="var(--accent)" stroke-width="2.25" stroke-linejoin="round"/>`;
+ const seen={};posts.forEach(p=>{const lx=x(p[0]);const row=seen[p[0]-1]?1:0;seen[p[0]]=1;g+=`<line x1="${lx}" x2="${lx}" y1="${T-4}" y2="${y(act[p[0]-1])}" stroke="var(--crt)" stroke-width="1" opacity=".45"/><circle cx="${lx}" cy="${T-8-row*12}" r="3" fill="var(--crt)"/><text x="${lx}" y="${T-14-row*12}" text-anchor="middle" style="font-size:10px;fill:var(--crt);font-weight:600">${p[1]}</text>`});
+ return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Daily sales through Fernway's Link in bio against a baseline forecast, with creator post days marked">${g}</svg>`;
+}
+function insights(){
+ const t=S.itab||'halo';
+ const tabs=`<div class="tabs f-grow" role="tablist">${[['halo','Creator halo'],['aud','From your audience']].map(x=>`<button class="tab ${t===x[0]?'on':''}" role="tab" aria-selected="${t===x[0]}" data-itab="${x[0]}">${x[1]}</button>`).join('')}</div>`;
+ return `<div class="view stack">${head('insights','Insights','Answers that need your social, creator and sales data together. Each one shows how it was worked out.')}${tabs}${t==='halo'?iHalo():iAud()}</div>`;
+}
+function iHalo(){
+ return `<div class="kpis">${[['Tracked through creator links','$113,950','What Campaigns already reports'],['Estimated halo sales','$38–52K','Through your own Link in bio'],['ROAS with halo','7.6–8.1×','vs 6.3× from links alone'],['New Fernway followers','+5,950','Above the expected trend']].map(x=>`<div class="kpi"><span class="eyebrow">${x[0]}</span><div class="v">${x[1]}</div><div class="d">${x[2]}</div></div>`).join('')}</div>
+ <div class="g2">
+  <section class="card"><div class="card-h"><div><h2>Sales through your Link in bio</h2><p class="faint" style="font-size:12.5px;margin-top:2px">Fall Trail '26 · daily, Oct 1–26</p></div><div class="legend"><span><i style="background:var(--accent)"></i>Actual</span><span><i style="background:var(--c5)"></i>Expected without creators</span><span><i style="background:var(--crt);border-radius:50%"></i>Creator post</span></div></div>
+   ${haloChart()}
+   <p class="faint" style="font-size:12.5px;margin-top:8px">The shaded purple area above the expected range is the halo: shoppers who saw a creator post and then bought through Fernway directly.</p></section>
+  <section class="card f-grow"><div class="card-h"><h2>What stands out</h2></div>
+   <div class="ai-a"><b>Jules’s teaser sold more through your page than his link.</b> His story drove an estimated $5–8K through Fernway’s Link in bio, versus $2,410 through his own link. Pricing his next deal on tracked sales alone would undervalue him.</div>
+   <div class="ai-a" style="margin-top:10px"><b>Lena Tor’s halo adds about 45%</b> to her tracked sales, and she brought the most new followers (+2,310).</div>
+   <div class="ai-a" style="margin-top:10px"><b>Paid amplification shows little halo.</b> Days with boosted posts and no new creator content stayed inside the expected range.</div>
+   <div class="row" style="margin-top:14px"><button class="btn pri" data-act="halorates">Use halo in renewal rates</button><button class="btn" data-act="sharebrief">${ic('copy',16)}Share with finance</button></div></section>
+ </div>
+ <section class="card"><div class="card-h"><h2>Halo by creator</h2><span class="faint" style="font-size:12.5px">Ranges are 80% intervals</span></div>
+  <div class="scrollx"><table class="tbl"><thead><tr><th>Creator</th><th class="r">Posts</th><th class="r">Tracked sales</th><th class="r">Estimated halo</th><th class="r">Halo vs. tracked</th><th class="r">New followers</th><th class="r">Brand mentions</th><th>Confidence</th></tr></thead><tbody>
+  ${HALO.map(h=>`<tr><td><button class="linkbtn" data-prof="${h.id}">${cname(h.id)}</button></td><td class="r">${h.posts}</td><td class="r">${$m(h.tr)}</td><td class="r"><b>$${h.lo/1000}–${h.hi/1000}K</b></td><td class="r">${h.lo>h.tr?(h.lo/h.tr).toFixed(1)+'–'+(h.hi/h.tr).toFixed(1)+'×':Math.round(h.lo/h.tr*100)+'–'+Math.round(h.hi/h.tr*100)+'%'}</td><td class="r">+${h.fol.toLocaleString()}</td><td class="r">${h.men}</td><td><span class="pill ${h.conf[1]}">${h.conf[0]}</span></td></tr>`).join('')}
+  </tbody></table></div>
+  <details style="margin-top:14px"><summary style="cursor:pointer;font-weight:600">How this is calculated</summary><p class="muted" style="font-size:13px;margin-top:8px;max-width:72ch">We forecast what Fernway’s Link in bio sales, follower growth and mentions would have been from the 6 weeks before the campaign, adjusting for day of week and paid spend. Lift above that forecast in the 4 days after each creator post is credited to that creator, split by overlap when posts land close together. Sales already counted through a creator’s own link are excluded, so nothing is counted twice. Medium confidence means another creator posted within 2 days.</p></details>
+ </section>`;
+}
+function iAud(){
+ const f=S.af||'all';
+ const list=AUD.filter(a=>f==='all'||(f==='ugc'&&a.ugc)||(f==='inbox'&&a.inbox)||(f==='sells'&&a.sold));
+ const sig=(on,txt,icon)=>`<span class="pill ${on?'fam':''}" style="${on?'':'opacity:.45'}">${ic(icon,13)}${txt}</span>`;
+ return `<div class="kpis">${[['People with creator potential','214','Across your audience'],['Strong matches','38','Fit score 75 or higher'],['Already sell your products','37','Through Later Creator links'],['Top matches below','6','Ranked by fit score']].map(x=>`<div class="kpi"><span class="eyebrow">${x[0]}</span><div class="v">${x[1]}</div><div class="d">${x[2]}</div></div>`).join('')}</div>
+ <div class="g2">
+  <section class="card"><div class="card-h"><h2>Where they come from</h2></div>
+   <div class="loop f-grow" style="grid-template-columns:repeat(3,minmax(0,1fr))"><div>Posted about you<b>142</b><span style="font-weight:500;color:var(--ink2)">UGC in Create</span></div><div>Messaged you<b>61</b><span style="font-weight:500;color:var(--ink2)">Comments and DMs in Engage</span></div><div>Sell your products<b>37</b><span style="font-weight:500;color:var(--ink2)">Links in Later Creator</span></div></div>
+   <p class="muted" style="font-size:13px;margin-top:12px">No single Later product can see all three. Together they find people who already love the brand and have shown they can sell it.</p></section>
+  <section class="card f-grow"><div class="card-h"><h2>Why start here</h2></div>
+   <div class="ai-a">In Spring Trail ’26, the 4 creators recruited from Fernway’s own audience converted <b>2.1×</b> better and cost <b>41% less per order</b> than creators found through search.</div>
+   <p class="faint" style="font-size:12.5px;margin-top:10px">Only people who post publicly, message you, or have joined Later Creator appear here. Shopper data stays aggregated.</p></section>
+ </div>
+ <section class="card f-grow"><div class="card-h"><h2>Top matches</h2><div class="chips">${[['all','All'],['ugc','Posted about you'],['inbox','Messaged you'],['sells','Sell your products']].map(c=>`<button class="chip ${f===c[0]?'on':''}" data-af="${c[0]}">${c[1]}</button>`).join('')}</div></div>
+  <div class="scrollx"><table class="tbl"><thead><tr><th>Person</th><th>Signals</th><th class="r">Your products sold, 90 days</th><th class="r">Fit</th><th>Fair rate</th><th>Why</th><th></th></tr></thead><tbody>
+  ${list.map(a=>`<tr><td><button class="linkbtn" data-prof="${a.id}">${a.n}</button><div class="faint" style="font-size:12px">${a.h} · ${a.f}</div></td><td><div class="row" style="gap:4px;flex-wrap:nowrap">${sig(a.ugc,a.ugc?a.ugc+' posts':'UGC','create')}${sig(a.inbox,'Inbox','engage')}${sig(a.sold,'Sells','earn')}</div></td><td class="r">${a.sold?$m(a.sold):'—'}</td><td class="r">${a.fit}%</td><td style="white-space:nowrap">${a.rate}</td><td class="muted" style="min-width:240px;font-size:12.5px">${a.why}</td><td>${a.inv?'<span class="pill">Invited</span>':`<button class="btn sm" data-inv="${a.id}">Invite</button>`}</td></tr>`).join('')}
+  </tbody></table></div></section>`;
+}
+const VIEWS={insights,hub,plan,create,linkinbio,engage,analyze,listen,campaigns,earn,services,settings};
 
 /* ---------- overlays ---------- */
 const AIQ={
@@ -1230,7 +1306,7 @@ function signIn(){
 let tt;
 function toast(m){S.toast=m;overlay();clearTimeout(tt);tt=setTimeout(()=>{S.toast=null;overlay()},2400)}
 function drawProto(){document.getElementById('proto').innerHTML=protoBar()}
-const SHORT={plan:'Plan',create:'Create',linkinbio:'Link in bio',engage:'Inbox',analyze:'Analyze',listen:'Listen',earn:'Earn',services:'Services'};
+const SHORT={insights:'Insights',plan:'Plan',create:'Create',linkinbio:'Link in bio',engage:'Inbox',analyze:'Analyze',listen:'Listen',earn:'Earn',services:'Services'};
 function tabbar(){
  const ids=['hub'].concat(ROLES[S.role].order.slice(0,3));
  return `<nav class="tabbar" aria-label="Primary">${ids.map(id=>{const b=id==='hub'?0:badgeFor(id);const l=id==='hub'?'Home':id==='campaigns'?(S.role==='creator'?'Deals':'Campaigns'):SHORT[id];return `<button class="tab-i ${S.view===id?'on':''}" data-go="${id}" ${S.view===id?'aria-current="page"':''}>${ic(id==='hub'?'home':id)}<span>${l}</span>${b?`<i class="badge">${b}</i>`:''}</button>`}).join('')}<button class="tab-i ${S.navOpen?'on':''}" data-act="nav">${ic('menu')}<span>More</span></button></nav>`;
@@ -1255,9 +1331,11 @@ document.addEventListener('click',e=>{
  const t=e.target.closest('button,[data-act]');if(!t)return;
  const ds=t.dataset;
  if(ds.go){S.palette=false;S.aiOpen=false;S.prof=ds.prof||null;if(ds.go==='campaigns'){S.camp=ds.camp||null;S.ctab=ds.ctab||'overview'}go(ds.go);return}
- if(ds.q!=null){const q=QUEUE[S.role][+ds.q];if(q.flt)S.filter=q.flt;if(q.go==='campaigns'){S.camp=q.camp||null;S.ctab=q.tab||'overview';S.prof=q.prof||null}if(q.open){openPost(q.open)}else go(q.go);return}
+ if(ds.q!=null){const q=QUEUE[S.role][+ds.q];if(q.flt)S.filter=q.flt;if(q.itab)S.itab=q.itab;if(q.go==='campaigns'){S.camp=q.camp||null;S.ctab=q.tab||'overview';S.prof=q.prof||null}if(q.open){openPost(q.open)}else go(q.go);return}
  if(ds.open){S.palette=false;S.prof=null;openPost(ds.open);return}
  if(ds.camp!=null){S.camp=ds.camp||null;S.ctab='overview';S.prof=null;if(S.camp==='new')S.nb={goal:'sales',budget:40000,prods:['Alder jacket'],aud:['Hikers 25–34'],name:''};go('campaigns');return}
+ if(ds.itab){S.itab=ds.itab;render();return}
+ if(ds.af){S.af=ds.af;render();return}
  if(ds.ctab){S.ctab=ds.ctab;render();return}
  if(ds.prof){S.prof=ds.prof;overlay();return}
  if(ds.cf){S.cf=ds.cf;render();return}
@@ -1271,7 +1349,7 @@ document.addEventListener('click',e=>{
  if(ds.tog){t.classList.toggle('on');t.setAttribute('aria-pressed',t.classList.contains('on'));return}
  if(ds.blk!=null){const b=S.blocks[team()][+ds.blk];b[2]=!b[2];render();return}
  if(ds.adv){const p=PIPE.find(x=>x.id===ds.adv);if(p&&p.st<4){p.st++;render();toast(p.n+' moved to '+STAGES[p.st])}return}
- if(ds.inv){const d=DISC.find(x=>x.id===ds.inv);if(!d.inv){d.inv=true;PIPE.push({id:d.id,n:d.n,h:d.h,f:d.f,st:1,fit:d.fit,note:'Invited today'})}S.prof=null;render();toast(d.n+' invited at '+d.rate);return}
+ if(ds.inv){const d=DISC.find(x=>x.id===ds.inv)||AUD.find(x=>x.id===ds.inv);if(!d.inv){d.inv=true;PIPE.push({id:d.id,n:d.n,h:d.h,f:d.f,st:1,fit:d.fit,note:'Invited today'})}S.prof=null;render();toast(d.n+' invited at '+d.rate);return}
  if(ds.opp){const o=OPPS.find(x=>x.id===ds.opp);o.st={accept:'accepted',decline:'declined',apply:'applied'}[ds.v];render();toast(ds.v==='accept'?o.b+' accepted. The brief is in Plan.':ds.v==='apply'?'Applied to '+o.b:'Invite declined');return}
  if(ds.copy){const u='https://'+ds.copy;try{navigator.clipboard.writeText(u).then(()=>toast('Link copied'),()=>toast(u))}catch(err){toast(u)}return}
  if(ds.swap){const l=LINKS.find(x=>x.id===ds.swap);l.ok=true;l.p+=' (holiday offer)';render();toast('Swapped to a live offer. Link in bio updated.');return}
@@ -1304,6 +1382,7 @@ document.addEventListener('click',e=>{
  if(a==='accept-ask'){PAY.bk={fee:'$6,500 flat',adv:'$4,200–5,300',st:'Accepted',k:''};render();toast('Accepted. Contract sent to Ben Kalu.');return}
  if(a==='revss'){DELIV.forEach(d=>{if(d.c==='ss'&&d.st==='review')d.st='live'});render();toast('Sun Shin’s TikTok approved');return}
  if(a==='nudge'){toast('Reminder sent to '+cname(ds.who));return}
+ if(a==='halorates'){toast('Halo added to rate suggestions for Jules, Lena, Ari and Mo');return}
  if(a==='sharebrief'){toast('Shareable campaign report link created');return}
  if(a==='palette'){S.palette=true;overlay();return}
  if(a==='ai'){S.aiOpen=true;overlay();return}

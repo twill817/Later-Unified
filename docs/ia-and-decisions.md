@@ -43,3 +43,8 @@ Campaigns is the deepest tool because brand influencer marketing is where Later 
   - *Results:* sales by creator and by source, and per-creator reach, cost per order and ROAS.
 - **Creator profile** opens from any creator name across the app: audience, performance, brand-safety checks, past brand work and fair rate.
 - **Managed and completed campaigns** get their own views: a program timeline with the Later strategist for full-service, and results plus "reuse this brief" for completed ones.
+
+## Insights: answers only the merged data can give
+
+- **Creator halo.** Forecasts the brand's own Link in bio sales, follower growth and mentions from the pre-campaign baseline, then credits lift in the days after each creator post to that creator. Excludes sales already tracked through creator links, shows 80% ranges and a confidence level, and feeds renewal rate suggestions. Example finding: a creator's teaser drove more sales through the brand's page than through their own link.
+- **From your audience.** Finds creator candidates in three places no single product sees together: people who posted UGC (Create), people who messaged or commented (Engage), and people already earning commission on the brand's products (Later Creator). Only public posters, people who messaged the brand, or Later Creator members appear; shopper data stays aggregated.
