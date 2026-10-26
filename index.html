@@ -1,0 +1,946 @@
+<title>Later Unified Workspace</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: framed workspace. Left rail of spokes ordered by role, sticky command bar, hub or spoke canvas. Family color = publish teal, grow indigo, creators magenta; tangerine is reserved for actions and "needs you". */
+:root{
+  --bg:#EEF0F3;--panel:#FFFFFF;--sunk:#F3F4F7;--line:#DCDFE6;--line2:#C9CDD7;
+  --ink:#141821;--ink2:#495165;--ink3:#767E92;
+  --accent:#E8572A;--accent-ink:#A93A12;--accent-soft:#FCE6DC;--on-accent:#FFFFFF;
+  --pub:#0D8676;--pub-soft:#D8F1EC;--grow:#3651C9;--grow-soft:#E1E6FB;--crt:#C93A7D;--crt-soft:#FAE2ED;
+  --ok:#1C7F47;--ok-soft:#DCF1E3;--warn:#9A6512;--warn-soft:#FAEFD6;--bad:#B42D2D;--bad-soft:#FADFDF;
+  --scrim:rgba(14,17,26,.42);
+  --f-disp:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --f-body:"Instrument Sans","Helvetica Neue","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1016;--panel:#161922;--sunk:#1D212C;--line:#292E3B;--line2:#363C4C;
+  --ink:#ECEEF4;--ink2:#B4BACA;--ink3:#868DA0;
+  --accent:#FF7445;--accent-ink:#FFB08F;--accent-soft:#3A2015;--on-accent:#1A0B04;
+  --pub:#3CC6B2;--pub-soft:#12302C;--grow:#8B9DFF;--grow-soft:#1D2448;--crt:#F06FAB;--crt-soft:#3A1829;
+  --ok:#55CF8D;--ok-soft:#133120;--warn:#E7B357;--warn-soft:#332611;--bad:#F27575;--bad-soft:#391717;
+  --scrim:rgba(0,0,0,.6);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1016;--panel:#161922;--sunk:#1D212C;--line:#292E3B;--line2:#363C4C;
+  --ink:#ECEEF4;--ink2:#B4BACA;--ink3:#868DA0;
+  --accent:#FF7445;--accent-ink:#FFB08F;--accent-soft:#3A2015;--on-accent:#1A0B04;
+  --pub:#3CC6B2;--pub-soft:#12302C;--grow:#8B9DFF;--grow-soft:#1D2448;--crt:#F06FAB;--crt-soft:#3A1829;
+  --ok:#55CF8D;--ok-soft:#133120;--warn:#E7B357;--warn-soft:#332611;--bad:#F27575;--bad-soft:#391717;
+  --scrim:rgba(0,0,0,.6);color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 14px/1.5 var(--f-body);padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3{font-family:var(--f-disp);font-weight:700;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:30px;line-height:1.15}
+h2{font-size:18px;line-height:1.25}
+h3{font-size:15px;font-weight:500;font-family:var(--f-body);letter-spacing:0}
+p{margin:0}
+.mono,.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink3);font-weight:600}
+.muted{color:var(--ink2)}.faint{color:var(--ink3)}
+.svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+
+.app{display:grid;grid-template-columns:236px minmax(0,1fr);gap:16px;max-width:1440px;margin:0 auto;align-items:start}
+.rail{position:sticky;top:calc(16px + env(safe-area-inset-top,0px));background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 10px;display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - 32px);overflow:auto}
+.mark{display:flex;align-items:baseline;gap:6px;padding:4px 10px 12px}
+.mark b{font:700 22px/1 var(--f-disp);letter-spacing:-.02em}
+.mark span{font:500 12px var(--f-mono);color:var(--ink3)}
+.rail .sect{padding:14px 10px 6px}
+.nav{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border:0;border-radius:9px;background:none;color:var(--ink2);font-weight:500;text-align:left;white-space:nowrap}
+.nav:hover{background:var(--sunk);color:var(--ink)}
+.nav .svg{color:var(--fam,var(--ink3))}
+.nav.on{background:var(--ink);color:var(--panel)}
+.nav.on .svg{color:var(--panel)}
+.nav .badge{margin-left:auto}
+.nav.dim{opacity:.72}
+.f-pub{--fam:var(--pub);--fam-soft:var(--pub-soft)}
+.f-grow{--fam:var(--grow);--fam-soft:var(--grow-soft)}
+.f-crt{--fam:var(--crt);--fam-soft:var(--crt-soft)}
+.f-hub{--fam:var(--accent);--fam-soft:var(--accent-soft)}
+.concept{margin-top:auto;padding:14px 10px 2px;font-size:11.5px;color:var(--ink3);line-height:1.45}
+
+.main{min-width:0;display:flex;flex-direction:column;gap:16px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--bg);display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-block:2px 6px}
+.who{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:5px 6px 5px 5px}
+.ava{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:600 12px var(--f-body);background:var(--fam-soft,var(--sunk));color:var(--fam,var(--ink2));flex:none}
+.who select{border:0;background:transparent;font-weight:600;padding:2px 2px;max-width:220px}
+.searchbtn{flex:1 1 220px;min-width:0;display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 12px;color:var(--ink3);text-align:left}
+.searchbtn kbd{margin-left:auto;font:500 11px var(--f-mono);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+.btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:9px;padding:8px 13px;font-weight:600;white-space:nowrap}
+.btn:hover{border-color:var(--line2)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.pri:hover{filter:brightness(1.05)}
+.btn.ink{background:var(--ink);border-color:var(--ink);color:var(--panel)}
+.btn.sm{padding:5px 10px;font-size:13px;border-radius:8px}
+.btn.ghost{background:transparent;border-color:transparent}
+.btn.ghost:hover{background:var(--sunk)}
+.iconbtn{position:relative;width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line);background:var(--panel);border-radius:10px;color:var(--ink2)}
+.iconbtn .dot{position:absolute;top:7px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.menu{position:absolute;right:0;top:calc(100% + 6px);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:6px;min-width:250px;box-shadow:0 12px 32px rgba(10,14,24,.14);z-index:20}
+.menu button{display:flex;gap:10px;align-items:flex-start;width:100%;border:0;background:none;padding:9px 10px;border-radius:8px;text-align:left}
+.menu button:hover{background:var(--sunk)}
+.menu small{display:block;color:var(--ink3);font-size:12px}
+.rel{position:relative}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.card.flush{padding:0}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.stack{display:flex;flex-direction:column;gap:16px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.between{justify-content:space-between}
+.g2{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:16px}
+.g2e{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi .v{font:500 22px/1.2 var(--f-mono);font-variant-numeric:tabular-nums;margin-top:4px}
+.kpi .d{font-size:12px;margin-top:2px}
+.up{color:var(--ok)}.down{color:var(--bad)}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.head p{max-width:62ch;margin-top:6px}
+.famtag{display:inline-flex;align-items:center;gap:6px;font-size:11px;text-transform:uppercase;letter-spacing:.09em;font-weight:600;color:var(--fam)}
+.famtag i{width:8px;height:8px;border-radius:2px;background:var(--fam)}
+
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--sunk);color:var(--ink2);white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.acc{background:var(--accent-soft);color:var(--accent-ink)}
+.pill.fam{background:var(--fam-soft);color:var(--fam)}
+.badge{min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--accent);color:var(--on-accent);font:600 11px/20px var(--f-mono);text-align:center}
+.nav.on .badge{background:var(--panel);color:var(--ink)}
+.plat{display:inline-grid;place-items:center;height:18px;min-width:24px;padding:0 4px;border-radius:5px;border:1px solid var(--line);font:500 10px var(--f-mono);color:var(--ink2);background:var(--panel)}
+
+/* hub */
+.queue{display:flex;flex-direction:column}
+.qi{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 4px;border-top:1px solid var(--line);background:none;border-left:0;border-right:0;border-bottom:0;text-align:left;width:100%}
+.qi:first-child{border-top:0}
+.qi:hover .qt{text-decoration:underline;text-underline-offset:3px}
+.qi .ico{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--fam-soft);color:var(--fam)}
+.qi .ico.bad{background:var(--bad-soft);color:var(--bad)}
+.qi .ico.warn{background:var(--warn-soft);color:var(--warn)}
+.qt{font-weight:600}
+.qm{font-size:13px;color:var(--ink2)}
+.spokes{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.spoke{display:flex;flex-direction:column;gap:8px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;min-height:118px}
+.spoke:hover{border-color:var(--fam)}
+.spoke .t{display:flex;align-items:center;gap:8px;font-weight:600}
+.spoke .t .svg{color:var(--fam)}
+.spoke .s{font:500 18px var(--f-mono);margin-top:auto}
+.spoke .c{font-size:12.5px;color:var(--ink2)}
+.timeline{display:flex;flex-direction:column}
+.tl{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
+.tl:first-child{border-top:0}
+.loop{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:6px}
+.loop div{border-radius:10px;padding:10px;background:var(--fam-soft);color:var(--fam);font-size:12.5px;font-weight:500}
+.loop b{display:block;font:500 16px var(--f-mono);color:var(--ink)}
+
+/* bars + meters */
+.meter{height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--fam,var(--accent));border-radius:99px}
+.meter.two{position:relative}
+.meter.two i.b{position:absolute;inset:0 auto 0 0;background:var(--line2)}
+.barrow{display:grid;grid-template-columns:90px minmax(0,1fr) 64px;gap:10px;align-items:center;font-size:13px;padding:5px 0}
+
+/* chart */
+.chart{width:100%;height:auto;display:block}
+.chart text{font:500 11px var(--f-mono);fill:var(--ink3)}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--ink2)}
+.legend i{display:inline-block;width:10px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+
+/* calendar */
+.scrollx{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(138px,1fr));gap:8px;min-width:1000px}
+.day{background:var(--sunk);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:6px;min-height:300px}
+.day.today{background:var(--accent-soft)}
+.dh{display:flex;justify-content:space-between;align-items:baseline;padding:2px 4px 4px}
+.dh b{font:700 15px var(--f-disp)}
+.best{font:500 10.5px var(--f-mono);color:var(--pub);padding:3px 6px;border:1px dashed var(--pub);border-radius:6px;text-align:center}
+.post{display:flex;flex-direction:column;gap:5px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px}
+.post:hover{border-color:var(--line2)}
+.post .tm{display:flex;align-items:center;gap:6px;font:500 11px var(--f-mono);color:var(--ink3)}
+.post .tt{font-size:12.5px;font-weight:600;line-height:1.3}
+.sdot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--ink3)}
+.s-scheduled{background:var(--pub)}.s-approval{background:var(--accent)}.s-draft{background:var(--line2);border:1px solid var(--ink3)}.s-published{background:var(--ok)}.s-failed{background:var(--bad)}.s-changes{background:var(--warn)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:5px 11px;font-size:13px;font-weight:500;color:var(--ink2)}
+.chip.on{background:var(--ink);border-color:var(--ink);color:var(--panel)}
+
+/* lists/tables */
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td.r,.tbl th.r{text-align:right}
+.li{display:flex;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
+.li:first-child{border-top:0}
+.li .grow{flex:1;min-width:0}
+
+/* engage */
+.inbox{display:grid;grid-template-columns:290px minmax(0,1fr) 260px;min-height:560px}
+.inbox > *{min-width:0}
+.ilist{border-right:1px solid var(--line);display:flex;flex-direction:column}
+.conv{display:flex;gap:10px;padding:12px 14px;border:0;border-bottom:1px solid var(--line);background:none;text-align:left;width:100%}
+.conv.on{background:var(--sunk)}
+.conv .n{font-weight:600;display:flex;gap:6px;align-items:center}
+.conv .x{font-size:13px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.unread{width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none;margin-top:6px}
+.thread{display:flex;flex-direction:column}
+.msgs{flex:1;padding:16px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:78%;padding:9px 12px;border-radius:12px;background:var(--sunk);font-size:13.5px}
+.msg.me{align-self:flex-end;background:var(--ink);color:var(--panel)}
+.msg small{display:block;font-size:11px;opacity:.7;margin-top:3px}
+.compose{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);flex-wrap:wrap}
+.compose input{flex:1 1 200px;min-width:0;border:1px solid var(--line);border-radius:9px;padding:9px 12px;background:var(--panel)}
+.ctx{border-left:1px solid var(--line);padding:16px;display:flex;flex-direction:column;gap:12px}
+.sugg{border:1px dashed var(--fam);border-radius:10px;padding:10px;font-size:13px;background:var(--fam-soft)}
+
+/* kanban */
+.kanban{display:grid;grid-template-columns:repeat(5,minmax(190px,1fr));gap:10px;min-width:980px}
+.col{background:var(--sunk);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:8px}
+.col h3{display:flex;justify-content:space-between;padding:4px 4px 2px;font-size:13px}
+.kc{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.kc .h{display:flex;gap:8px;align-items:center}
+.fit{font:500 12px var(--f-mono)}
+
+/* link in bio */
+.lib{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.phone{width:100%;max-width:300px;justify-self:center;border:10px solid var(--ink);border-radius:36px;background:var(--panel);padding:18px 14px;display:flex;flex-direction:column;gap:10px;min-height:560px}
+.phone .pfp{width:60px;height:60px;border-radius:50%;margin:4px auto 0;display:grid;place-items:center;font:700 20px var(--f-disp);background:var(--fam-soft);color:var(--fam)}
+.pb{border:1px solid var(--line);border-radius:12px;padding:10px;font-size:12.5px;font-weight:600;text-align:center}
+.pb.banner{background:var(--fam-soft);color:var(--fam);text-align:left;padding:14px}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.pgrid i{aspect-ratio:1;border-radius:6px;max-width:100%}
+.prow{display:flex;gap:6px;overflow:hidden}
+.prow span{flex:1;border:1px solid var(--line);border-radius:8px;padding:6px;font-size:10.5px;text-align:left;font-weight:500}
+.prow span b{display:block;font-family:var(--f-mono)}
+.blk{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.blk:first-child{border-top:0}
+.sw{position:relative;width:38px;height:22px;border-radius:99px;background:var(--line2);border:0;flex:none;transition:background .15s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--panel);transition:transform .15s}
+.sw.on{background:var(--pub)}
+.sw.on::after{transform:translateX(16px)}
+
+/* media */
+.media{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tile{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel);display:flex;flex-direction:column}
+.tile .im{aspect-ratio:4/5;display:grid;place-items:center;color:var(--fam);background:var(--fam-soft);max-width:100%}
+.tile .im .svg{width:30px;height:30px;stroke-width:1.4}
+.tile .cap{padding:8px 10px;font-size:12.5px;display:flex;flex-direction:column;gap:4px}
+
+/* listen */
+.gauge{display:flex;align-items:center;gap:18px}
+.ring{width:96px;height:96px}
+.lock{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center;border:1px dashed var(--grow);background:var(--grow-soft);border-radius:14px;padding:16px 18px}
+.lock .svg{color:var(--grow);width:26px;height:26px}
+
+/* overlays */
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:30}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--panel);z-index:31;border-left:1px solid var(--line);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-right:env(safe-area-inset-right,0px)}
+.dhd{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.dbd{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:14px}
+.dft{display:flex;gap:8px;justify-content:flex-end;padding:14px 18px;border-top:1px solid var(--line);flex-wrap:wrap}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:12.5px;font-weight:600;color:var(--ink2)}
+.inp{border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:var(--panel);font-weight:400;color:var(--ink);width:100%}
+textarea.inp{min-height:110px;resize:vertical;line-height:1.5}
+.toggles{display:flex;gap:6px;flex-wrap:wrap}
+.tog{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:5px 9px;font:500 12px var(--f-mono);color:var(--ink2)}
+.tog.on{background:var(--pub-soft);border-color:var(--pub);color:var(--pub)}
+.note{border-radius:10px;padding:10px 12px;font-size:13px;background:var(--sunk)}
+.note.acc{background:var(--accent-soft);color:var(--accent-ink)}
+.note.fam{background:var(--fam-soft)}
+.cmt{display:flex;gap:10px;font-size:13px}
+.palette{position:fixed;left:50%;top:max(10vh,calc(env(safe-area-inset-top,0px) + 12px));transform:translateX(-50%);width:min(580px,calc(100% - 32px));background:var(--panel);border:1px solid var(--line);border-radius:14px;z-index:31;overflow:hidden;box-shadow:0 20px 50px rgba(8,12,22,.25)}
+.palette input{width:100%;border:0;border-bottom:1px solid var(--line);padding:16px 18px;font-size:16px;background:var(--panel);outline:none}
+.plist{max-height:min(420px,60vh);overflow:auto;padding:6px}
+.pi{display:flex;gap:10px;align-items:center;width:100%;border:0;background:none;padding:9px 12px;border-radius:9px;text-align:left}
+.pi.sel,.pi:hover{background:var(--sunk)}
+.pi .k{margin-left:auto;font-size:12px;color:var(--ink3)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--panel);padding:10px 16px;border-radius:10px;font-weight:600;z-index:40;display:flex;gap:8px;align-items:center;max-width:calc(100% - 32px)}
+.ai-q{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:10px 12px;text-align:left;font-weight:500}
+.ai-q:hover{border-color:var(--grow)}
+.ai-a{background:var(--grow-soft);border-radius:12px;padding:12px 14px;font-size:13.5px}
+.ai-a b{color:var(--grow)}
+
+@media (max-width:1100px){.inbox{grid-template-columns:260px minmax(0,1fr)}.ctx{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}.lib{grid-template-columns:1fr}}
+@media (max-width:980px){.g2,.g2e{grid-template-columns:1fr}}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .rail{position:static;max-height:none;flex-direction:row;align-items:center;overflow-x:auto;padding:8px;gap:4px}
+  .rail .sect,.concept,.nav .badge{display:none}
+  .mark{padding:0 10px 0 6px}
+  .nav{width:auto}
+  .inbox{grid-template-columns:1fr}.ilist{border-right:0;border-bottom:1px solid var(--line)}
+  h1{font-size:25px}
+  .loop{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:no-preference){
+  .view{animation:in .22s ease-out}
+  @keyframes in{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+}
+</style>
+
+<div class="app" id="app"></div>
+<div id="ov"></div>
+
+<script>
+(function(){
+const P={
+home:"M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z",
+plan:"M4 6h16v14H4zM4 10h16M8 3v4M16 3v4",
+create:"M4 5h16v14H4zM4 16l5-5 4 4 3-3 4 4M15 9h.01",
+linkinbio:"M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1",
+engage:"M4 13l3-8h10l3 8v6H4zM4 13h5l1 2h4l1-2h5",
+analyze:"M4 20V4M4 20h16M8 16v-5M12 16V8M16 16v-3",
+listen:"M4 12a8 8 0 1 0 16 0 8 8 0 1 0-16 0M8 12a4 4 0 1 0 8 0 4 4 0 1 0-8 0M12 12l6-6",
+campaigns:"M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 6.5M18 14a6 6 0 0 1 3.5 6",
+earn:"M4 7h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4zM4 7V5a1 1 0 0 1 1-1h11M16 13.5h.01",
+services:"M4 8h16v11H4zM9 8V5h6v3M4 13h16",
+settings:"M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M14 4v4M8 10v4M16 16v4",
+search:"M4 11a7 7 0 1 0 14 0 7 7 0 1 0-14 0M20 20l-4-4",
+plus:"M12 5v14M5 12h14",
+spark:"M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z",
+bell:"M6 16v-5a6 6 0 0 1 12 0v5l2 2H4zM10 21h4",
+x:"M6 6l12 12M18 6L6 18",
+check:"M5 12l5 5 9-10",
+lock:"M6 11h12v9H6zM8 11V8a4 4 0 0 1 8 0v3",
+arrow:"M5 12h14M13 6l6 6-6 6",
+alert:"M12 4l9 16H3zM12 10v4M12 17h.01",
+copy:"M8 8h12v12H8zM4 16V4h12",
+chevl:"M15 6l-6 6 6 6",chevr:"M9 6l6 6-6 6",
+send:"M4 12l16-8-6 16-3-7z",
+};
+const ic=(n,s)=>`<svg class="svg" viewBox="0 0 24 24" ${s?`style="width:${s}px;height:${s}px"`:''} aria-hidden="true"><path d="${P[n]}"/></svg>`;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $m=n=>'$'+n.toLocaleString('en-US',{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2});
+
+/* ---------- model ---------- */
+const SPOKES={
+ plan:{label:'Plan + publish',fam:'pub',famName:'Publish'},
+ create:{label:'Create',fam:'pub',famName:'Publish'},
+ linkinbio:{label:'Link in bio',fam:'pub',famName:'Publish'},
+ engage:{label:'Engage',fam:'grow',famName:'Grow'},
+ analyze:{label:'Analyze',fam:'grow',famName:'Grow'},
+ listen:{label:'Listen',fam:'grow',famName:'Grow'},
+ campaigns:{label:'Campaigns',fam:'crt',famName:'Creators'},
+ earn:{label:'Earn',fam:'crt',famName:'Creators'},
+ services:{label:'Services',fam:'crt',famName:'Creators'},
+};
+const ROLES={
+ smm:{name:'Priya Shah',ini:'PS',title:'Social media manager',ws:'Fernway Outdoor',plan:'Growth plan',
+   order:['plan','engage','analyze','create','linkinbio','listen','campaigns'],more:['earn','services']},
+ brand:{name:'Maya Chen',ini:'MC',title:'Influencer marketing lead',ws:'Fernway Outdoor',plan:'Enterprise',
+   order:['campaigns','analyze','listen','plan','engage','services'],more:['create','linkinbio','earn']},
+ creator:{name:'Jules Ortiz',ini:'JO',title:'Creator · @julesoutside',ws:'Jules Ortiz',plan:'Creator',
+   order:['earn','campaigns','linkinbio','plan','analyze','create','engage'],more:['listen','services']},
+};
+const label=(id)=>id==='campaigns'&&S.role==='creator'?'Opportunities':SPOKES[id].label;
+
+const DAYS=['Mon 26','Tue 27','Wed 28','Thu 29','Fri 30','Sat 31','Sun 1'];
+const BEST=['6:30 PM','12:15 PM','6:00 PM','7:00 PM','11:30 AM','9:00 AM','4:00 PM'];
+const POSTS={
+ team:[
+  {id:'p1',d:0,t:'9:00 AM',ti:'Trail-ready layers: the fall drop',pl:['IG','FB'],st:'published',by:'Priya',cap:'Shoulder season calls for layers that pack down small. The fall drop is live.'},
+  {id:'p2',d:0,t:'6:30 PM',ti:'Reel: 3 ways to pack the Ridge 28',pl:['IG','TT'],st:'approval',by:'Priya',cap:'Three packing setups for one 28L pack. Which one are you?'},
+  {id:'p3',d:1,t:'12:00 PM',ti:'Jules × Fernway: summit morning',pl:['IG'],st:'approval',by:'Jules Ortiz',collab:true,cap:'5:40am, 4,200 ft, and the Ridge 28 carrying everything. Partnered with @fernwayoutdoor.'},
+  {id:'p4',d:2,t:'8:15 AM',ti:'Fall camp checklist',pl:['PIN'],st:'scheduled',by:'Priya',cap:'Save this for your next overnight.'},
+  {id:'p5',d:2,t:'5:00 PM',ti:'Behind the stitch: factory visit',pl:['YT','LI'],st:'scheduled',by:'Sam',cap:'How the Ridge line gets made.'},
+  {id:'p6',d:3,t:'11:00 AM',ti:'UGC repost: @wanderwithkai',pl:['IG'],st:'scheduled',by:'Priya',cap:'Kai took the Ridge 28 up Rainier. Rights granted.'},
+  {id:'p7',d:3,t:'7:00 PM',ti:'Tent pitch speedrun',pl:['TT'],st:'failed',by:'Sam',cap:'Can we pitch the Basecamp 2 in under 90 seconds?',err:'TikTok needs reconnecting. The access token expired on Oct 24.'},
+  {id:'p8',d:4,t:'10:00 AM',ti:'Weekend forecast + gear picks',pl:['TH','FB'],st:'draft',by:'Priya',cap:''},
+  {id:'p9',d:5,t:'9:30 AM',ti:'Story poll: lake or summit?',pl:['IG'],st:'scheduled',by:'Priya',cap:'Vote in stories.'},
+  {id:'p10',d:6,t:'4:00 PM',ti:'Sunday reset: gear care',pl:['IG','TT'],st:'draft',by:'Sam',cap:''},
+ ],
+ creator:[
+  {id:'c1',d:0,t:'7:00 AM',ti:'Sunrise on Mt. Si',pl:['IG'],st:'published',by:'Jules',cap:'Worth the 4am alarm.'},
+  {id:'p3',d:1,t:'12:00 PM',ti:'Jules × Fernway: summit morning',pl:['IG'],st:'changes',by:'Jules',collab:true,cap:'5:40am, 4,200 ft, and the Ridge 28 carrying everything. Partnered with @fernwayoutdoor.'},
+  {id:'c3',d:2,t:'6:00 PM',ti:'Fall layers haul (affiliate)',pl:['TT'],st:'scheduled',by:'Jules',cap:'Everything I am wearing this fall, links in bio.'},
+  {id:'c4',d:4,t:'8:00 AM',ti:'Trail mix, three ways',pl:['IG','YT'],st:'draft',by:'Jules',cap:''},
+  {id:'c5',d:5,t:'10:00 AM',ti:'Q&A in stories',pl:['IG'],st:'scheduled',by:'Jules',cap:'Ask me anything about solo overnights.'},
+ ]
+};
+const ST={published:['Published','ok'],scheduled:['Scheduled',''],approval:['Needs approval','acc'],draft:['Draft',''],failed:['Failed','bad'],changes:['Changes requested','warn']};
+const COMMENTS={p3:[{w:'Maya Chen',ini:'MC',t:'Love the light. Can we name the pack in the first line and add the #ad disclosure?',when:'Today 10:12 AM'}],p2:[{w:'Sam Park',ini:'SP',t:'Cover frame swapped to the blue jacket shot.',when:'Today 9:40 AM'}]};
+
+const CONVOS={
+ team:[
+  {id:'k1',who:'@kai.wanders',pl:'IG',type:'DM',un:true,msgs:[['them','Is the Ridge 28 carry-on size for most airlines?','11:02 AM']],ctx:{k:'customer',orders:2,note:'Bought a Basecamp 2 in August.'}},
+  {id:'k2',who:'@julesoutside',pl:'IG',type:'Comment',un:true,msgs:[['them','So stoked on how this one turned out!! 🏔️','10:48 AM']],ctx:{k:'creator',camp:"Fall Trail '26",sales:'$2,410',note:'In your creator network.'}},
+  {id:'k3',who:'@tentlife_tyler',pl:'TT',type:'Comment',un:true,flag:true,msgs:[['them','zipper broke after 2 trips. not cool','9:15 AM']],ctx:{k:'risk',note:'Negative sentiment. 1.1k likes on the comment.'}},
+  {id:'k4',who:'Dana Whitfield',pl:'FB',type:'DM',un:false,msgs:[['them','Do you ship to Canada?','Yesterday'],['me','We do. Duties are included at checkout.','Yesterday']],ctx:{k:'customer',orders:0,note:'New contact.'}},
+  {id:'k5',who:'@sierrahikes',pl:'IG',type:'Mention',un:false,msgs:[['them','Tagged @fernwayoutdoor in a story: "best $90 I spent this year"','Sat']],ctx:{k:'ugc',note:'Ask for rights to repost this in Create.'}},
+ ],
+ creator:[
+  {id:'j1',who:'Maya Chen · Fernway',pl:'Later',type:'Brand',un:true,msgs:[['them','Small revision on Tuesday’s post. Notes are on the post in Plan.','10:13 AM']],ctx:{k:'brand',camp:"Fall Trail '26",note:'Active campaign. $1,800 flat + 12% commission.'}},
+  {id:'j2',who:'@hannah.on.trail',pl:'IG',type:'Comment',un:true,msgs:[['them','where is that jacket from?? need it','9:51 AM']],ctx:{k:'shop',note:'Matches a product you have a link for.'}},
+  {id:'j3',who:'@mtnmarco',pl:'TT',type:'Comment',un:true,msgs:[['them','jacket link pls','9:30 AM']],ctx:{k:'shop',note:'Matches a product you have a link for.'}},
+  {id:'j4',who:'@liz_outdoors',pl:'IG',type:'DM',un:false,msgs:[['them','Your Mt. Si post got me out the door this morning','Yesterday']],ctx:{k:'fan',note:'Follower for 2 years.'}},
+ ]
+};
+
+const PIPE=[
+ {id:'jo',n:'Jules Ortiz',h:'@julesoutside',f:'184K',st:3,fit:94,note:'Draft revision due Wed'},
+ {id:'ar',n:'Ari Bennett',h:'@aribennett',f:'61K',st:4,fit:91,note:'Live · 3 posts'},
+ {id:'lt',n:'Lena Tor',h:'@lenatrails',f:'322K',st:4,fit:88,note:'Live · 2 posts'},
+ {id:'dm',n:'Dev Mehta',h:'@devclimbs',f:'45K',st:2,fit:90,note:'Contract signed Oct 22'},
+ {id:'ny',n:'Noa Yi',h:'@noaoutside',f:'97K',st:2,fit:86,note:'Shipping product'},
+ {id:'rc',n:'Rosa Cruz',h:'@rosacamps',f:'28K',st:1,fit:89,note:'Invited Oct 23'},
+ {id:'bk',n:'Ben Kalu',h:'@benkalu',f:'510K',st:1,fit:79,note:'Negotiating rate'},
+ {id:'ss',n:'Sun Shin',h:'@sunshinehikes',f:'73K',st:3,fit:87,note:'Content in review'},
+ {id:'mo',n:'Mo Farah-Lind',h:'@mofl',f:'19K',st:4,fit:93,note:'Live · 1 post'},
+];
+const STAGES=['Discover','Invited','Contracted','Content','Live'];
+const DISC=[
+ {id:'d1',n:'Tess Alder',h:'@tessalder',f:'88K',fit:95,rate:'$1,400–1,900',risk:'none',ov:'8%',why:'Audience 71% hikers 25–34; 3 past outdoor collabs averaged 5.1% saves'},
+ {id:'d2',n:'Kofi Mensah',h:'@kofiwalks',f:'142K',fit:92,rate:'$2,100–2,800',risk:'none',ov:'14%',why:'High purchase intent: 1.9k linked-post clicks per post'},
+ {id:'d3',n:'Gray Holloway',h:'@grayholloway',f:'230K',fit:84,rate:'$3,200–4,000',risk:'review',ov:'22%',why:'Strong reach, but a 2025 post about a competitor recall needs review'},
+ {id:'d4',n:'Iris Park',h:'@irisparkoutdoors',f:'36K',fit:90,rate:'$600–850',risk:'none',ov:'5%',why:'Low overlap with current roster; strong Pinterest saves'},
+];
+const OPPS=[
+ {id:'o0',b:'Fernway Outdoor',c:"Fall Trail '26",pay:'$1,800 + 12% commission',m:97,st:'active',due:'Content due Wed'},
+ {id:'o1',b:'Northline Coffee',c:'Camp brew season',pay:'$1,200 + 15% commission',m:92,st:'invite',due:'Reply by Oct 30'},
+ {id:'o2',b:'Altus Optics',c:'Golden hour',pay:'$850 flat',m:81,st:'open',due:'Apply by Nov 4'},
+ {id:'o3',b:'Kestrel Bikes',c:'Gravel winter',pay:'$2,000 + gear',m:64,st:'open',due:'Apply by Nov 9'},
+];
+const LINKS=[
+ {id:'l1',b:'Fernway Outdoor',p:'Ridge 28 pack',url:'later.link/jules/ridge28',cl:3214,or:188,cm:1128.40,ok:true},
+ {id:'l2',b:'Fernway Outdoor',p:'Alder insulated jacket',url:'later.link/jules/alder',cl:2876,or:141,cm:1269.00,ok:true},
+ {id:'l3',b:'Northline Coffee',p:'Cold brew camp kit',url:'later.link/jules/coldbrew',cl:1540,or:96,cm:432.00,ok:true},
+ {id:'l4',b:'Altus Optics',p:'Polar trail sunglasses',url:'later.link/jules/polar',cl:902,or:37,cm:288.60,ok:false},
+ {id:'l5',b:'Pinecrest Supply',p:'Ultralight stove',url:'later.link/jules/stove',cl:611,or:22,cm:143.00,ok:false},
+];
+const MEDIA=[
+ {t:'Ridge 28 on granite',src:'Upload',fam:'pub'},{t:'Factory: stitching',src:'Upload',fam:'pub'},{t:'Summit morning (Jules)',src:'Creator',fam:'crt'},
+ {t:'@wanderwithkai on Rainier',src:'UGC',fam:'grow',rights:'Granted'},{t:'Fall drop carousel',src:'Canva',fam:'pub'},{t:'@sierrahikes story',src:'UGC',fam:'grow',rights:'Not requested'},
+ {t:'Tent pitch b-roll',src:'Upload',fam:'pub'},{t:'Gear care graphic',src:'Canva',fam:'pub'},{t:'@lenatrails reel',src:'Creator',fam:'crt'},{t:'Lake camp at dusk',src:'Upload',fam:'pub'},
+];
+
+const S={role:'smm',view:'hub',filter:'all',mediaF:'All',conv:null,mode:'both',listenPreview:false,drawer:null,palette:false,menu:null,toast:null,
+ credits:{smm:31,brand:88,creator:12},ideas:[],ai:[],
+ blocks:{team:[['Featured banner','Fall drop: layers that pack small',true,'1,912 clicks'],['Linked posts','Shoppable feed of your IG and TikTok posts',true,'2,204 clicks'],['Product carousel','Ridge 28, Alder jacket, Basecamp 2',true,'640 clicks'],['Email signup','Trail notes newsletter',true,'150 signups'],['Social links','Instagram, TikTok, YouTube, Pinterest',false,'—']],
+  creator:[['Featured banner','My fall kit, all in one place',true,'1,377 clicks'],['Affiliate links','5 links, synced from Earn',true,'9,143 clicks'],['Linked posts','Tap a post to shop it',true,'3,021 clicks'],['Brand partner','Fernway Outdoor collab',true,'812 clicks'],['Email signup','Weekend trail drops',false,'—']]},
+};
+const team=()=>S.role==='creator'?'creator':'team';
+
+/* ---------- shell ---------- */
+const app=document.getElementById('app'),ov=document.getElementById('ov');
+function badgeFor(id){
+ const p=POSTS[team()];
+ if(id==='plan'){const n=p.filter(x=>x.st==='approval'||x.st==='failed'||x.st==='changes').length;return n}
+ if(id==='engage'){return CONVOS[team()].filter(c=>c.un).length}
+ if(id==='campaigns'&&S.role==='creator')return OPPS.filter(o=>o.st==='invite').length;
+ if(id==='earn'&&S.role==='creator')return LINKS.filter(l=>!l.ok).length;
+ return 0;
+}
+function navBtn(id){
+ const s=SPOKES[id],b=badgeFor(id);
+ return `<button class="nav f-${s.fam} ${S.view===id?'on':''}" data-go="${id}">${ic(id)}<span>${label(id)}</span>${b?`<span class="badge">${b}</span>`:''}</button>`;
+}
+function rail(){
+ const r=ROLES[S.role];
+ return `<nav class="rail" aria-label="Spokes">
+  <div class="mark"><b>Later</b><span>unified</span></div>
+  <button class="nav f-hub ${S.view==='hub'?'on':''}" data-go="hub">${ic('home')}<span>Home</span></button>
+  <div class="sect eyebrow">Your spokes</div>
+  ${r.order.map(navBtn).join('')}
+  <div class="sect eyebrow">More from Later</div>
+  ${r.more.map(id=>navBtn(id).replace('class="nav','class="nav dim')).join('')}
+  <button class="nav ${S.view==='settings'?'on':''}" data-go="settings">${ic('settings')}<span>Workspace</span></button>
+  <p class="concept">Unofficial concept prototype. Not affiliated with Later. All people, brands and figures are fictional.</p>
+ </nav>`;
+}
+function top(){
+ const r=ROLES[S.role];
+ return `<div class="top">
+  <div class="who f-${S.role==='creator'?'crt':S.role==='brand'?'crt':'pub'}"><span class="ava">${r.ini}</span>
+   <select id="role" aria-label="Switch role">
+    <option value="smm" ${S.role==='smm'?'selected':''}>Priya · Social media manager</option>
+    <option value="brand" ${S.role==='brand'?'selected':''}>Maya · Influencer marketing lead</option>
+    <option value="creator" ${S.role==='creator'?'selected':''}>Jules · Creator</option>
+   </select></div>
+  <button class="searchbtn" data-act="palette">${ic('search',16)}<span>Search posts, creators, links, spokes</span><kbd>⌘K</kbd></button>
+  <button class="iconbtn" data-act="ai" aria-label="Ask EdgeAI">${ic('spark')}</button>
+  <button class="iconbtn" data-act="notif" aria-label="Notifications">${ic('bell')}<span class="dot"></span></button>
+  <div class="rel"><button class="btn pri" data-act="create">${ic('plus',16)}Create</button>${S.menu==='create'?createMenu():''}</div>
+ </div>`;
+}
+function createMenu(){
+ const items={smm:[['post','Post','Schedule to any connected profile'],['block','Link in bio block','Add a banner, product or form'],['report','Report','Share analytics with a link']],
+  brand:[['brief','Campaign brief','Start a creator campaign with EdgeAI'],['shortlist','Creator shortlist','Find best-fit creators'],['post','Post','Schedule to Fernway profiles']],
+  creator:[['link','Affiliate link','Link any product from 1,000s of brands'],['post','Post','Schedule to your profiles'],['block','Link in bio block','Update your page']]}[S.role];
+ return `<div class="menu" role="menu">${items.map(i=>`<button data-new="${i[0]}" role="menuitem">${ic(i[0]==='post'?'plan':i[0]==='link'?'linkinbio':i[0]==='block'?'linkinbio':i[0]==='report'?'analyze':'campaigns')}<span><b>${i[1]}</b><small>${i[2]}</small></span></button>`).join('')}</div>`;
+}
+function head(id,title,sub,actions=''){
+ const s=SPOKES[id];
+ return `<div class="head f-${s?s.fam:'hub'}"><div><span class="famtag"><i></i>${s?s.famName+' · '+label(id):'Home'}</span><h1 style="margin-top:6px">${title}</h1>${sub?`<p class="muted">${sub}</p>`:''}</div><div class="row">${actions}</div></div>`;
+}
+
+/* ---------- charts ---------- */
+function lineChart(series,labels,opts={}){
+ const W=640,H=230,L=46,R=14,T=14,B=30;
+ const all=series.flatMap(s=>s.v);const max=Math.ceil(Math.max(...all)*1.12/ (opts.step||10))*(opts.step||10);
+ const x=i=>L+i*(W-L-R)/(labels.length-1),y=v=>T+(H-T-B)*(1-v/max);
+ const ticks=[0,max/2,max];
+ let g=ticks.map(t=>`<line class="grid" x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}"/><text x="${L-8}" y="${y(t)+4}" text-anchor="end">${opts.fmt?opts.fmt(t):t}</text>`).join('');
+ g+=labels.map((l,i)=>`<text x="${x(i)}" y="${H-8}" text-anchor="middle">${l}</text>`).join('');
+ const paths=series.map((s,si)=>{
+  const d=s.v.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)).join(' ');
+  const area=si===0?`<path d="${d} L${x(s.v.length-1)} ${y(0)} L${x(0)} ${y(0)} Z" fill="${s.c}" opacity=".1"/>`:'';
+  const li=s.v.length-1;
+  return `${area}<path d="${d}" fill="none" stroke="${s.c}" stroke-width="2.25" stroke-linejoin="round" stroke-linecap="round" ${s.dash?'stroke-dasharray="5 5"':''}/><circle cx="${x(li)}" cy="${y(s.v[li])}" r="4" fill="${s.c}"/>`;
+ }).join('');
+ return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||'Trend chart')}">${g}${paths}</svg>`;
+}
+function spark(v,c){const W=200,H=44,mx=Math.max(...v),mn=Math.min(...v);const x=i=>i*W/(v.length-1),y=n=>4+(H-8)*(1-(n-mn)/(mx-mn||1));const d=v.map((n,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(n).toFixed(1)).join(' ');return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:44px;display:block" aria-hidden="true"><path d="${d} L${W} ${H} L0 ${H}Z" fill="${c}" opacity=".12"/><path d="${d}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round"/><circle cx="${x(v.length-1)}" cy="${y(v[v.length-1])}" r="3.5" fill="${c}"/></svg>`}
+const cv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* ---------- HUB ---------- */
+const QUEUE={
+ smm:[
+  {f:'pub',i:'plan',t:'3 posts are waiting for approval',m:'2 from your team and 1 creator collab from Jules Ortiz',go:'plan',flt:'approval'},
+  {f:'pub',i:'alert',k:'bad',t:'A TikTok post failed to publish',m:'Tent pitch speedrun · Thu 7:00 PM · reconnect TikTok to retry',go:'plan',open:'p7'},
+  {f:'grow',i:'engage',t:'3 unread conversations',m:'1 TikTok comment flagged as negative sentiment',go:'engage'},
+  {f:'grow',i:'listen',t:'#shoulderseason is up 212% this week',m:'Trend from Listen · included in the Scale plan',go:'listen'},
+ ],
+ brand:[
+  {f:'crt',i:'plan',t:'Jules Ortiz sent a draft for your review',m:"Fall Trail '26 · approves in Plan, publishes from Jules’s account",go:'plan',open:'p3'},
+  {f:'crt',i:'alert',k:'warn',t:'1 shortlisted creator needs a brand-safety review',m:'@grayholloway · flagged by EdgeAI',go:'campaigns'},
+  {f:'crt',i:'campaigns',t:'Budget is 61% spent with 40% of the flight left',m:"Fall Trail '26 is pacing 6% ahead of plan",go:'campaigns'},
+  {f:'grow',i:'analyze',t:'Creator content earns 2.3× more saves than brand posts',m:'Last 30 days across Instagram and TikTok',go:'analyze'},
+ ],
+ creator:[
+  {f:'crt',i:'plan',t:'Fernway asked for a small revision',m:'Summit morning · name the pack first and add #ad · due Wed',go:'plan',open:'p3'},
+  {f:'crt',i:'campaigns',t:'New invite: Northline Coffee',m:'$1,200 + 15% commission · 92% match · reply by Oct 30',go:'campaigns'},
+  {f:'crt',i:'alert',k:'warn',t:'2 links point to expired promos',m:'Altus Optics and Pinecrest Supply · swap to live offers',go:'earn'},
+  {f:'grow',i:'engage',t:'2 followers asked where your jacket is from',m:'Reply with your Alder jacket link in one tap',go:'engage'},
+ ],
+};
+const TILE={
+ smm:{plan:['8','scheduled this week'],engage:['3','unread'],analyze:['412K','reach, 30 days'],create:['248','assets'],linkinbio:['26.6%','click-through'],listen:['+212%','top trend'],campaigns:['9','creators live or in content'],earn:['—','for creators'],services:['—','managed programs']},
+ brand:{campaigns:['6.3×',"ROAS, Fall Trail '26"],analyze:['$186K','creator-attributed sales'],listen:['78','brand health'],plan:['2','awaiting approval'],engage:['3','unread'],services:['1','program in planning'],create:['248','assets'],linkinbio:['18.4K','page views'],earn:['—','for creators']},
+ creator:{earn:['$4,812','October earnings'],campaigns:['1','new invite'],linkinbio:['9.1K','clicks this month'],plan:['3','scheduled'],analyze:['184K','followers'],create:['96','assets'],engage:['3','unread'],listen:['—','brand tool'],services:['—','brand tool']},
+};
+function hub(){
+ const r=ROLES[S.role],q=QUEUE[S.role];
+ const first=r.name.split(' ')[0];
+ const sub={smm:'Fernway Outdoor · 8 profiles across Instagram, TikTok, Facebook, YouTube, Pinterest, LinkedIn and Threads.',
+  brand:"Fernway Outdoor · Fall Trail '26 is live with 9 creators and 3 more in contracting.",
+  creator:'Your posts, links and brand deals in one place. October is your best month so far.'}[S.role];
+ return `<div class="view stack">
+ <div class="head"><div><span class="eyebrow">Monday, October 26</span><h1 style="margin-top:6px">Good afternoon, ${first}</h1><p class="muted">${sub}</p></div></div>
+ <div class="g2">
+  <section class="card"><div class="card-h"><h2>Needs you now</h2><span class="pill acc">${q.length} items</span></div>
+   <div class="queue">${q.map((x,i)=>`<button class="qi f-${x.f}" data-q="${i}"><span class="ico ${x.k||''}">${ic(x.i)}</span><span><span class="qt">${x.t}</span><br><span class="qm">${x.m}</span></span>${ic('arrow',16)}</button>`).join('')}</div>
+  </section>
+  ${hubSide()}
+ </div>
+ <section class="stack" style="gap:10px"><div class="row between"><h2>Your spokes</h2><span class="faint" style="font-size:13px">Ordered for ${r.title.split(' ·')[0].toLowerCase()}s. Everything else is under More.</span></div>
+  <div class="spokes">${r.order.map(id=>{const s=SPOKES[id],t=TILE[S.role][id];return `<button class="spoke f-${s.fam}" data-go="${id}"><span class="t">${ic(id)}${label(id)}</span><span class="s">${t[0]}</span><span class="c">${t[1]}</span></button>`}).join('')}</div>
+ </section>
+ </div>`;
+}
+function hubSide(){
+ if(S.role==='smm'){
+  const today=POSTS.team.filter(p=>p.d===0||p.d===1).slice(0,4);
+  return `<section class="card"><div class="card-h"><h2>Today and tomorrow</h2><button class="btn sm ghost" data-go="plan">Calendar ${ic('arrow',14)}</button></div>
+   <div class="timeline">${today.map(p=>`<div class="tl"><span class="mono faint" style="font-size:12px">${DAYS[p.d].slice(0,3)} ${p.t.replace(':00','')}</span><button class="btn ghost sm" style="justify-content:flex-start;white-space:normal;text-align:left;padding:2px 0" data-open="${p.id}">${esc(p.ti)}</button><span class="pill ${ST[p.st][1]}">${ST[p.st][0]}</span></div>`).join('')}</div>
+   <div style="margin-top:14px" class="note f-pub note fam"><b>Best time today:</b> 6:30 PM on Instagram. Your Reel is already in that slot.</div></section>`;
+ }
+ if(S.role==='brand'){
+  return `<section class="card f-crt"><div class="card-h"><h2>Fall Trail '26</h2><span class="pill ok">On track</span></div>
+   <div class="stack" style="gap:12px">
+    <div><div class="row between" style="font-size:13px"><span>Budget spent</span><span class="mono">$29,400 of $48,000</span></div><div class="meter" style="margin-top:6px"><i style="width:61%"></i></div><div class="row between faint" style="font-size:12px;margin-top:4px"><span>Flight day 18 of 30</span><span>60% elapsed</span></div></div>
+    <div class="kpis" style="grid-template-columns:repeat(3,minmax(0,1fr))"><div><span class="eyebrow">Sales</span><div class="mono" style="font-size:18px">$186K</div></div><div><span class="eyebrow">ROAS</span><div class="mono" style="font-size:18px">6.3×</div></div><div><span class="eyebrow">Live</span><div class="mono" style="font-size:18px">9</div></div></div>
+    <div class="ai-a"><b>EdgeAI:</b> Shifting $4K from paid amplification to two more micro-creators like @mofl would raise projected sales about 9% at the same spend.</div>
+    <p class="faint" style="font-size:12.5px">Sales here come from the same affiliate links creators manage in Earn and post through Plan.</p>
+   </div></section>`;
+ }
+ const v=[2.1,2.6,2.2,3.0,3.4,3.1,3.8,4.0,3.7,4.4,4.8];
+ return `<section class="card f-crt"><div class="card-h"><h2>October earnings</h2><span class="pill ok">+38% vs Sept</span></div>
+  <div class="mono" style="font-size:34px;line-height:1">$4,812.40</div>
+  <div style="margin:12px 0">${spark(v,'var(--crt)')}</div>
+  <div class="li"><span class="grow">Next payout · Nov 1</span><b class="mono">$3,576.40</b></div>
+  <div class="li"><span class="grow">Pending (in return window)</span><b class="mono">$1,236.00</b></div>
+  <div class="li"><span class="grow">From Fernway campaign</span><b class="mono">$1,800 + 12%</b></div>
+ </section>`;
+}
+
+/* ---------- PLAN ---------- */
+function plan(){
+ const ps=POSTS[team()];
+ const show=p=>S.filter==='all'||(S.filter==='approval'&&(p.st==='approval'||p.st==='changes'))||(S.filter==='draft'&&p.st==='draft')||(S.filter==='issues'&&p.st==='failed');
+ const queue=ps.filter(p=>p.st==='approval'||p.st==='changes'||p.st==='failed');
+ return `<div class="view stack">
+ ${head('plan',S.role==='creator'?'Your content calendar':'Content calendar','Plan, approve and publish in one place. Creator collabs land here for approval, then publish from the creator’s own account.',`<button class="btn" data-act="notyet">${ic('chevl',16)}</button><span class="mono" style="font-size:13px">Oct 26 – Nov 1</span><button class="btn" data-act="notyet">${ic('chevr',16)}</button><button class="btn pri" data-new="post">${ic('plus',16)}New post</button>`)}
+ <div class="row between"><div class="chips">${[['all','All'],['approval','Approvals'],['draft','Drafts'],['issues','Issues']].map(c=>`<button class="chip ${S.filter===c[0]?'on':''}" data-filter="${c[0]}">${c[1]}</button>`).join('')}</div>
+  <div class="legend">${Object.entries(ST).map(([k,v])=>`<span><span class="sdot s-${k}" style="display:inline-block;vertical-align:middle;margin-right:5px"></span>${v[0]}</span>`).join('')}</div></div>
+ <div class="scrollx"><div class="cal">${DAYS.map((d,i)=>`<div class="day ${i===0?'today':''}"><div class="dh"><b>${d}</b>${i===0?'<span class="pill acc">Today</span>':''}</div><div class="best" title="Best time to post on Instagram">Best ${BEST[i]}</div>
+   ${ps.filter(p=>p.d===i&&show(p)).map(p=>`<button class="post" data-open="${p.id}"><span class="tm"><span class="sdot s-${p.st}"></span>${p.t}</span><span class="tt">${esc(p.ti)}</span><span class="row" style="gap:4px">${p.pl.map(x=>`<span class="plat">${x}</span>`).join('')}${p.collab?'<span class="pill f-crt fam" style="font-size:10.5px">Collab</span>':''}</span></button>`).join('')}
+  </div>`).join('')}</div></div>
+ <section class="card"><div class="card-h"><h2>${S.role==='creator'?'Waiting on you':'Approval queue'}</h2><span class="faint" style="font-size:13px">${queue.length} items</span></div>
+  ${queue.length?queue.map(p=>`<div class="li"><span class="sdot s-${p.st}"></span><div class="grow"><b>${esc(p.ti)}</b><div class="faint" style="font-size:12.5px">${DAYS[p.d]} · ${p.t} · by ${p.by} ${p.collab?'· creator collab':''}</div></div><span class="pill ${ST[p.st][1]}">${ST[p.st][0]}</span><button class="btn sm" data-open="${p.id}">Open</button></div>`).join(''):'<p class="faint">All caught up.</p>'}
+ </section></div>`;
+}
+function composer(p){
+ const isNew=!p.id;const r=S.role;
+ const canApprove=p.st==='approval'&&r!=='creator';
+ const cm=COMMENTS[p.id]||[];
+ const plats=['IG','TT','FB','TH','YT','PIN','LI','SC'];
+ return `<div class="drawer f-pub" role="dialog" aria-modal="true" aria-label="Post">
+  <div class="dhd"><div><span class="famtag"><i></i>${isNew?'New post':'Post'}</span><h2 style="margin-top:4px">${isNew?'Untitled post':esc(p.ti)}</h2></div><button class="iconbtn" data-act="close" aria-label="Close">${ic('x')}</button></div>
+  <div class="dbd">
+   ${p.st&&!isNew?`<div class="row"><span class="pill ${ST[p.st][1]}">${ST[p.st][0]}</span>${p.collab?`<span class="pill f-crt fam">Creator collab · Fall Trail '26</span>`:''}</div>`:''}
+   ${p.err?`<div class="note" style="background:var(--bad-soft);color:var(--bad)">${p.err} <button class="btn sm" data-act="reconnect" style="margin-left:6px">Reconnect TikTok</button></div>`:''}
+   <label class="f">Title<input class="inp" id="c-ti" value="${esc(p.ti||'')}" placeholder="Name this post"></label>
+   <label class="f">Caption<textarea class="inp" id="c-cap" placeholder="Write a caption">${esc(p.cap||'')}</textarea></label>
+   <div class="row between"><button class="btn sm" data-act="aicap">${ic('spark',15)}Write caption with AI</button><span class="faint" style="font-size:12px">1 credit · ${S.credits[r]} left this month</span></div>
+   <div class="f" style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12.5px;font-weight:600;color:var(--ink2)">Profiles</span><div class="toggles" id="c-pl">${plats.map(x=>`<button class="tog ${(p.pl||['IG']).includes(x)?'on':''}" data-tog="${x}" aria-pressed="${(p.pl||['IG']).includes(x)}">${x}</button>`).join('')}</div></div>
+   <div class="g2e" style="gap:10px"><label class="f">Day<select class="inp" id="c-d">${DAYS.map((d,i)=>`<option value="${i}" ${(p.d??0)===i?'selected':''}>${d}</option>`).join('')}</select></label><label class="f">Time<input class="inp" id="c-t" value="${esc(p.t||BEST[p.d??0])}"></label></div>
+   <div class="note fam">Best time on ${DAYS[p.d??0]}: <b class="mono">${BEST[p.d??0]}</b> for Instagram, based on the last 90 days.</div>
+   ${p.collab?`<div class="note">This post publishes from <b>@julesoutside</b>. Sales from its link count toward Fall Trail '26 in Campaigns and toward Jules’s earnings in Earn.</div>`:''}
+   ${cm.length?`<div class="stack" style="gap:10px"><span class="eyebrow">Comments</span>${cm.map(c=>`<div class="cmt"><span class="ava" style="width:26px;height:26px;font-size:10.5px">${c.ini}</span><div><b>${c.w}</b> <span class="faint" style="font-size:12px">${c.when}</span><div>${esc(c.t)}</div></div></div>`).join('')}</div>`:''}
+  </div>
+  <div class="dft">
+   ${canApprove?`<button class="btn" data-act="changes">Request changes</button><button class="btn pri" data-act="approve">${ic('check',16)}Approve</button>`:
+     p.st==='changes'&&r==='creator'?`<button class="btn" data-act="save">Save draft</button><button class="btn pri" data-act="resubmit">Send back for approval</button>`:
+     `<button class="btn" data-act="save">Save draft</button><button class="btn pri" data-act="schedule">${r==='smm'&&isNew?'Send for approval':'Schedule'}</button>`}
+  </div></div>`;
+}
+
+/* ---------- CREATE ---------- */
+function create(){
+ const f=S.mediaF;const list=MEDIA.filter(m=>f==='All'||m.src===f);
+ return `<div class="view stack">
+ ${head('create','Media and ideas','Uploads, Canva exports, creator content and UGC share one library. Anything here can go straight into a post or a Link in bio block.',`<button class="btn" data-act="notyet">Import from Canva</button><button class="btn pri" data-act="notyet">${ic('plus',16)}Upload</button>`)}
+ <div class="g2">
+  <section class="card"><div class="card-h"><div class="chips">${['All','Upload','Canva','Creator','UGC'].map(c=>`<button class="chip ${f===c?'on':''}" data-mf="${c}">${c}</button>`).join('')}</div><span class="faint" style="font-size:13px">${list.length} of 248</span></div>
+   <div class="media">${list.map(m=>`<div class="tile f-${m.fam}"><div class="im">${ic(m.src==='UGC'?'engage':m.src==='Creator'?'campaigns':'create')}</div><div class="cap"><b>${esc(m.t)}</b><span class="row" style="gap:4px"><span class="pill">${m.src}</span>${m.rights?`<span class="pill ${m.rights==='Granted'?'ok':'warn'}">Rights: ${m.rights}</span>`:''}</span></div></div>`).join('')}</div>
+  </section>
+  <section class="card f-grow"><div class="card-h"><h2>AI ideas</h2><span class="pill">${S.credits[S.role]} credits</span></div>
+   <p class="muted" style="font-size:13.5px">Ideas use your top posts and current trends from Listen. One credit makes three ideas.</p>
+   <button class="btn" style="margin:12px 0" data-act="ideas">${ic('spark',16)}Generate 3 ideas</button>
+   <div class="stack" style="gap:8px">${S.ideas.length?S.ideas.map(i=>`<div class="ai-a"><b>${i[0]}</b><br>${i[1]}</div>`).join(''):'<p class="faint" style="font-size:13px">No ideas yet this session.</p>'}</div>
+   <div class="note" style="margin-top:14px"><b>Collect UGC:</b> search by hashtag, profile, tags or mentions. 2 new mentions are waiting in Engage.</div>
+  </section></div></div>`;
+}
+
+/* ---------- LINK IN BIO ---------- */
+function linkinbio(){
+ const t=team(),bl=S.blocks[t],c=S.role==='creator';
+ const k=c?[['Page views','24,610','+18%'],['Clicks','9,143','+22%'],['Click-through','37.1%','+1.4 pts'],['Commission','$3,261','+31%']]:[['Page views','18,420','+9%'],['Clicks','4,906','+12%'],['Click-through','26.6%','+0.8 pts'],['Attributed sales','$21,380','+15%']];
+ const on=bl.filter(b=>b[2]);
+ const prev=b=>{const n=b[0];
+  if(n==='Featured banner')return `<div class="pb banner">${esc(b[1])}<div style="font-weight:500;font-size:11px;margin-top:4px">Shop now →</div></div>`;
+  if(n==='Linked posts')return `<div class="pgrid">${['pub','grow','crt','pub','crt','grow'].map(f=>`<i class="f-${f}" style="background:var(--fam-soft)"></i>`).join('')}</div>`;
+  if(n==='Product carousel')return `<div class="prow"><span>Ridge 28<b>$128</b></span><span>Alder jacket<b>$189</b></span><span>Basecamp 2<b>$249</b></span></div>`;
+  if(n==='Affiliate links')return LINKS.slice(0,3).map(l=>`<div class="pb">${esc(l.p)}</div>`).join('');
+  if(n==='Brand partner')return `<div class="pb">Fernway Outdoor collab</div>`;
+  if(n==='Email signup')return `<div class="pb" style="text-align:left;font-weight:500">${esc(b[1])}<div style="border:1px solid var(--line);border-radius:8px;padding:6px;margin-top:6px;color:var(--ink3)">Email address</div></div>`;
+  return `<div class="row" style="justify-content:center;gap:6px">${['IG','TT','YT','PIN'].map(x=>`<span class="plat">${x}</span>`).join('')}</div>`;};
+ return `<div class="view stack">
+ ${head('linkinbio',c?'later.link/jules':'later.link/fernway',c?'Your shoppable page. Affiliate links sync from Earn, so a new link is live here as soon as you create it.':'Your shoppable page. Linked posts update automatically when posts publish from Plan.',`<button class="btn" data-act="copyurl">${ic('copy',16)}Copy link</button>`)}
+ <div class="kpis">${k.map(x=>`<div class="kpi"><span class="eyebrow">${x[0]}</span><div class="v">${x[1]}</div><div class="d up">${x[2]} vs last month</div></div>`).join('')}</div>
+ <div class="lib">
+  <section class="card"><div class="card-h"><h2>Blocks</h2><button class="btn sm" data-act="notyet">${ic('plus',14)}Add block</button></div>
+   ${bl.map((b,i)=>`<div class="blk"><span class="ava f-pub" style="border-radius:8px">${ic('linkinbio',16)}</span><div><b>${b[0]}</b><div class="faint" style="font-size:12.5px">${esc(b[1])}</div></div><span class="mono faint" style="font-size:12px">${b[3]}</span><button class="sw ${b[2]?'on':''}" data-blk="${i}" aria-pressed="${b[2]}" aria-label="Show ${b[0]}"></button></div>`).join('')}
+  </section>
+  <div class="phone f-${c?'crt':'pub'}" aria-label="Page preview"><div class="pfp">${c?'JO':'F'}</div><div style="text-align:center"><b>${c?'Jules Ortiz':'Fernway Outdoor'}</b><div class="faint" style="font-size:12px">${c?'Solo overnights + early starts':'Gear for shoulder season'}</div></div>${on.map(prev).join('')}</div>
+ </div></div>`;
+}
+
+/* ---------- ENGAGE ---------- */
+function engage(){
+ const list=CONVOS[team()];if(!S.conv||!list.find(c=>c.id===S.conv))S.conv=list[0].id;
+ const c=list.find(x=>x.id===S.conv);
+ const ctxs={
+  customer:`<span class="eyebrow">Customer</span><div class="li"><span class="grow">Orders</span><b class="mono">${c.ctx.orders}</b></div><p class="muted" style="font-size:13px">${c.ctx.note}</p>`,
+  creator:`<span class="eyebrow">Creator in your network</span><div class="pill f-crt fam" style="width:max-content">${c.ctx.camp}</div><div class="li"><span class="grow">Attributed sales</span><b class="mono">${c.ctx.sales}</b></div><button class="btn sm" data-go="campaigns">Open in Campaigns ${ic('arrow',14)}</button>`,
+  risk:`<span class="eyebrow">Flagged</span><div class="note" style="background:var(--bad-soft);color:var(--bad)">${c.ctx.note}</div><div class="sugg f-grow">Suggested reply: apologize, ask for the order number, and offer the lifetime zipper repair.</div><button class="btn sm" data-go="listen">See brand health ${ic('arrow',14)}</button>`,
+  ugc:`<span class="eyebrow">User-generated content</span><p class="muted" style="font-size:13px">${c.ctx.note}</p><button class="btn sm" data-act="rights">Request rights</button>`,
+  brand:`<span class="eyebrow">Brand partner</span><div class="pill f-crt fam" style="width:max-content">${c.ctx.camp}</div><p class="muted" style="font-size:13px">${c.ctx.note}</p><button class="btn sm" data-open="p3">Open the post ${ic('arrow',14)}</button>`,
+  shop:`<span class="eyebrow">Shopping question</span><div class="sugg f-crt">Reply with your <b>Alder insulated jacket</b> link? You earn 9% on full-cart orders.</div><button class="btn sm pri" data-act="inslink">Insert link</button>`,
+  fan:`<span class="eyebrow">Follower</span><p class="muted" style="font-size:13px">${c.ctx.note}</p>`,
+ };
+ return `<div class="view stack">
+ ${head('engage','Inbox',S.role==='creator'?'Comments, DMs and brand messages together. Shopping questions come with a link ready to send.':'Instagram, Facebook and TikTok conversations in one queue, with context from Campaigns and Listen beside each one.')}
+ <section class="card flush"><div class="inbox">
+  <div class="ilist">${list.map(x=>`<button class="conv ${x.id===S.conv?'on':''}" data-conv="${x.id}">${x.un?'<span class="unread"></span>':'<span style="width:8px"></span>'}<span style="min-width:0;flex:1"><span class="n">${esc(x.who)}<span class="plat">${x.pl}</span>${x.flag?'<span class="pill bad">Flag</span>':''}</span><span class="x">${esc(x.msgs[x.msgs.length-1][1])}</span><span class="faint" style="font-size:11.5px">${x.type} · ${x.msgs[x.msgs.length-1][2]}</span></span></button>`).join('')}</div>
+  <div class="thread"><div class="dhd" style="padding:12px 16px"><div><b>${esc(c.who)}</b> <span class="faint" style="font-size:12.5px">${c.type} on ${c.pl}</span></div><button class="btn sm" data-act="done">${ic('check',14)}Mark done</button></div>
+   <div class="msgs">${c.msgs.map(m=>`<div class="msg ${m[0]==='me'?'me':''}">${esc(m[1])}<small>${m[2]}</small></div>`).join('')}</div>
+   <form class="compose" id="reply"><input id="reply-in" placeholder="Write a reply" aria-label="Reply"><button class="btn ink" type="submit">${ic('send',15)}Send</button></form></div>
+  <aside class="ctx f-grow">${ctxs[c.ctx.k]}</aside>
+ </div></section></div>`;
+}
+
+/* ---------- ANALYZE ---------- */
+function analyze(){
+ const c=S.role==='creator';
+ const L=['Sep 7','14','21','28','Oct 5','12','19','26'];
+ const org=c?[22,25,24,29,33,31,38,41]:[42,48,45,53,58,61,57,66],paid=[18,20,26,24,30,34,31,38],crt=[9,11,14,18,22,27,29,34];
+ let series=[{n:c?'Reach':'Organic reach',v:org,c:cv('--grow')}];
+ if(!c&&(S.mode==='both'))series.push({n:'Paid (Meta Ads)',v:paid,c:cv('--accent'),dash:true});
+ if(!c&&S.mode==='creator')series.push({n:'Creator posts',v:crt,c:cv('--crt')});
+ const k=c?[['Followers','184.2K','+3.1K'],['Engagement rate','6.8%','+0.6 pts'],['Saves','21.4K','+18%'],['Link clicks','9,143','+22%']]:
+  [['Reach','412K','+11%'],['Engagement rate','4.2%','+0.3 pts'],['Link clicks','4,906','+12%'],['Attributed sales','$207K','+19%']];
+ const top=c?[['Sunrise on Mt. Si','IG',['14.2K','2.1K saves']],['Fall layers haul','TT',['88K','1.4K clicks']],['Solo overnight checklist','IG',['11.9K','3.0K saves']]]:
+  [['Jules × Fernway: summit morning','IG',['96K','4.1K saves'],true],['Trail-ready layers: the fall drop','IG',['54K','1.2K saves']],['@lenatrails reel','TT',['211K','3.3K saves'],true],['Behind the stitch','YT',['18K','610 saves']]];
+ return `<div class="view stack">
+ ${head('analyze','Performance',c?'Every profile and every link in one report. Sales come from your Earn links.':'Organic, paid and creator content measured side by side, with sales attributed through Link in bio and creator links.',c?'':`<div class="chips">${[['organic','Organic'],['both','Organic + paid'],['creator','Organic + creators']].map(m=>`<button class="chip ${S.mode===m[0]?'on':''}" data-mode="${m[0]}">${m[1]}</button>`).join('')}</div>`)}
+ <div class="kpis">${k.map(x=>`<div class="kpi"><span class="eyebrow">${x[0]}</span><div class="v">${x[1]}</div><div class="d up">${x[2]} vs prior 30 days</div></div>`).join('')}</div>
+ <div class="g2">
+  <section class="card"><div class="card-h"><h2>Weekly reach</h2><div class="legend">${series.map(s=>`<span><i style="background:${s.c}"></i>${s.n}</span>`).join('')}</div></div>
+   ${lineChart(series,L,{fmt:v=>v+'K',aria:'Weekly reach in thousands, last 8 weeks'})}
+  </section>
+  <section class="card"><div class="card-h"><h2>Reach by channel</h2><span class="faint" style="font-size:12.5px">30 days</span></div>
+   ${(c?[['TikTok',58],['Instagram',31],['YouTube',8],['Pinterest',3]]:[['Instagram',44],['TikTok',29],['Facebook',12],['YouTube',7],['Pinterest',5],['LinkedIn',3]]).map(b=>`<div class="barrow f-grow"><span>${b[0]}</span><div class="meter"><i style="width:${b[1]}%"></i></div><span class="mono r" style="text-align:right">${b[1]}%</span></div>`).join('')}
+   <div class="note" style="margin-top:12px">${c?'TikTok drives reach; Instagram drives 64% of your link clicks.':'Creator collabs are 22% of reach but 41% of attributed sales.'}</div>
+  </section></div>
+ <section class="card"><div class="card-h"><h2>Top posts</h2><button class="btn sm" data-act="share">${ic('copy',14)}Share report</button></div>
+  <div class="scrollx"><table class="tbl"><thead><tr><th>Post</th><th>Channel</th><th class="r">Reach</th><th class="r">Result</th></tr></thead><tbody>
+  ${top.map(t=>`<tr><td><b>${t[0]}</b> ${t[3]?'<span class="pill f-crt fam">Creator</span>':''}</td><td><span class="plat">${t[1]}</span></td><td class="r mono">${t[2][0]}</td><td class="r mono">${t[2][1]}</td></tr>`).join('')}
+  </tbody></table></div></section></div>`;
+}
+
+/* ---------- LISTEN ---------- */
+function listen(){
+ const locked=S.role==='smm'&&!S.listenPreview;
+ if(locked)return `<div class="view stack">${head('listen','Social listening','Trends, competitors, brand health and mentions.')}
+  <div class="lock">${ic('lock')}<div><h2>Listen is part of the Scale plan</h2><p class="muted" style="margin-top:4px">You’re on Growth. See it with your own competitors and trends before you decide. Nothing changes on your plan.</p></div><button class="btn ink" data-act="preview">Preview with sample data</button></div>
+  <div class="kpis">${['Future trends','Competitive benchmarking','Brand health','Brand mentions'].map(x=>`<div class="kpi f-grow"><span class="famtag"><i></i>Included</span><div style="font-weight:600;margin-top:6px">${x}</div></div>`).join('')}</div></div>`;
+ const pos=64,neu=27,neg=9;const C=2*Math.PI*40;
+ return `<div class="view stack">
+ ${head('listen','Social listening','What people say about Fernway and the outdoor category, and what’s about to trend.')}
+ ${S.role==='smm'?`<div class="note fam f-grow">Previewing Scale features with sample data. <button class="btn sm" data-act="upgrade" style="margin-left:6px">Compare plans</button></div>`:''}
+ <div class="g2">
+  <section class="card"><div class="card-h"><h2>Future trends</h2><span class="faint" style="font-size:12.5px">Outdoor apparel · next 14 days</span></div>
+   <table class="tbl"><thead><tr><th>Topic</th><th class="r">Momentum</th><th>Signal</th><th></th></tr></thead><tbody>
+   ${[['#shoulderseason','+212%','Rising','ok'],['quiet hiking','+148%','Rising','ok'],['packable puffer','+96%','Rising','ok'],['#gorpcore','−12%','Cooling','warn']].map(t=>`<tr><td><b>${t[0]}</b></td><td class="r mono ${t[3]==='ok'?'up':'down'}">${t[1]}</td><td><span class="pill ${t[3]}">${t[2]}</span></td><td class="r"><button class="btn sm" data-act="trendpost" data-trend="${t[0]}">Plan a post</button></td></tr>`).join('')}
+   </tbody></table></section>
+  <section class="card"><div class="card-h"><h2>Brand health</h2><span class="pill ok">78 / 100</span></div>
+   <div class="gauge"><svg class="ring" viewBox="0 0 100 100" aria-label="Sentiment: 64% positive, 27% neutral, 9% negative"><circle cx="50" cy="50" r="40" fill="none" stroke="var(--sunk)" stroke-width="12"/>
+    <circle cx="50" cy="50" r="40" fill="none" stroke="var(--ok)" stroke-width="12" stroke-dasharray="${C*pos/100} ${C}" transform="rotate(-90 50 50)"/>
+    <circle cx="50" cy="50" r="40" fill="none" stroke="var(--line2)" stroke-width="12" stroke-dasharray="${C*neu/100} ${C}" stroke-dashoffset="${-C*pos/100}" transform="rotate(-90 50 50)"/>
+    <circle cx="50" cy="50" r="40" fill="none" stroke="var(--bad)" stroke-width="12" stroke-dasharray="${C*neg/100} ${C}" stroke-dashoffset="${-C*(pos+neu)/100}" transform="rotate(-90 50 50)"/></svg>
+    <div class="stack" style="gap:4px;font-size:13px"><span><b class="mono up">64%</b> positive</span><span><b class="mono">27%</b> neutral</span><span><b class="mono down">9%</b> negative · zipper complaints up</span></div></div>
+   <button class="btn sm" style="margin-top:12px" data-go="engage">Reply to flagged comments ${ic('arrow',14)}</button>
+  </section></div>
+ <section class="card"><div class="card-h"><h2>Competitive benchmarking</h2><span class="faint" style="font-size:12.5px">Instagram · 30 days · 3 of 20 tracked</span></div>
+  <div class="scrollx"><table class="tbl"><thead><tr><th>Brand</th><th class="r">Followers</th><th class="r">Growth</th><th class="r">Engagement</th><th class="r">Posts / wk</th></tr></thead><tbody>
+  ${[['Fernway Outdoor (you)','212K','+2.4%','4.2%','6.5',1],['Summit Supply Co.','480K','+1.1%','2.6%','9.0'],['Trailhead & Pine','156K','+3.0%','4.8%','4.0'],['Basin Gear','98K','+0.4%','1.9%','11.5']].map(r=>`<tr><td><b>${r[0]}</b></td><td class="r mono">${r[1]}</td><td class="r mono">${r[2]}</td><td class="r mono">${r[3]}</td><td class="r mono">${r[4]}</td></tr>`).join('')}
+  </tbody></table></div></section></div>`;
+}
+
+/* ---------- CAMPAIGNS ---------- */
+function campaigns(){
+ if(S.role==='creator')return opportunities();
+ return `<div class="view stack">
+ ${head('campaigns',"Fall Trail '26",'Find creators, set fair rates, approve content and see sales, from brief to ROI.',`<button class="btn" data-go="services">Get full-service help</button><button class="btn pri" data-new="brief">${ic('plus',16)}New campaign</button>`)}
+ <div class="kpis f-crt">${[['Budget','$48,000'],['Spent','$29,400'],['Creators','9 of 12'],['Attributed sales','$186,200'],['ROAS','6.3×']].map(x=>`<div class="kpi"><span class="eyebrow">${x[0]}</span><div class="v">${x[1]}</div></div>`).join('')}</div>
+ <section class="card"><div class="card-h"><h2>Creator pipeline</h2><span class="faint" style="font-size:12.5px">Move a creator forward when the step is done</span></div>
+  <div class="scrollx"><div class="kanban">${STAGES.map((s,i)=>{const cs=PIPE.filter(p=>p.st===i);return `<div class="col"><h3>${s}<span class="faint mono">${cs.length}</span></h3>${cs.map(p=>`<div class="kc f-crt"><div class="h"><span class="ava" style="width:28px;height:28px;font-size:11px">${p.n.split(' ').map(w=>w[0]).join('')}</span><div style="min-width:0"><b style="font-size:13px">${p.n}</b><div class="faint" style="font-size:11.5px">${p.h} · ${p.f}</div></div></div><div class="row between"><span class="fit">${p.fit}% fit</span>${i<4?`<button class="btn sm ghost" data-adv="${p.id}" aria-label="Move ${p.n} to ${STAGES[i+1]}">${ic('arrow',14)}</button>`:''}</div><span class="faint" style="font-size:12px">${p.note}</span>${p.id==='jo'?`<button class="btn sm" data-open="p3">Review draft</button>`:''}</div>`).join('')}</div>`}).join('')}</div></div>
+ </section>
+ <section class="card f-crt"><div class="card-h"><div><h2>Recommended creators</h2><p class="faint" style="font-size:12.5px;margin-top:2px">EdgeAI ranks fit from your past campaigns, audience match and purchase data. Rates come from the incentive advisor.</p></div></div>
+  <div class="scrollx"><table class="tbl"><thead><tr><th>Creator</th><th class="r">Fit</th><th>Fair rate per post</th><th class="r">Overlap</th><th>Brand safety</th><th>Why</th><th></th></tr></thead><tbody>
+  ${DISC.map(d=>`<tr><td><b>${d.n}</b><div class="faint" style="font-size:12px">${d.h} · ${d.f}</div></td><td class="r mono">${d.fit}%</td><td class="mono">${d.rate}</td><td class="r mono">${d.ov}</td><td>${d.risk==='none'?'<span class="pill ok">Clear</span>':'<span class="pill warn">Review</span>'}</td><td style="min-width:220px;font-size:12.5px" class="muted">${d.why}</td><td>${d.inv?'<span class="pill">Invited</span>':`<button class="btn sm" data-inv="${d.id}">Invite</button>`}</td></tr>`).join('')}
+  </tbody></table></div></section></div>`;
+}
+function opportunities(){
+ return `<div class="view stack">
+ ${head('campaigns','Brand opportunities','Campaigns matched to your audience and past results. Accepted deals show up in Plan for posting and in Earn for payment.')}
+ <div class="stack" style="gap:10px">${OPPS.map(o=>`<section class="card f-crt"><div class="row between" style="align-items:flex-start"><div><span class="famtag"><i></i>${o.b}</span><h2 style="margin-top:4px">${o.c}</h2><p class="muted" style="margin-top:4px">${o.pay} · ${o.due}</p></div>
+  <div class="row"><span class="fit pill fam">${o.m}% match</span>${o.st==='active'?`<span class="pill ok">Active</span><button class="btn sm" data-open="p3">Open post</button>`:o.st==='invite'?`<button class="btn sm" data-opp="${o.id}" data-v="decline">Decline</button><button class="btn sm pri" data-opp="${o.id}" data-v="accept">Accept</button>`:o.st==='applied'?'<span class="pill">Applied</span>':o.st==='accepted'?'<span class="pill ok">Accepted</span>':o.st==='declined'?'<span class="pill">Declined</span>':`<button class="btn sm" data-opp="${o.id}" data-v="apply">Apply</button>`}</div></div></section>`).join('')}</div></div>`;
+}
+
+/* ---------- EARN ---------- */
+function earn(){
+ if(S.role!=='creator')return `<div class="view stack">${head('earn','Earn is for creators','Creators use Earn to share affiliate links, track sales and get paid. Your creators’ sales from these links show up in Campaigns and Analyze.')}
+  <section class="card f-crt"><div class="loop"><div>Creator posts<b>Plan</b></div><div>Shopper buys<b>Link in bio</b></div><div>Brand sees ROI<b>Campaigns</b></div></div></section></div>`;
+ const v=[1.2,1.6,1.4,2.2,2.6,2.4,3.1,3.6,3.3,4.1,4.8];
+ return `<div class="view stack">
+ ${head('earn','Earnings','Every click, order and commission as it happens. Links you make here appear in Link in bio and can be dropped into replies in Engage.',`<button class="btn pri" data-new="link">${ic('plus',16)}New link</button>`)}
+ <div class="kpis f-crt">${[['October','$4,812.40','+38%'],['Pending','$1,236.00','Return window'],['Next payout','$3,576.40','Nov 1'],['Orders','484','+29%']].map(x=>`<div class="kpi"><span class="eyebrow">${x[0]}</span><div class="v">${x[1]}</div><div class="d faint">${x[2]}</div></div>`).join('')}</div>
+ <div class="g2">
+  <section class="card"><div class="card-h"><h2>Your links</h2><span class="faint" style="font-size:12.5px">October</span></div>
+   <div class="scrollx"><table class="tbl"><thead><tr><th>Product</th><th class="r">Clicks</th><th class="r">Orders</th><th class="r">Commission</th><th></th></tr></thead><tbody>
+   ${LINKS.map(l=>`<tr><td><b>${l.p}</b><div class="faint" style="font-size:12px">${l.b} ${l.ok?'':'· <span class="down">promo expired</span>'}</div></td><td class="r mono">${l.cl.toLocaleString()}</td><td class="r mono">${l.or}</td><td class="r mono">${$m(l.cm)}</td><td class="r">${l.ok?`<button class="btn sm" data-copy="${l.url}">${ic('copy',14)}Copy</button>`:`<button class="btn sm pri" data-swap="${l.id}">Swap offer</button>`}</td></tr>`).join('')}
+   </tbody></table></div></section>
+  <section class="card f-crt"><div class="card-h"><h2>Earnings trend</h2></div>${spark(v,'var(--crt)')}<p class="faint" style="font-size:12.5px;margin-top:6px">Weekly commission, last 11 weeks</p>
+   <div style="margin-top:12px"><span class="eyebrow">Payouts</span>${[['Nov 1','$3,576.40','Scheduled'],['Oct 1','$2,904.10','Paid'],['Sep 1','$2,118.75','Paid']].map(p=>`<div class="li"><span class="grow">${p[0]}</span><b class="mono">${p[1]}</b><span class="pill ${p[2]==='Paid'?'ok':''}">${p[2]}</span></div>`).join('')}</div>
+   <div class="note" style="margin-top:10px"><b>Your strategist, Dana,</b> has office hours Thursday. Ask about the Northline invite.</div>
+  </section></div></div>`;
+}
+
+/* ---------- SERVICES ---------- */
+function services(){
+ return `<div class="view stack">
+ ${head('services','Full-service programs','Hand a campaign to Later’s team. They plan, source creators, produce and report, and everything they run shows up in your Campaigns and Analyze.')}
+ <div class="g2">
+  <section class="card f-crt"><div class="card-h"><h2>${S.role==='brand'?'Your programs':'How it works'}</h2></div>
+   ${S.role==='brand'?`<div class="li"><div class="grow"><b>Holiday Gifting '26</b><div class="faint" style="font-size:12.5px">Strategy approved · creator sourcing starts Nov 3</div></div><span class="pill warn">Planning</span></div><div class="li"><div class="grow"><b>Spring Trail '26</b><div class="faint" style="font-size:12.5px">41M impressions · $1.1M earned media value</div></div><span class="pill ok">Complete</span></div>
+   <div class="li"><span class="ava">DR</span><div class="grow"><b>Dana Reyes</b><div class="faint" style="font-size:12.5px">Your campaign strategist</div></div><button class="btn sm" data-go="engage">Message</button></div>`:
+   `<div class="loop f-crt"><div>Strategy<b>By experts</b></div><div>Creators<b>Sourced + managed</b></div><div>Results<b>Tracked here</b></div></div>`}
+  </section>
+  <section class="card"><div class="card-h"><h2>Request a program</h2></div>
+   <form id="svc" class="stack" style="gap:12px">
+    <label class="f">Goal<select class="inp" id="svc-g"><option>Drive sales</option><option>Launch a product</option><option>Build awareness</option></select></label>
+    <label class="f">Budget<select class="inp" id="svc-b"><option>$25K–50K</option><option>$50K–150K</option><option>$150K+</option></select></label>
+    <label class="f">What should we know?<textarea class="inp" id="svc-n" placeholder="Timing, products, creators you like"></textarea></label>
+    <button class="btn pri" type="submit">Send to Later strategy team</button>
+   </form></section></div></div>`;
+}
+
+/* ---------- WORKSPACE ---------- */
+function settings(){
+ const r=ROLES[S.role];
+ return `<div class="view stack">
+ <div class="head"><div><span class="eyebrow">Shared layer</span><h1 style="margin-top:6px">Workspace</h1><p class="muted">One account across every spoke: profiles, people, credits and plan.</p></div></div>
+ <div class="g2e">
+  <section class="card"><div class="card-h"><h2>Social sets</h2><span class="faint" style="font-size:12.5px">${r.plan}</span></div>
+   ${(S.role==='creator'?[['Jules Ortiz','IG, TT, YT, PIN',true]]:[['Fernway Outdoor','IG, TT, FB, TH, YT, PIN, LI',false],['Fernway Kids','IG, FB',true]]).map(s=>`<div class="li"><div class="grow"><b>${s[0]}</b><div class="faint mono" style="font-size:12px">${s[1]}</div></div>${s[2]?'<span class="pill ok">Connected</span>':'<span class="pill bad">TikTok expired</span>'}</div>`).join('')}
+  </section>
+  <section class="card"><div class="card-h"><h2>AI credits</h2><span class="mono">${S.credits[S.role]} left</span></div>
+   <div class="meter"><i style="width:${Math.min(100,S.credits[S.role]/(S.role==='brand'?100:50)*100)}%"></i></div>
+   <p class="faint" style="font-size:12.5px;margin-top:8px">Shared by captions, ideas and EdgeAI suggestions. Resets Nov 1.</p></section>
+  <section class="card"><div class="card-h"><h2>People</h2></div>
+   ${(S.role==='creator'?[['Jules Ortiz','Owner'],['Dana Reyes','Later strategist']]:[['Maya Chen','Admin · Campaigns'],['Priya Shah','Editor · Publish, Grow'],['Sam Park','Contributor · needs approval'],['Dana Reyes','Later strategist']]).map(p=>`<div class="li"><span class="ava" style="width:28px;height:28px;font-size:11px">${p[0].split(' ').map(w=>w[0]).join('')}</span><span class="grow"><b>${p[0]}</b></span><span class="faint" style="font-size:12.5px">${p[1]}</span></div>`).join('')}</section>
+  <section class="card"><div class="card-h"><h2>Connected tools</h2></div>
+   ${['Canva','Shopify','Google Analytics','Mailchimp','Meta Ads'].map(t=>`<div class="li"><span class="grow">${t}</span><span class="pill ok">On</span></div>`).join('')}</section>
+ </div></div>`;
+}
+
+const VIEWS={hub,plan,create,linkinbio,engage,analyze,listen,campaigns,earn,services,settings};
+
+/* ---------- overlays ---------- */
+const AIQ={
+ smm:[['What should I post this weekend?','<b>Saturday 9:00 AM</b> on Instagram and <b>Sunday 4:00 PM</b> on TikTok are your strongest slots. Pair the rising #shoulderseason trend with the Alder jacket; layering posts earned 1.8× your average saves this month.'],
+  ['Why did TikTok reach drop last week?','Two scheduled TikToks didn’t publish because the account token expired on Oct 24. Reconnect in Workspace and they will retry automatically.'],
+  ['Summarize this week for my manager','Reach is up 11% to 412K. The Jules collab is your top post with 96K reach. One TikTok post failed and is fixed once you reconnect. I can turn this into a shareable report.']],
+ brand:[['Which creators should I add next?','<b>Tess Alder</b> (95% fit, $1,400–1,900) and <b>Iris Park</b> (90% fit, $600–850). Both have under 10% audience overlap with your roster, so they add new buyers instead of repeat reach.'],
+  ['Am I overspending?','No. You’re 61% spent at 60% of the flight with ROAS at 6.3×, above your 4.5× target. The paid line is the least efficient; creator posts return about 2× more per dollar.'],
+  ['Draft a brief for Holiday Gifting','Goal: gifting-led sales Nov 20–Dec 15. 10–14 creators, 60% micro. Deliverables: 1 Reel + 3 stories each, with linked products in Link in bio. Budget guide: $55–65K.']],
+ creator:[['Should I take the Northline invite?','Probably yes. Coffee posts with your audience convert at 4.1%, and 15% commission on camp kits averaged $4.50 per order for similar creators. It doesn’t conflict with Fernway’s exclusivity terms.'],
+  ['What should I post to earn more?','Your Alder jacket link converts best at 4.9%. A short TikTok try-on with the link pinned in Link in bio would likely add 40–60 orders this week.'],
+  ['When do I get paid?','$3,576.40 pays out Nov 1. Another $1,236 clears after the 30-day return window.']],
+};
+function overlay(){
+ let h='';
+ if(S.drawer||S.palette||S.aiOpen)h+=`<div class="scrim" data-act="close"></div>`;
+ if(S.drawer)h+=composer(S.drawer);
+ if(S.aiOpen)h+=`<div class="drawer f-grow" role="dialog" aria-modal="true" aria-label="Ask EdgeAI"><div class="dhd"><div><span class="famtag"><i></i>Assistant</span><h2 style="margin-top:4px">Ask EdgeAI</h2></div><button class="iconbtn" data-act="close" aria-label="Close">${ic('x')}</button></div>
+  <div class="dbd"><p class="muted" style="font-size:13.5px">Answers draw on every spoke you can see: posts, inbox, analytics, campaigns and earnings.</p>
+  ${S.ai.map(a=>`<div class="stack" style="gap:8px"><div class="msg me" style="max-width:100%">${a[0]}</div><div class="ai-a">${a[1]}</div></div>`).join('')}
+  <span class="eyebrow">Try asking</span>${AIQ[S.role].map((q,i)=>`<button class="ai-q" data-aiq="${i}">${q[0]}</button>`).join('')}</div></div>`;
+ if(S.palette)h+=`<div class="palette" role="dialog" aria-label="Search"><input id="pal" placeholder="Search posts, creators, links, spokes" autocomplete="off"><div class="plist" id="plist"></div></div>`;
+ if(S.toast)h+=`<div class="toast" role="status">${ic('check',16)}${esc(S.toast)}</div>`;
+ ov.innerHTML=h;
+ if(S.palette){const i=document.getElementById('pal');i.focus();palList('')}
+}
+function palItems(){
+ const out=[{l:'Home',k:'Hub',go:'hub',i:'home'}];
+ ROLES[S.role].order.concat(ROLES[S.role].more).forEach(id=>out.push({l:label(id),k:'Spoke',go:id,i:id}));
+ out.push({l:'Workspace',k:'Settings',go:'settings',i:'settings'});
+ POSTS[team()].forEach(p=>out.push({l:p.ti,k:'Post · '+DAYS[p.d],open:p.id,i:'plan'}));
+ if(S.role!=='creator')PIPE.concat(DISC).forEach(c=>out.push({l:c.n+' '+c.h,k:'Creator',go:'campaigns',i:'campaigns'}));
+ if(S.role==='creator'){LINKS.forEach(l=>out.push({l:l.p,k:'Link · '+l.b,go:'earn',i:'earn'}));OPPS.forEach(o=>out.push({l:o.b+': '+o.c,k:'Opportunity',go:'campaigns',i:'campaigns'}))}
+ CONVOS[team()].forEach(c=>out.push({l:c.who,k:'Conversation',go:'engage',conv:c.id,i:'engage'}));
+ return out;
+}
+let palSel=0,palRes=[];
+function palList(q){
+ q=q.toLowerCase().trim();palRes=palItems().filter(x=>!q||x.l.toLowerCase().includes(q)||x.k.toLowerCase().includes(q)).slice(0,12);palSel=0;drawPal();
+}
+function drawPal(){const el=document.getElementById('plist');if(!el)return;el.innerHTML=palRes.length?palRes.map((x,i)=>`<button class="pi ${i===palSel?'sel':''}" data-pi="${i}">${ic(x.i,16)}<span>${esc(x.l)}</span><span class="k">${x.k}</span></button>`).join(''):'<p class="faint" style="padding:12px">No matches. Try a creator name or a post title.</p>'}
+function palGo(x){S.palette=false;if(x.conv)S.conv=x.conv;if(x.open){openPost(x.open)}else{go(x.go)}}
+
+/* ---------- actions ---------- */
+let tt;
+function toast(m){S.toast=m;overlay();clearTimeout(tt);tt=setTimeout(()=>{S.toast=null;overlay()},2400)}
+function render(){app.innerHTML=rail()+`<div class="main">${top()}<main id="view">${VIEWS[S.view]()}</main></div>`;overlay()}
+function go(v){S.view=v;S.menu=null;S.drawer=null;try{history.replaceState(null,'','#'+v)}catch(e){}render();window.scrollTo({top:0})}
+function findPost(id){return POSTS[team()].find(p=>p.id===id)||POSTS.team.find(p=>p.id===id)}
+function openPost(id){const p=findPost(id);if(!p)return;S.view='plan';S.drawer={...p};render()}
+function readComposer(){
+ const d=S.drawer;d.ti=document.getElementById('c-ti').value.trim()||'Untitled post';d.cap=document.getElementById('c-cap').value;d.d=+document.getElementById('c-d').value;d.t=document.getElementById('c-t').value||BEST[d.d];
+ d.pl=[...document.querySelectorAll('#c-pl .tog.on')].map(b=>b.dataset.tog);if(!d.pl.length)d.pl=['IG'];
+}
+function commit(st,msg){
+ readComposer();const d=S.drawer,list=POSTS[team()];
+ if(!d.id){d.id='n'+Date.now();d.by=ROLES[S.role].name.split(' ')[0];d.st=st;list.push(d)}else{d.st=st;const i=list.findIndex(p=>p.id===d.id);if(i>-1)list[i]=d;
+  const other=team()==='team'?POSTS.creator:POSTS.team;const j=other.findIndex(p=>p.id===d.id);
+  if(j>-1){other[j]={...other[j],cap:d.cap,ti:d.ti,st:st==='scheduled'?'scheduled':st==='changes'?'changes':st==='approval'?'approval':other[j].st}}}
+ S.drawer=null;render();toast(msg);
+}
+
+document.addEventListener('click',e=>{
+ const t=e.target.closest('button,[data-act]');if(!t)return;
+ const ds=t.dataset;
+ if(ds.go){S.palette=false;S.aiOpen=false;go(ds.go);return}
+ if(ds.q!=null){const q=QUEUE[S.role][+ds.q];if(q.flt)S.filter=q.flt;if(q.open){openPost(q.open)}else go(q.go);return}
+ if(ds.open){S.palette=false;openPost(ds.open);return}
+ if(ds.filter){S.filter=ds.filter;render();return}
+ if(ds.mf){S.mediaF=ds.mf;render();return}
+ if(ds.mode){S.mode=ds.mode;render();return}
+ if(ds.conv){S.conv=ds.conv;const c=CONVOS[team()].find(x=>x.id===ds.conv);c.un=false;render();return}
+ if(ds.tog){t.classList.toggle('on');t.setAttribute('aria-pressed',t.classList.contains('on'));return}
+ if(ds.blk!=null){const b=S.blocks[team()][+ds.blk];b[2]=!b[2];render();return}
+ if(ds.adv){const p=PIPE.find(x=>x.id===ds.adv);if(p&&p.st<4){p.st++;render();toast(p.n+' moved to '+STAGES[p.st])}return}
+ if(ds.inv){const d=DISC.find(x=>x.id===ds.inv);d.inv=true;PIPE.push({id:d.id,n:d.n,h:d.h,f:d.f,st:1,fit:d.fit,note:'Invited today'});render();toast(d.n+' invited at '+d.rate);return}
+ if(ds.opp){const o=OPPS.find(x=>x.id===ds.opp);o.st={accept:'accepted',decline:'declined',apply:'applied'}[ds.v];render();toast(ds.v==='accept'?o.b+' accepted. The brief is in Plan.':ds.v==='apply'?'Applied to '+o.b:'Invite declined');return}
+ if(ds.copy){const u='https://'+ds.copy;try{navigator.clipboard.writeText(u).then(()=>toast('Link copied'),()=>toast(u))}catch(err){toast(u)}return}
+ if(ds.swap){const l=LINKS.find(x=>x.id===ds.swap);l.ok=true;l.p+=' (holiday offer)';render();toast('Swapped to a live offer. Link in bio updated.');return}
+ if(ds.pi!=null){palGo(palRes[+ds.pi]);return}
+ if(ds.aiq!=null){S.ai.push(AIQ[S.role][+ds.aiq]);overlay();return}
+ if(ds.new){S.menu=null;const n=ds.new;
+  if(n==='post'){S.view='plan';S.drawer={pl:['IG'],d:0,t:BEST[0]};render();return}
+  if(n==='brief'||n==='shortlist'){go('campaigns');toast(n==='brief'?'EdgeAI drafted a brief from your last 3 campaigns':'Shortlist built from 4 recommended creators');return}
+  if(n==='link'){go('earn');toast('Paste any product URL to make a link');return}
+  if(n==='block'){go('linkinbio');return}
+  if(n==='report'){go('analyze');toast('Report link copied');return}
+ }
+ const a=ds.act;if(!a)return;
+ if(a==='close'){S.drawer=null;S.palette=false;S.aiOpen=false;overlay();return}
+ if(a==='palette'){S.palette=true;overlay();return}
+ if(a==='ai'){S.aiOpen=true;overlay();return}
+ if(a==='create'){S.menu=S.menu==='create'?null:'create';render();return}
+ if(a==='notif'){go('hub');toast('Notifications live in Needs you now');return}
+ if(a==='approve'){commit('scheduled','Approved and scheduled');return}
+ if(a==='changes'){readComposer();(COMMENTS[S.drawer.id]=COMMENTS[S.drawer.id]||[]).push({w:ROLES[S.role].name,ini:ROLES[S.role].ini,t:'Requested changes',when:'Just now'});commit('changes','Changes requested. The author was notified.');return}
+ if(a==='resubmit'){commit('approval','Sent back to Fernway for approval');return}
+ if(a==='save'){commit('draft','Saved as draft');return}
+ if(a==='schedule'){const isNew=!S.drawer.id;commit(S.role==='smm'&&isNew?'approval':'scheduled',S.role==='smm'&&isNew?'Sent to Maya for approval':'Scheduled');return}
+ if(a==='reconnect'){POSTS.team.forEach(p=>{if(p.st==='failed'){p.st='scheduled';delete p.err}});S.drawer=null;render();toast('TikTok reconnected. The post will retry at 7:00 PM Thu.');return}
+ if(a==='aicap'){if(S.credits[S.role]<1){toast('No credits left this month');return}S.credits[S.role]--;const el=document.getElementById('c-cap');const ti=document.getElementById('c-ti').value||'this';el.value=`${ti}. Built for shoulder season: light enough to forget, warm enough to stay out longer. Tap the link in bio to shop the kit. #shoulderseason #fernwayoutdoor`;t.nextElementSibling;toast('Caption drafted · 1 credit used');return}
+ if(a==='ideas'){if(S.credits[S.role]<1){toast('No credits left this month');return}S.credits[S.role]--;S.ideas=[['Reel: “What I pack for a 40°F morning”','Ride #shoulderseason (+212%). Show the Alder jacket packing into its own pocket.'],['Carousel: quiet hiking spots near you','Rising +148%. Ask followers to drop their spot; collect replies as UGC.'],['Story series: gear care in 60 seconds','Answers the zipper complaints from Engage before they spread.']].concat(S.ideas).slice(0,6);render();return}
+ if(a==='preview'){S.listenPreview=true;render();return}
+ if(a==='upgrade'){toast('Scale adds Listen, custom analytics and 6 social sets');return}
+ if(a==='trendpost'){S.view='plan';S.drawer={pl:['IG','TT'],d:5,t:BEST[5],ti:'Trend: '+ds.trend,cap:''};render();return}
+ if(a==='done'){const l=CONVOS[team()];const i=l.findIndex(x=>x.id===S.conv);l[i].un=false;S.conv=(l[i+1]||l[0]).id;render();toast('Marked done');return}
+ if(a==='rights'){toast('Rights request sent to @sierrahikes');return}
+ if(a==='inslink'){const i=document.getElementById('reply-in');i.value='It’s the Fernway Alder jacket! later.link/jules/alder';i.focus();return}
+ if(a==='copyurl'){const u='https://later.link/'+(S.role==='creator'?'jules':'fernway');try{navigator.clipboard.writeText(u).then(()=>toast('Page link copied'),()=>toast(u))}catch(err){toast(u)}return}
+ if(a==='share'){toast('Shareable report link created');return}
+ if(a==='notyet'){toast('Not built in this prototype yet');return}
+});
+document.addEventListener('click',e=>{if(S.menu&&!e.target.closest('.rel')){S.menu=null;render()}},true);
+document.addEventListener('change',e=>{if(e.target.id==='role'){S.role=e.target.value;S.filter='all';S.conv=null;S.ai=[];S.ideas=[];
+ if(S.view!=='hub'&&S.view!=='settings'&&!ROLES[S.role].order.includes(S.view)&&!ROLES[S.role].more.includes(S.view))S.view='hub';render()}});
+document.addEventListener('submit',e=>{e.preventDefault();
+ if(e.target.id==='reply'){const i=document.getElementById('reply-in');const v=i.value.trim();if(!v){i.focus();return}const c=CONVOS[team()].find(x=>x.id===S.conv);c.msgs.push(['me',v,'Just now']);c.un=false;render();toast('Reply sent');}
+ if(e.target.id==='svc'){toast('Sent. Dana from the strategy team will reply within 1 business day.');e.target.reset()}
+});
+document.addEventListener('input',e=>{if(e.target.id==='pal')palList(e.target.value)});
+document.addEventListener('keydown',e=>{
+ if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();S.palette=!S.palette;overlay();return}
+ if(e.key==='Escape'&&(S.palette||S.drawer||S.aiOpen||S.menu)){S.palette=false;S.drawer=null;S.aiOpen=false;S.menu=null;render();return}
+ if(S.palette&&e.target.id==='pal'){if(e.key==='ArrowDown'){palSel=Math.min(palRes.length-1,palSel+1);drawPal();e.preventDefault()}if(e.key==='ArrowUp'){palSel=Math.max(0,palSel-1);drawPal();e.preventDefault()}if(e.key==='Enter'&&palRes[palSel])palGo(palRes[palSel])}
+});
+const h=(location.hash||'').slice(1);if(VIEWS[h])S.view=h;
+render();
+})();
+</script>
