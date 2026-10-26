@@ -293,6 +293,32 @@ textarea.inp{min-height:110px;resize:vertical;line-height:1.5}
 .stbar i{display:block;height:100%}
 .range{width:100%;accent-color:var(--accent);margin-top:4px}
 
+/* sign in */
+.app.locked{filter:blur(18px) saturate(.7);pointer-events:none;user-select:none}
+.app.blank .main *{color:transparent!important;border-color:transparent}
+.app.blank .main svg,.app.blank .main .pill,.app.blank .main .badge,.app.blank .rail .badge{opacity:0}
+.app.revealing{transition:filter 2.4s cubic-bezier(.2,.7,.2,1)}
+.app.revealing .main *{transition:color .9s ease .35s,border-color .9s ease .35s}
+.app.revealing .main svg,.app.revealing .main .pill,.app.revealing .rail .badge{transition:opacity .9s ease .6s}
+.app.revealing .qi{animation:rise .6s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(.35s + var(--i,0)*.12s)}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.login{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:color-mix(in srgb,var(--bg) 40%,transparent);overflow:auto;transition:opacity .45s ease}
+.login.out{opacity:0;pointer-events:none}
+.lcard{width:min(440px,100%);background:var(--panel);border-radius:16px;box-shadow:0 24px 60px rgba(14,14,30,.18);padding:32px 28px 24px;display:flex;flex-direction:column;gap:18px}
+.lcard .mark{padding:0;justify-content:center}
+.lcard h1{text-align:center;font-size:22px}
+.lcard .sub{text-align:center;color:var(--ink2);margin-top:-10px}
+.acct{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;text-align:left;background:var(--panel);border:1.5px solid var(--line2);border-radius:10px;padding:12px 14px}
+.acct:hover{border-color:var(--accent)}
+.acct.on{border-color:var(--accent);background:var(--accent-soft)}
+.acct b{display:block}.acct small{color:var(--ink2);font-size:12.5px}
+.acct .rad{width:18px;height:18px;border-radius:50%;border:2px solid var(--line2)}
+.acct.on .rad{border:5px solid var(--accent)}
+.lcard .go{justify-content:center;padding:12px;font-size:15px}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.lnote{text-align:center;font-size:12px;color:var(--ink3)}
+@media (prefers-reduced-motion:reduce){.app.revealing,.app.revealing .main *{transition:none}.app.revealing .qi{animation:none}}
 @media (max-width:1100px){.inbox{grid-template-columns:260px minmax(0,1fr)}.ctx{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}.lib{grid-template-columns:1fr}}
 @media (max-width:980px){.g2,.g2e{grid-template-columns:1fr}.lock{grid-template-columns:1fr}}
 @media (max-width:860px){
@@ -342,6 +368,7 @@ alert:"M12 4l9 16H3zM12 10v4M12 17h.01",
 copy:"M8 8h12v12H8zM4 16V4h12",
 chevl:"M15 6l-6 6 6 6",chevr:"M9 6l6 6-6 6",
 send:"M4 12l16-8-6 16-3-7z",
+logout:"M9 4H5v16h4M14 8l4 4-4 4M18 12H9",
 };
 (()=>{const k=[
  "<circle cx='12' cy='12' r='9'/><path d='M15 9.2c-.6-1-1.7-1.5-3-1.5-1.7 0-3 .9-3 2.1s1.3 1.8 3 2.1 3 .9 3 2.1-1.3 2.1-3 2.1c-1.4 0-2.5-.5-3-1.5M12 6v12'/>",
@@ -455,7 +482,7 @@ const MEDIA=[
  {t:'Tent pitch b-roll',src:'Upload',fam:'pub'},{t:'Gear care graphic',src:'Canva',fam:'pub'},{t:'@lenatrails reel',src:'Creator',fam:'crt'},{t:'Lake camp at dusk',src:'Upload',fam:'pub'},
 ];
 
-const S={camp:null,ctab:'overview',prof:null,recs:{},cf:'all',nb:{goal:'sales',budget:40000,prods:['Alder jacket'],aud:['Hikers 25–34'],name:''},
+const S={auth:'out',pick:'brand',signing:false,camp:null,ctab:'overview',prof:null,recs:{},cf:'all',nb:{goal:'sales',budget:40000,prods:['Alder jacket'],aud:['Hikers 25–34'],name:''},
  role:'smm',view:'hub',filter:'all',mediaF:'All',conv:null,mode:'both',listenPreview:false,drawer:null,palette:false,menu:null,toast:null,
  credits:{smm:31,brand:88,creator:12},ideas:[],ai:[],
  blocks:{team:[['Featured banner','Fall drop: layers that pack small',true,'1,912 clicks'],['Linked posts','Shoppable feed of your IG and TikTok posts',true,'2,204 clicks'],['Product carousel','Ridge 28, Alder jacket, Basecamp 2',true,'640 clicks'],['Email signup','Trail notes newsletter',true,'150 signups'],['Social links','Instagram, TikTok, YouTube, Pinterest',false,'—']],
@@ -502,6 +529,7 @@ function top(){
    </select></div>
   <button class="searchbtn" data-act="palette">${ic('search',16)}<span>Search posts, creators, links, spokes</span><kbd>⌘K</kbd></button>
   <button class="iconbtn" data-act="notif" aria-label="Notifications">${ic('bell')}<span class="dot"></span></button>
+  <button class="iconbtn" data-act="signout" aria-label="Sign out" title="Sign out">${ic('logout')}</button>
   <div class="rel"><button class="btn pri" data-act="create">${ic('plus',16)}Create</button>${S.menu==='create'?createMenu():''}</div>
  </div>`;
 }
@@ -578,7 +606,7 @@ function hub(){
  <div class="head"><div><span class="eyebrow">Monday, October 26</span><h1 style="margin-top:6px">Good afternoon, ${first}</h1><p class="muted">${sub}</p></div></div>
  <div class="g2">
   <section class="card"><div class="card-h"><h2>Needs you now</h2><span class="pill acc">${q.length} items</span></div>
-   <div class="queue">${q.map((x,i)=>`<button class="qi f-${x.f}" data-q="${i}"><span class="ico ${x.k||''}">${ic(x.i)}</span><span><span class="qt">${x.t}</span><br><span class="qm">${x.m}</span></span>${ic('arrow',16)}</button>`).join('')}</div>
+   <div class="queue">${q.map((x,i)=>`<button class="qi f-${x.f}" data-q="${i}" style="--i:${i}"><span class="ico ${x.k||''}">${ic(x.i)}</span><span><span class="qt">${x.t}</span><br><span class="qm">${x.m}</span></span>${ic('arrow',16)}</button>`).join('')}</div>
   </section>
   ${hubSide()}
  </div>
@@ -598,7 +626,7 @@ function hubSide(){
   return `<section class="card f-crt"><div class="card-h"><h2>Fall Trail '26</h2><span class="pill ok">On track</span></div>
    <div class="stack" style="gap:12px">
     <div><div class="row between" style="font-size:13px"><span>Budget spent</span><span class="mono">$29,400 of $48,000</span></div><div class="meter" style="margin-top:6px"><i style="width:61%"></i></div><div class="row between faint" style="font-size:12px;margin-top:4px"><span>Flight day 18 of 30</span><span>60% elapsed</span></div></div>
-    <div class="kpis" style="grid-template-columns:repeat(3,minmax(0,1fr))"><div><span class="eyebrow">Sales</span><div class="mono" style="font-size:18px">$186K</div></div><div><span class="eyebrow">ROAS</span><div class="mono" style="font-size:18px">6.3×</div></div><div><span class="eyebrow">Live</span><div class="mono" style="font-size:18px">9</div></div></div>
+    <div class="kpis" style="grid-template-columns:repeat(3,minmax(0,1fr))"><div><span class="eyebrow">Sales</span><div class="mono cu" style="font-size:18px">$186K</div></div><div><span class="eyebrow">ROAS</span><div class="mono cu" style="font-size:18px">6.3×</div></div><div><span class="eyebrow">Live</span><div class="mono cu" style="font-size:18px">9</div></div></div>
     <div class="ai-a"><b>EdgeAI:</b> Shifting $4K from paid amplification to two more micro-creators like @mofl would raise projected sales about 9% at the same spend.</div>
     <p class="faint" style="font-size:12.5px">Sales here come from the same affiliate links creators manage in Earn and post through Plan.</p>
     <button class="btn" data-go="campaigns" data-camp="ft">Open campaign ${ic('arrow',14)}</button>
@@ -606,7 +634,7 @@ function hubSide(){
  }
  const v=[2.1,2.6,2.2,3.0,3.4,3.1,3.8,4.0,3.7,4.4,4.8];
  return `<section class="card f-crt"><div class="card-h"><h2>October earnings</h2><span class="pill ok">+38% vs Sept</span></div>
-  <div class="mono" style="font-size:34px;line-height:1">$4,812.40</div>
+  <div class="mono cu" style="font-size:34px;line-height:1">$4,812.40</div>
   <div style="margin:12px 0">${spark(v,'var(--accent)')}</div>
   <div class="li"><span class="grow">Next payout · Nov 1</span><b class="mono">$3,576.40</b></div>
   <div class="li"><span class="grow">Pending (in return window)</span><b class="mono">$1,236.00</b></div>
@@ -1060,8 +1088,19 @@ const AIQ={
   ['What should I post to earn more?','Your Alder jacket link converts best at 4.9%. A short TikTok try-on with the link pinned in Link in bio would likely add 40–60 orders this week.'],
   ['When do I get paid?','$3,576.40 pays out Nov 1. Another $1,236 clears after the 30-day return window.']],
 };
+function loginCard(){
+ const A=[['brand','Maya Chen','MC','Influencer marketing lead, Fernway Outdoor'],['smm','Priya Shah','PS','Social media manager, Fernway Outdoor'],['creator','Jules Ortiz','JO','Creator, @julesoutside']];
+ return `<div class="login" id="login" role="dialog" aria-modal="true" aria-labelledby="login-h"><div class="lcard">
+  <div class="mark" aria-label="Later One"><b>Later</b><span class="one">One</span></div>
+  <h1 id="login-h">Sign in to your workspace</h1><p class="sub">Choose a demo account to continue.</p>
+  <div class="stack" style="gap:8px" role="radiogroup" aria-label="Demo account">${A.map(a=>`<button class="acct ${S.pick===a[0]?'on':''}" role="radio" aria-checked="${S.pick===a[0]}" data-pick="${a[0]}"><span class="ava">${a[2]}</span><span><b>${a[1]}</b><small>${a[3]}</small></span><span class="rad"></span></button>`).join('')}</div>
+  <button class="btn pri go" id="login-go" data-act="signin">${S.signing?'<span class="spin"></span>Signing in…':'Continue'}</button>
+  <p class="lnote">Unofficial concept prototype. Demo accounts only, no passwords.</p>
+ </div></div>`;
+}
 function overlay(){
  let h='';
+ if(S.auth==='out'){ov.innerHTML=loginCard();return}
  if(S.drawer||S.palette||S.aiOpen||S.prof)h+=`<div class="scrim" data-act="close"></div>`;
  if(S.drawer)h+=composer(S.drawer);
  else if(S.prof)h+=profileDrawer(S.prof);
@@ -1093,9 +1132,29 @@ function drawPal(){const el=document.getElementById('plist');if(!el)return;el.in
 function palGo(x){S.palette=false;if(x.conv)S.conv=x.conv;if(x.go==='campaigns'){S.camp=x.camp||null;S.ctab=x.tab||'overview';S.prof=x.prof||null}if(x.open){openPost(x.open)}else{go(x.go)}}
 
 /* ---------- actions ---------- */
+function countUp(root){
+ const els=root.querySelectorAll('.kpi .v,.spoke .s,.cu');const t0=performance.now(),D=1700;
+ const jobs=[...els].map(el=>{const m=el.textContent.trim().match(/^([^\d]*?)([\d,]*\.?\d+)(.*)$/);if(!m)return null;const raw=m[2],dec=(raw.split('.')[1]||'').length;return {el,pre:m[1],n:parseFloat(raw.replace(/,/g,'')),dec,g:raw.includes(','),suf:m[3]}}).filter(Boolean);
+ const f=(j,v)=>j.pre+v.toLocaleString('en-US',{minimumFractionDigits:j.dec,maximumFractionDigits:j.dec,useGrouping:j.g})+j.suf;
+ jobs.forEach(j=>j.el.textContent=f(j,0));
+ const step=now=>{const k=Math.min(1,(now-t0)/D),e=1-Math.pow(1-k,3);jobs.forEach(j=>j.el.textContent=f(j,j.n*e));if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step);
+}
+function signIn(){
+ if(S.signing)return;S.signing=true;overlay();
+ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ setTimeout(()=>{
+  S.role=S.pick;S.view='hub';S.camp=null;S.prof=null;S.filter='all';S.conv=null;S.auth='in';
+  render();
+  if(reduce){S.signing=false;return}
+  app.classList.add('locked','blank');void app.offsetWidth;
+  ov.innerHTML=loginCard();S.signing=false;const L=document.getElementById('login');void L.offsetWidth;L.classList.add('out');
+  requestAnimationFrame(()=>{app.classList.add('revealing');app.classList.remove('locked','blank');countUp(app)});
+  setTimeout(()=>{app.classList.remove('revealing');overlay()},2700);
+ },reduce?0:700);
+}
 let tt;
 function toast(m){S.toast=m;overlay();clearTimeout(tt);tt=setTimeout(()=>{S.toast=null;overlay()},2400)}
-function render(){app.innerHTML=rail()+`<div class="main">${top()}<main id="view">${VIEWS[S.view]()}</main></div><button class="help" data-act="ai">${ic('spark',18)}<span>Ask EdgeAI</span></button>`;overlay()}
+function render(){app.className='app'+(S.auth==='out'?' locked blank':'');if(S.auth==='out')app.setAttribute('aria-hidden','true');else app.removeAttribute('aria-hidden');app.innerHTML=rail()+`<div class="main">${top()}<main id="view">${VIEWS[S.view]()}</main></div><button class="help" data-act="ai">${ic('spark',18)}<span>Ask EdgeAI</span></button>`;overlay()}
 function go(v){S.view=v;S.menu=null;S.drawer=null;try{history.replaceState(null,'','#'+v)}catch(e){}render();window.scrollTo({top:0})}
 function findPost(id){return POSTS[team()].find(p=>p.id===id)||POSTS.team.find(p=>p.id===id)}
 function openPost(id){const p=findPost(id);if(!p)return;S.view='plan';S.drawer={...p};render()}
@@ -1145,7 +1204,10 @@ document.addEventListener('click',e=>{
   if(n==='block'){go('linkinbio');return}
   if(n==='report'){go('analyze');toast('Report link copied');return}
  }
+ if(ds.pick){S.pick=ds.pick;overlay();const b=document.querySelector(`[data-pick="${ds.pick}"]`);b&&b.focus();return}
  const a=ds.act;if(!a)return;
+ if(a==='signin'){signIn();return}
+ if(a==='signout'){S.auth='out';S.drawer=null;S.aiOpen=false;S.palette=false;S.menu=null;S.view='hub';render();return}
  if(a==='close'){S.drawer=null;S.palette=false;S.aiOpen=false;S.prof=null;overlay();return}
  if(a==='mkcamp'){const n=S.nb;if(!n.prods.length){toast('Pick at least one product first');return}const id='c'+Date.now();
   CAMPS.splice(1,0,{id,n:n.name.trim()||'Untitled campaign',st:'draft',goal:{sales:'Drive sales',launch:'Launch a product',aware:'Build awareness'}[n.goal],dates:'Not scheduled',mode:'Self-run',budget:n.budget,spent:0,sales:0,roas:'—',cr:'Not started',nb:{...n,prods:[...n.prods],aud:[...n.aud]}});
@@ -1190,11 +1252,12 @@ document.addEventListener('input',e=>{if(e.target.id==='pal')palList(e.target.va
  if(e.target.id==='nb-name')S.nb.name=e.target.value;
  if(e.target.id==='nb-b'){S.nb.budget=+e.target.value;document.getElementById('nb-bv').textContent=$m(S.nb.budget);document.getElementById('fc').innerHTML=forecast(S.nb)}});
 document.addEventListener('keydown',e=>{
+ if(S.auth==='out'){if(e.key==='Enter'&&!e.target.closest('.acct')){e.preventDefault();signIn()}return}
  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();S.palette=!S.palette;overlay();return}
  if(e.key==='Escape'&&(S.palette||S.drawer||S.aiOpen||S.menu||S.prof)){S.palette=false;S.drawer=null;S.aiOpen=false;S.menu=null;S.prof=null;render();return}
  if(S.palette&&e.target.id==='pal'){if(e.key==='ArrowDown'){palSel=Math.min(palRes.length-1,palSel+1);drawPal();e.preventDefault()}if(e.key==='ArrowUp'){palSel=Math.max(0,palSel-1);drawPal();e.preventDefault()}if(e.key==='Enter'&&palRes[palSel])palGo(palRes[palSel])}
 });
 const h=(location.hash||'').slice(1);if(VIEWS[h])S.view=h;
-render();
+render();setTimeout(()=>{const g=document.getElementById('login-go');g&&g.focus()},50);
 })();
 </script>

@@ -32,6 +32,7 @@ Each role gets its own hub queue and spoke order. Spokes outside a role's core w
 
 ## Things to try
 
+- Pick a demo account on the sign-in screen and watch the blurred, blank dashboard sharpen as its numbers load. Use the sign-out button in the top bar to replay it.
 - As Maya, open Jules's draft from the hub and request changes. Switch to Jules to see the same post with Maya's note, then send it back.
 - In Engage, see campaign context next to a creator's comment, or (as Jules) reply to a shopping question with an affiliate link.
 - As Maya, open Campaigns: plan a new campaign with the EdgeAI forecast, then open Fall Trail '26 and work through its Overview, Brief, Creators, Content, Payments and Results tabs. Select any creator name for their full profile.
