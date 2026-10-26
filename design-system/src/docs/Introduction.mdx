@@ -1,0 +1,36 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { Wordmark } from '../components/Badge/Badge';
+
+<Meta title="Foundations/Introduction" />
+
+<Wordmark />
+
+# Later One design system
+
+Later One is an unofficial concept that brings Later Social, Later Influence and Later Creator into one account. This design system is how three product lines stay one product: shared tokens, shared components, and shared patterns for AI that acts on someone's behalf.
+
+All people, brands and figures in these examples are fictional. Not affiliated with Later.
+
+## How it's organized
+
+- **Foundations**: color, type, spacing and icons. Every value is a design token.
+- **Components**: the building blocks used across all three product lines.
+- **Patterns**: the agent step card, for human-in-the-loop AI.
+
+## Tokens are the source of truth
+
+Tokens live in `src/tokens/tokens.json`. `npm run tokens` turns them into CSS variables in `src/tokens/tokens.css`, which runs on its own before Storybook starts or builds. Components use only those variables, so a change in the JSON reaches every component, in both themes.
+
+```
+tokens.json  →  npm run tokens  →  tokens.css (--lo-*)  →  components
+```
+
+The same JSON can feed a Figma variables import or native platform builds, so design and code read from one file.
+
+## Principles
+
+1. **Purple means act.** The action color is reserved for primary buttons, selection and focus. Brand marks, status and charts use other colors.
+2. **Status takes form, not just color.** Status shows as a labeled pill, icon or stripe, so it reads without color.
+3. **Icons describe the metric.** A metric card's icon follows what the number measures (money, volume, clicks, rate, people), not its position in a row.
+4. **AI explains itself and asks before it commits.** Agent output shows its reasoning, confidence and sources. Money and messages to creators always need a person.
+5. **Both themes, always.** Every color token has a light and a dark value. Use the Theme switch in the toolbar to check any story.

@@ -1,0 +1,51 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/addon-docs/blocks';
+import tokens from '../tokens/tokens.json';
+
+<Meta title="Foundations/Color" />
+
+# Color
+
+Each swatch shows the light value, then the dark value. In code, use the CSS variable `--lo-color-<name>`, never the hex value.
+
+export const group = (names) => names.map((n) => (
+  <ColorItem
+    key={n}
+    title={n}
+    subtitle={`--lo-color-${n} · ${tokens.color[n].description}`}
+    colors={{ Light: tokens.color[n].light, Dark: tokens.color[n].dark }}
+  />
+));
+
+## Surfaces and text
+
+<ColorPalette>{group(['canvas', 'surface', 'surface-sunken', 'border', 'border-strong', 'text', 'text-secondary', 'text-tertiary'])}</ColorPalette>
+
+## Action
+
+Reserved for the one main action in a view, selection and focus.
+
+<ColorPalette>{group(['action', 'action-hover', 'action-subtle', 'on-action'])}</ColorPalette>
+
+## Ink
+
+For metric icon tiles, the One badge and toasts. Strong without competing with actions.
+
+<ColorPalette>{group(['ink', 'on-ink'])}</ColorPalette>
+
+## Tool groups
+
+Mark which part of Later One something belongs to. Not for status.
+
+<ColorPalette>{group(['publish', 'publish-subtle', 'grow', 'grow-subtle', 'creators', 'creators-subtle'])}</ColorPalette>
+
+## Status
+
+Always paired with a label or icon.
+
+<ColorPalette>{group(['success', 'success-subtle', 'warning', 'warning-subtle', 'danger', 'danger-subtle'])}</ColorPalette>
+
+## Charts
+
+One color per series, in this order. Social platforms keep the same color everywhere.
+
+<ColorPalette>{group(['chart-1', 'chart-2', 'chart-3', 'chart-4', 'chart-5'])}</ColorPalette>

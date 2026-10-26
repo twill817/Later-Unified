@@ -1,0 +1,15 @@
+.lo-metric {
+  display: grid; grid-template-columns: 48px minmax(0, 1fr); column-gap: 16px; align-items: center;
+  background: var(--lo-color-surface); border-radius: var(--lo-radius-lg); box-shadow: var(--lo-shadow-card);
+  padding: 22px 20px; min-width: 0;
+}
+.lo-metric__tile { width: 48px; height: 48px; border-radius: var(--lo-radius-md); background: var(--lo-color-ink); color: var(--lo-color-on-ink); display: grid; place-items: center; }
+.lo-metric__label { font-size: var(--lo-font-size-sm); color: var(--lo-color-text-secondary); font-weight: var(--lo-font-weight-medium); }
+.lo-metric__value { font-size: var(--lo-font-size-metric); font-weight: var(--lo-font-weight-semibold); letter-spacing: -.01em; line-height: 1.2; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.lo-metric__note { font-size: var(--lo-font-size-sm); color: var(--lo-color-text-secondary); margin-top: 6px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.lo-metric__delta { display: inline-flex; align-items: center; gap: 3px; padding: 1px 7px; border-radius: var(--lo-radius-pill); font-size: 11px; font-weight: var(--lo-font-weight-semibold); }
+.lo-metric__delta--up { background: var(--lo-color-success-subtle); color: var(--lo-color-success); }
+.lo-metric__delta--down { background: var(--lo-color-danger-subtle); color: var(--lo-color-danger); }
+.lo-metric--compact { grid-template-columns: 36px minmax(0, 1fr); column-gap: 10px; padding: 14px; }
+.lo-metric--compact .lo-metric__tile { width: 36px; height: 36px; }
+.lo-metric--compact .lo-metric__value { font-size: 18px; }

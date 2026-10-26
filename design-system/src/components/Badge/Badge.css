@@ -1,0 +1,13 @@
+.lo-badge {
+  display: inline-block; min-width: 20px; height: 20px; padding: 0 6px;
+  border-radius: var(--lo-radius-pill); background: var(--lo-color-action); color: var(--lo-color-on-action);
+  font: var(--lo-font-weight-semibold) 11px/20px var(--lo-font-family); text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.lo-wordmark { display: inline-flex; align-items: center; gap: 7px; }
+.lo-wordmark b { font: var(--lo-font-weight-wordmark) 27px/1 var(--lo-font-family); letter-spacing: -.06em; color: var(--lo-color-text); }
+.lo-wordmark span {
+  display: inline-grid; place-items: center; height: 22px; padding: 0 7px; border-radius: var(--lo-radius-sm);
+  background: var(--lo-color-ink); color: var(--lo-color-on-ink);
+  font: 800 13px/1 var(--lo-font-family); letter-spacing: -.01em; transform: translateY(1px);
+}

@@ -1,0 +1,31 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import tokens from '../tokens/tokens.json';
+
+<Meta title="Foundations/Spacing and radius" />
+
+# Spacing and radius
+
+Spacing runs on a 4px base. Cards use 20px padding and sit 20px apart.
+
+<div style={{ display: 'grid', gap: 10, margin: '20px 0' }}>
+  {Object.entries(tokens.space).map(([k, t]) => (
+    <div key={k} style={{ display: 'grid', gridTemplateColumns: '140px 60px 1fr', alignItems: 'center', gap: 12, fontSize: 13 }}>
+      <code>--lo-space-{k}</code>
+      <span>{t.value}</span>
+      <span style={{ height: 12, width: t.value, background: '#5A2BD8', borderRadius: 3 }} />
+    </div>
+  ))}
+</div>
+
+## Radius
+
+Radius follows hierarchy: small for tags, medium for controls, large for cards.
+
+<div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', margin: '20px 0' }}>
+  {Object.entries(tokens.radius).map(([k, t]) => (
+    <div key={k} style={{ textAlign: 'center', fontSize: 12.5 }}>
+      <div style={{ width: 88, height: 56, border: '1.5px solid #5A2BD8', borderRadius: t.value, background: '#EEE8FD', marginBottom: 6 }} />
+      <code>--lo-radius-{k}</code><br />{t.value} {t.description ? `· ${t.description}` : ''}
+    </div>
+  ))}
+</div>

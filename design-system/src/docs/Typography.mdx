@@ -1,0 +1,32 @@
+import { Meta, Typeset } from '@storybook/addon-docs/blocks';
+
+<Meta title="Foundations/Typography" />
+
+# Typography
+
+One family, Inter, for everything. Hierarchy comes from size and weight, not from mixing faces. Numbers use tabular figures so columns line up.
+
+## Scale
+
+<Typeset
+  fontFamily='"Inter", "Helvetica Neue", "Segoe UI", system-ui, sans-serif'
+  fontSizes={['26px', '24px', '16px', '14px', '12.5px', '11.5px']}
+  fontWeight={600}
+  sampleText="Creators drove an estimated $38–52K beyond their links"
+/>
+
+| Token | Size | Weight | Use |
+| --- | --- | --- | --- |
+| `--lo-font-size-h1` | 26px | 700 | Page titles |
+| `--lo-font-size-metric` | 24px | 600 | Metric values |
+| `--lo-font-size-h2` | 16px | 700 | Card titles |
+| `--lo-font-size-body` | 14px | 400 or 600 | Body text, controls, labels |
+| `--lo-font-size-sm` | 12.5px | 400 or 500 | Metadata and helper text |
+| `--lo-font-size-xs` | 11.5px | 400 | Captions and chart axes |
+
+## Writing
+
+- Sentence case everywhere, including buttons and headings.
+- Buttons say what happens: "Approve offers," and the confirmation says "Offers approved."
+- Name things the way people do: "Inbox," not "conversation queue."
+- Errors say what went wrong and how to fix it, without apologizing.

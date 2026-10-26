@@ -1,0 +1,11 @@
+.lo-seg { display: inline-flex; border: 1px solid var(--lo-color-border-strong); border-radius: var(--lo-radius-md); overflow: hidden; background: var(--lo-color-surface); max-width: 100%; }
+.lo-seg button {
+  border: 0; border-right: 1px solid var(--lo-color-border-strong); background: var(--lo-color-surface);
+  padding: 7px 14px; font: var(--lo-font-weight-semibold) 13px/1.3 var(--lo-font-family); color: var(--lo-color-text);
+  cursor: pointer; white-space: nowrap;
+}
+.lo-seg button:last-child { border-right: 0; }
+.lo-seg button:hover { background: var(--lo-color-surface-sunken); }
+.lo-seg button[aria-checked='true'] { background: var(--lo-color-action-subtle); color: var(--lo-color-action); }
+.lo-seg button:focus-visible { outline: 2px solid var(--lo-color-action); outline-offset: -2px; }
+.lo-seg--sm button { padding: 4px 8px; font-size: 11.5px; }

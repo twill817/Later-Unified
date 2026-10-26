@@ -1,0 +1,13 @@
+.lo-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font: var(--lo-font-weight-semibold) 12px/1.5 var(--lo-font-family);
+  padding: 2px 9px; border-radius: var(--lo-radius-pill); white-space: nowrap;
+  background: var(--lo-color-surface-sunken); color: var(--lo-color-text-secondary);
+}
+.lo-pill--success { background: var(--lo-color-success-subtle); color: var(--lo-color-success); }
+.lo-pill--warning { background: var(--lo-color-warning-subtle); color: var(--lo-color-warning); }
+.lo-pill--danger { background: var(--lo-color-danger-subtle); color: var(--lo-color-danger); }
+.lo-pill--action { background: var(--lo-color-action-subtle); color: var(--lo-color-action); }
+.lo-pill--publish { background: var(--lo-color-publish-subtle); color: var(--lo-color-publish); }
+.lo-pill--grow { background: var(--lo-color-grow-subtle); color: var(--lo-color-grow); }
+.lo-pill--creators { background: var(--lo-color-creators-subtle); color: var(--lo-color-creators); }

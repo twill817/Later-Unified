@@ -1,5 +1,5 @@
 {
-  "name": "design-system",
+  "name": "later-one-design-system",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +9,10 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "tokens": "node scripts/build-tokens.mjs",
+    "prestorybook": "npm run tokens",
+    "prebuild-storybook": "npm run tokens"
   },
   "dependencies": {
     "react": "^19.3.1",
@@ -19,7 +22,6 @@
     "@chromatic-com/storybook": "^5.6.0",
     "@storybook/addon-a11y": "^10.6.4",
     "@storybook/addon-docs": "^10.6.4",
-    "@storybook/addon-onboarding": "^10.6.4",
     "@storybook/addon-vitest": "^10.6.4",
     "@storybook/react-vite": "^10.6.4",
     "@types/node": "^24.19.2",

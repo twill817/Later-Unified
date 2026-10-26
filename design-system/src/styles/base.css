@@ -1,0 +1,12 @@
+@import '../tokens/tokens.css';
+
+.lo-root, .lo-root * { box-sizing: border-box; }
+.lo-root {
+  font-family: var(--lo-font-family);
+  font-size: var(--lo-font-size-body);
+  line-height: 1.5;
+  color: var(--lo-color-text);
+  -webkit-font-smoothing: antialiased;
+}
+.lo-root :focus-visible { outline: 2px solid var(--lo-color-action); outline-offset: 2px; }
+.lo-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

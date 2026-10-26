@@ -30,6 +30,10 @@ A shared Workspace layer holds social sets, people and roles, AI credits, plan a
 
 Each role gets its own "Needs you now" queue and tool order. Tools outside a role's core work stay under "More from Later."
 
+## Design system
+
+`design-system/` holds Later One's tokens and components in Storybook. See [design-system/README.md](design-system/README.md).
+
 ## Things to try
 
 - Pick a demo account on the sign-in screen and watch the blurred, blank dashboard sharpen as its numbers load. Use Replay sign-in in the prototype bar, or Sign out in the user menu, to see it again.
