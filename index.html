@@ -334,6 +334,11 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 #hh-ha{color:var(--accent)}
 .hhcap{margin-top:12px;min-height:46px;font-size:14px;background:var(--sunk);border-radius:10px;padding:11px 14px;color:var(--ink)}
 .hhcap b{color:var(--accent)}
+.hhbtn{width:36px;height:36px;flex:none;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line2);background:var(--panel);color:var(--ink)}
+.hhbtn:hover{background:var(--sunk)}
+.hhbtn.pri{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.hhbtn.pri:hover{background:var(--accent-ink)}
+.hhbtn.pri .svg{fill:currentColor}
 .hhreveal{justify-content:center;padding:12px;font-size:14.5px}
 @media (prefers-reduced-motion:no-preference){.hhreveal{animation:pulse 2.2s ease-in-out infinite}@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(90,43,216,.35)}50%{box-shadow:0 0 0 8px rgba(90,43,216,0)}}}
 .hh3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
@@ -445,6 +450,8 @@ chevl:"M15 6l-6 6 6 6",chevr:"M9 6l6 6-6 6",
 send:"M4 12l16-8-6 16-3-7z",
 logout:"M9 4H5v16h4M14 8l4 4-4 4M18 12H9",
 menu:"M4 7h16M4 12h16M4 17h16",
+play:"M8 5.5v13l11-6.5z",
+pause:"M8.5 5.5v13M15.5 5.5v13",
 refresh:"M20 11a8 8 0 1 0-2.3 5.6M20 4v7h-7",
 };
 (()=>{const k=[
@@ -1239,16 +1246,16 @@ function drawHH(){
  const r=document.getElementById('hh-reveal');if(r)r.hidden=k>0.05||S.hh.playing;
  const s=document.getElementById('hh-s');if(s&&document.activeElement!==s)s.value=Math.round(t*1000);
  document.querySelectorAll('[data-act="hhlinks"],[data-act="hhfull"]').forEach(b=>{const on=(b.dataset.act==='hhfull')===(S.hh.mode==='full');b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
- const pb=document.getElementById('hh-play');if(pb)pb.innerHTML=S.hh.playing?'Pause':'Replay campaign';
+ const pb=document.getElementById('hh-play');if(pb){const want=S.hh.playing?'pause':'play';if(pb.dataset.ic!==want){pb.dataset.ic=want;pb.innerHTML=ic(want,18);pb.setAttribute('aria-label',S.hh.playing?'Pause':'Play')}}
  const box=document.getElementById('hh-habox');if(box)box.classList.toggle('dim',k<0.05);
 }
 function iHalo(){
  return `<section class="card hh f-grow"><div class="card-h"><div><h2>What creators really drove</h2><p class="faint" style="font-size:12.5px;margin-top:2px">Fall Trail '26 · daily sales influenced by creator posts</p></div>
-   <div class="row"><div class="chips"><button class="chip" data-act="hhlinks">What links see</button><button class="chip" data-act="hhfull">Full picture</button></div><button class="btn sm" id="hh-play" data-act="hhplay">Replay campaign</button></div></div>
+   <div class="row"><div class="chips"><button class="chip" data-act="hhlinks">What links see</button><button class="chip" data-act="hhfull">Full picture</button></div></div></div>
   <div class="hhgrid"><div style="min-width:0">
     <svg id="hh" class="chart" viewBox="0 0 640 280" role="img" aria-label="Stacked daily sales: baseline, sales tracked through creator links, and the estimated halo through Fernway's own Link in bio, with creator posts marked"></svg>
     <div class="legend" style="margin-top:6px"><span><i style="background:var(--c5)"></i>Expected anyway</span><span><i style="background:var(--crt)"></i>Tracked through creator links</span><span><i style="background:var(--accent)"></i>Halo: bought on Fernway’s own page</span></div>
-    <div class="row" style="margin-top:12px;flex-wrap:nowrap"><span class="mono" id="hh-date" style="font-weight:600;min-width:50px">Oct 26</span><input type="range" id="hh-s" min="0" max="1000" value="1000" class="range" aria-label="Scrub through the campaign" style="margin:0"></div>
+    <div class="row" style="margin-top:12px;flex-wrap:nowrap;gap:8px"><button class="hhbtn pri" id="hh-play" data-act="hhplay" aria-label="Play">${ic('play',18)}</button><button class="hhbtn" data-act="hhrestart" aria-label="Replay from the start" title="Replay from the start">${ic('refresh',17)}</button><span class="mono" id="hh-date" style="font-weight:600;min-width:50px;margin-left:4px">Oct 26</span><input type="range" id="hh-s" min="0" max="1000" value="1000" class="range" aria-label="Scrub through the campaign" style="margin:0"></div>
     <p class="hhcap" id="hh-cap" aria-live="polite"></p>
    </div>
    <div class="hhside">
@@ -1447,7 +1454,8 @@ document.addEventListener('click',e=>{
  if(a==='revss'){DELIV.forEach(d=>{if(d.c==='ss'&&d.st==='review')d.st='live'});render();toast('Sun Shin’s TikTok approved');return}
  if(a==='nudge'){toast('Reminder sent to '+cname(ds.who));return}
  if(a==='hhfull'||a==='hhlinks'){const full=a==='hhfull';S.hh.mode=full?'full':'links';if(S.hh.playing){S.hh.k=full?1:0;drawHH();return}if(matchMedia('(prefers-reduced-motion: reduce)').matches){S.hh.k=full?1:0;drawHH()}else hhAnim('k',S.hh.k,full?1:0,full?1500:700,true);return}
- if(a==='hhplay'){if(S.hh.playing){cancelAnimationFrame(hhRAF);S.hh.playing=false;drawHH();return}S.hh.k=S.hh.mode==='full'?1:0;if(matchMedia('(prefers-reduced-motion: reduce)').matches){S.hh.t=1;drawHH();return}hhAnim('t',S.hh.t>0.99?0:S.hh.t,1,10000*(1-(S.hh.t>0.99?0:S.hh.t)),false);return}
+ if(a==='hhrestart'){S.hh.t=0;S.hh.playing=false;cancelAnimationFrame(hhRAF);}
+ if(a==='hhplay'||a==='hhrestart'){if(a==='hhplay'&&S.hh.playing){cancelAnimationFrame(hhRAF);S.hh.playing=false;drawHH();return}S.hh.k=S.hh.mode==='full'?1:0;if(matchMedia('(prefers-reduced-motion: reduce)').matches){S.hh.t=1;drawHH();return}hhAnim('t',S.hh.t>0.99?0:S.hh.t,1,10000*(1-(S.hh.t>0.99?0:S.hh.t)),false);return}
  if(a==='halorates'){toast('Halo added to rate suggestions for Jules, Lena, Ari and Mo');return}
  if(a==='sharebrief'){toast('Shareable campaign report link created');return}
  if(a==='palette'){S.palette=true;overlay();return}
