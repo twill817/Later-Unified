@@ -48,3 +48,13 @@ Campaigns is the deepest tool because brand influencer marketing is where Later 
 
 - **Creator halo.** Forecasts the brand's own Link in bio sales, follower growth and mentions from the pre-campaign baseline, then credits lift in the days after each creator post to that creator. Excludes sales already tracked through creator links, shows 80% ranges and a confidence level, and feeds renewal rate suggestions. Example finding: a creator's teaser drove more sales through the brand's page than through their own link.
 - **From your audience.** Finds creator candidates in three places no single product sees together: people who posted UGC (Create), people who messaged or commented (Engage), and people already earning commission on the brand's products (Later Creator). Only public posters, people who messaged the brand, or Later Creator members appear; shopper data stays aggregated.
+
+## Agentic flow: EdgeAI plans a campaign
+
+A six-step agent run (gather context, draft the brief, build the shortlist, set offers, check availability, send invites) designed around human-in-the-loop control:
+
+- **Checkpoints by consequence.** Drafting and research run on their own. Committing budget and messaging creators always require the person; brief and shortlist review are guardrail settings ("Ask me" or "Continue").
+- **Trust.** Every output carries a "Why EdgeAI chose this" panel with reasoning, a confidence level and the data sources used. Edits to the brief are carried into later steps.
+- **Hard limits.** A budget cap the agent can't exceed: offers over the cap show the overage and disable approval until fixed.
+- **Failure states.** A creator with a conflicting exclusivity deal blocks the run with three resolutions (replace, delay, remove); stale audience data lowers confidence and triggers a refresh; a brand-safety-flagged creator is left out with an "Include anyway" override and undo.
+- **Control and accountability.** Pause, resume and start over; an activity log separating what EdgeAI did from what you did; invites can be withdrawn until opened; a closing summary of agent work vs. human decisions.

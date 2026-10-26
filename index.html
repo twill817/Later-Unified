@@ -362,6 +362,61 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 @media (min-width:861px){.top{background:var(--bg);box-shadow:none;border-radius:0;padding:6px 0 8px}}
 .searchbtn kbd{background:transparent}
 .head h1{margin:0}
+/* agent run */
+.agrid{display:grid;grid-template-columns:220px minmax(0,1fr) 290px;gap:20px;align-items:start}
+.agsteps{position:sticky;top:76px;padding:16px}
+.stp{display:flex;gap:10px;align-items:flex-start;padding:8px 6px;border-radius:8px}
+.stp.cur{background:var(--accent-soft)}
+.stp b{display:block;font-size:13.5px;font-weight:600}.stp small{display:block;font-size:12px;color:var(--ink3)}.stp small.acc{color:var(--accent);font-weight:600}
+.agi{width:20px;height:20px;border-radius:50%;flex:none;display:grid;place-items:center;margin-top:1px;color:var(--accent)}
+.agi.ok{background:var(--ok-soft);color:var(--ok)}.agi.acc{background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}.agi.bad{background:var(--bad-soft);color:var(--bad)}.agi.warn{background:var(--warn-soft);color:var(--warn)}.agi.todo{border:1.5px solid var(--line2)}
+.agi .spin{width:14px;height:14px}
+.agbudget{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.agcard.on{box-shadow:0 0 0 2px var(--accent),var(--shadow)}
+.agcard.on.bad{box-shadow:0 0 0 2px var(--bad),var(--shadow)}
+.agcard.done{padding:16px 20px}
+.aglines{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:13.5px;color:var(--ink2)}
+.agsum{display:flex;flex-direction:column;gap:2px;font-size:13.5px}
+.agf{display:grid!important;grid-template-columns:120px minmax(0,1fr);align-items:center;gap:12px!important}
+.agf>span{font-size:13px;color:var(--ink2)}
+.agwhy{margin-top:14px;border-radius:10px;background:var(--sunk);padding:10px 12px;font-size:13px}
+.agwhy summary{cursor:pointer;font-weight:600;display:flex;align-items:center;gap:6px;color:var(--accent);list-style:none}
+.agwhy summary::-webkit-details-marker{display:none}
+.agwhy p{margin-top:8px;color:var(--ink2)}
+.agact{padding:14px 0 0;border-top:0;margin-top:4px}
+.aglist{display:flex;flex-direction:column}
+.agrow{display:flex;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.agrow:first-child{border-top:0}
+.moneyin{display:inline-flex;align-items:center;border:1px solid var(--line2);border-radius:8px;padding:0 8px;background:var(--panel)}
+.moneyin span{color:var(--ink3)}
+.moneyin input{border:0;background:transparent;width:80px;padding:7px 4px;font-variant-numeric:tabular-nums;outline:none}
+.moneyin:focus-within{border-color:var(--accent)}
+.moneyin.sm input{width:76px}
+.agbud{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px;padding:12px 14px;background:var(--sunk);border-radius:10px}
+.agbud b{display:block;font-size:16px;font-variant-numeric:tabular-nums;margin-top:2px}
+.agerr{margin-top:10px;color:var(--bad);font-size:13px;font-weight:600}
+.agfail{border-radius:10px;background:var(--bad-soft);padding:14px;margin-top:12px;color:var(--ink)}
+.agfail>.row .svg{color:var(--bad);margin-top:2px}
+.agopts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.agopt{display:flex;flex-direction:column;gap:4px;text-align:left;background:var(--panel);border:1.5px solid var(--line2);border-radius:10px;padding:10px 12px}
+.agopt:hover{border-color:var(--accent)}
+.agopt span{font-size:12.5px;color:var(--ink2)}
+.agmsg{margin-top:10px;border-left:3px solid var(--accent);border-radius:0;background:var(--sunk);padding:12px 14px;font-size:13.5px}
+.agsumcard{box-shadow:0 0 0 2px var(--ok),var(--shadow)}
+.agside{position:sticky;top:76px}
+.gr{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid var(--line);font-size:13px}
+.gr:first-of-type{border-top:0}
+.gr .pill{display:inline-flex;gap:4px}
+.miniseg{display:inline-flex;border:1px solid var(--line2);border-radius:7px;overflow:hidden}
+.miniseg button{border:0;background:var(--panel);font-size:11.5px;font-weight:600;padding:4px 8px;color:var(--ink2)}
+.miniseg button.on{background:var(--accent-soft);color:var(--accent)}
+.aglog{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:12.5px;max-height:320px;overflow:auto}
+.aglog li span{display:block;font-size:11px}
+.aglog li.you b{color:var(--accent)}
+.agq{display:flex;gap:10px;align-items:flex-start;border-color:var(--accent)!important;background:var(--accent-soft)}
+.agq b{display:block}.agq small{display:block;color:var(--ink2);font-weight:400;font-size:12.5px;margin-top:2px}.agq .svg{color:var(--accent);margin-top:2px}
+@media (max-width:1180px){.agrid{grid-template-columns:200px minmax(0,1fr)}.agside{grid-column:1/-1;position:static;display:grid!important;grid-template-columns:1fr 1fr}}
+@media (max-width:860px){.agrid{grid-template-columns:1fr}.agsteps,.agside{position:static}.agside{grid-template-columns:1fr}.agopts{grid-template-columns:1fr}.agbud{grid-template-columns:1fr 1fr}.agf{grid-template-columns:1fr}}
 /* sign in */
 .app.locked{filter:blur(18px) saturate(.7);pointer-events:none;user-select:none}
 .app.blank .main *{color:transparent!important;border-color:transparent}
@@ -470,6 +525,7 @@ send:"M4 12l16-8-6 16-3-7z",
 logout:"M9 4H5v16h4M14 8l4 4-4 4M18 12H9",
 menu:"M4 7h16M4 12h16M4 17h16",
 play:"M8 5.5v13l11-6.5z",
+clock:"M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2",
 pause:"M8.5 5.5v13M15.5 5.5v13",
 refresh:"M20 11a8 8 0 1 0-2.3 5.6M20 4v7h-7",
 };
@@ -965,6 +1021,7 @@ function dst(d){if(!d.post)return d.st;const p=POSTS.team.find(x=>x.id===d.post)
 function campaigns(){
  if(S.role==='creator')return opportunities();
  if(S.camp==='new')return builder();
+ if(S.camp==='agent')return agentView();
  if(S.camp)return campDetail(CAMPS.find(c=>c.id===S.camp));
  return campList();
 }
@@ -994,8 +1051,8 @@ function campDetail(c){
  if(c.st==='complete')return `<div class="view stack">${top}
   <div class="kpis f-crt">${[['Impressions','41M'],['Earned media value','$1.1M'],['Attributed sales','$241,000'],['Spent','$70,850'],['ROAS','3.4×']].map(x=>`<div class="kpi"><span class="eyebrow">${x[0]}</span><div class="v">${x[1]}</div></div>`).join('')}</div>
   <section class="card f-crt"><div class="card-h"><h2>What carried forward</h2></div><div class="li"><span class="grow">6 of 18 creators rebooked for Fall Trail ’26, including Lena Tor and Ari Bennett</span></div><div class="li"><span class="grow">Brief, talking points and usage terms reused as the Fall Trail template</span></div><button class="btn" style="margin-top:10px" data-act="reuse">Reuse this brief</button></section></div>`;
- if(c.st==='draft')return `<div class="view stack">${top}<div class="g2">
-  <section class="card"><div class="card-h"><h2>Draft brief</h2><button class="btn sm pri" data-act="editdraft">Continue planning</button></div>
+ if(c.st==='draft'||(c.nb&&c.id!=='ft'))return `<div class="view stack">${top}<div class="g2">
+  <section class="card"><div class="card-h"><h2>Draft brief</h2><div class="row"><button class="btn sm" data-act="editdraft">Edit plan</button><button class="btn sm pri" data-act="agstart">${ic('spark',14)}Let EdgeAI plan it</button></div></div>
    ${[['Goal',c.goal],['Budget',$m(c.nb.budget)],['Products',c.nb.prods.join(', ')||'None yet'],['Audience',c.nb.aud.join(', ')||'Not set'],['Dates',c.dates]].map(r=>`<div class="li"><span class="faint" style="width:90px">${r[0]}</span><b class="grow">${esc(r[1])}</b></div>`).join('')}</section>
   <section class="card f-crt">${forecast(c.nb)}</section></div></div>`;
  const tabs=[['overview','Overview'],['brief','Brief'],['creators','Creators'],['content','Content'],['payments','Payments'],['results','Results']];
@@ -1193,6 +1250,143 @@ function settings(){
  </div></div>`;
 }
 
+/* ---------- AGENT RUN ---------- */
+const AG_STEPS=['Gather context','Draft the brief','Build the shortlist','Set offers','Check availability','Send invites'];
+const AG_LOGS=[
+ ['Read the Winter Layers drop draft: product launch, $30,000, Jan 12 – Feb 8','Pulled results from Spring Trail ’26 and Fall Trail ’26','Loaded creator halo estimates for 4 creators','Found 37 fans who already sell the Alder jacket','Compared against 1,240 outdoor-category launches'],
+ ['Started from the Fall Trail ’26 brief, which hit 124% of its sales target','Set a launch goal from the forecast','Shortened usage rights to 60 days because launches peak in the first 3 weeks'],
+ ['Ranked 412 creators by fit for a winter outerwear launch','Added 2 creators from your own audience','Excluded 1 creator flagged for brand-safety review','Balanced the mix: 4 micro, 1 mid, 1 macro'],
+ ['Priced each offer inside the incentive advisor’s fair range','Reserved $9,000 for paid amplification','Projected commission from expected sales'],
+ ['Checked each creator’s calendar and active deals in Later Creator','Checked audience data freshness'],
+ [],
+];
+const AGC0=[
+ {id:'d1',n:'Tess Alder',h:'@tessalder',f:'88K',tier:'Micro',fit:95,adv:[1400,1900],off:1600,comm:12,why:'Strong saves on jacket content; 8% overlap with your roster'},
+ {id:'d2',n:'Kofi Mensah',h:'@kofiwalks',f:'142K',tier:'Mid',fit:92,adv:[2100,2800],off:2400,comm:10,why:'1.9K linked-post clicks per outerwear post'},
+ {id:'d4',n:'Iris Park',h:'@irisparkoutdoors',f:'36K',tier:'Micro',fit:90,adv:[600,850],off:700,comm:12,why:'Strong Pinterest saves for winter gear; low overlap'},
+ {id:'a4',n:'Nina Okafor',h:'@northbound.nina',f:'41K',tier:'Micro',fit:89,adv:[800,1200],off:1000,comm:12,why:'Already sold $4,120 of Fernway gear without being paid',src:true},
+ {id:'a3',n:'Lu Andersen',h:'@lake.days.lu',f:'22K',tier:'Micro',fit:91,adv:[450,700],off:550,comm:12,why:'Sold $2,960 of Fernway gear; audience of families who camp',src:true,stale:true},
+ {id:'lt',n:'Lena Tor',h:'@lenatrails',f:'322K',tier:'Macro',fit:88,adv:[3400,4300],off:3900,comm:0,why:'Biggest halo in Fall Trail ’26 (+45% on top of tracked sales)'},
+];
+const AG_REPL={id:'r1',n:'Dana Holt',h:'@danaholtoutside',f:'64K',tier:'Mid',fit:87,adv:[1200,1600],off:1400,comm:10,why:'Audience close to Kofi’s; no conflicting deals'};
+const AG_COMM=7800,AG_PAID=9000;
+function agReset(){
+ (S.agT||[]).forEach(clearTimeout);S.agT=[];
+ S.ag={st:AG_STEPS.map(()=>'todo'),step:0,lines:AG_STEPS.map(()=>[]),log:[],started:new Date(),cap:30000,
+  auto:{brief:false,list:true},safety:true,
+  brief:{goal:'Sell 1,500 Alder jackets in the new winter colorway in 4 weeks',aud:'Hikers and winter campers 25–44 in the Pacific Northwest and Mountain West',del:'1 Reel or TikTok with a linked post, plus a 3-frame story set',talk:'Warm when you stop moving · packs into its own pocket · lifetime zipper repair',use:'60 days paid amplification',excl:'30 days, outdoor apparel only'},
+  edited:false,list:AGC0.map(c=>({...c})),excluded:true,conflict:null,res:null,sent:false,decisions:[]};
+}
+function agLog(t,who){const d=new Date();S.ag.log.push({t,who:who||'agent',at:d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})})}
+function agLive(){return S.view==='campaigns'&&S.camp==='agent'}
+function agRun(i){
+ const a=S.ag;a.step=i;a.st[i]='working';a.lines[i]=[];if(agLive())render();
+ const L=AG_LOGS[i];L.forEach((l,k)=>S.agT.push(setTimeout(()=>{a.lines[i].push(l);agLog(l);if(agLive())render()},500+k*650)));
+ S.agT.push(setTimeout(()=>agDone(i),700+L.length*650));
+}
+function agDone(i){
+ const a=S.ag;
+ if(i===0){a.st[0]='done';agRun(1)}
+ else if(i===1){if(a.auto.brief){a.st[1]='done';agLog('Brief accepted automatically (your guardrail setting)');agRun(2)}else{a.st[1]='review';agLog('Paused for your review of the brief')}}
+ else if(i===2){if(a.auto.list){a.st[2]='done';agLog('Shortlist kept automatically (your guardrail setting)');agRun(3)}else{a.st[2]='review';agLog('Paused for your review of the shortlist')}}
+ else if(i===3){a.st[3]='review';agLog('Offers commit budget, so EdgeAI is waiting for you')}
+ else if(i===4){if(a.list.some(c=>c.id==='d2')){a.conflict=true;a.st[4]='blocked';agLog('Found a conflict it can’t resolve on its own')}else{a.res='none';a.st[4]='done';a.step=5;a.st[5]='review';agLog('No conflicts. Refreshed Lu Andersen’s audience data');agLog('Ready to send invites. Waiting for you')}}
+ if(agLive())render();
+}
+function agFees(){return S.ag.list.reduce((s,c)=>s+c.off,0)}
+function agPlanned(){return agFees()+AG_COMM+AG_PAID}
+const AGI={done:['check','Done','ok'],working:['spin','Working',''],review:['dot','Needs you','acc'],blocked:['alert','Blocked','bad'],todo:['ring','',''],paused:['pause','Paused','warn']};
+function agStepIcon(s){if(s==='done')return `<span class="agi ok">${ic('check',13)}</span>`;if(s==='working')return '<span class="agi"><span class="spin"></span></span>';if(s==='review')return '<span class="agi acc"></span>';if(s==='blocked')return `<span class="agi bad">${ic('alert',12)}</span>`;if(s==='paused')return `<span class="agi warn">${ic('pause',12)}</span>`;return '<span class="agi todo"></span>'}
+function agentView(){
+ const a=S.ag;if(!a){agReset()}
+ const A=S.ag,c=CAMPS.find(x=>x.id==='wl');
+ const doneAll=A.sent;
+ const working=A.st.includes('working');
+ const head2=`<div class="crumb"><button class="linkbtn faint" data-camp="">Campaigns</button>${ic('chevr',14)}<button class="linkbtn faint" data-camp="wl">Winter Layers drop</button>${ic('chevr',14)}<span>Agent run</span></div>
+ ${head('campaigns','Plan Winter Layers drop','EdgeAI is planning this campaign for you. It stops whenever money, messages to creators or a judgment call is involved.',
+  doneAll?'':`${working?`<button class="btn" data-act="agpause">${ic('pause',16)}Pause</button>`:A.st.includes('paused')?`<button class="btn" data-act="agresume">${ic('play',16)}Resume</button>`:''}<button class="btn ghost" data-act="agrestart">${ic('refresh',16)}Start over</button>`)}`;
+ const steps=`<nav class="card agsteps" aria-label="Agent steps"><span class="eyebrow" style="display:block;margin-bottom:10px">Plan</span>${AG_STEPS.map((s,i)=>`<div class="stp ${i===A.step?'cur':''}">${agStepIcon(A.st[i])}<span><b>${s}</b>${A.st[i]!=='todo'&&AGI[A.st[i]][1]?`<small class="${AGI[A.st[i]][2]==='acc'?'acc':''}">${AGI[A.st[i]][1]}</small>`:''}</span></div>`).join('')}
+  <div class="agbudget"><div class="row between" style="font-size:12.5px"><span class="muted">Budget planned</span><b>${$m(A.st[3]==='todo'||A.st[3]==='working'?0:agPlanned())}</b></div><div class="meter" style="margin-top:6px"><i style="width:${A.st[3]==='todo'||A.st[3]==='working'?0:Math.min(100,agPlanned()/A.cap*100)}%;${agPlanned()>A.cap?'background:var(--bad)':''}"></i></div><div class="faint" style="font-size:11.5px;margin-top:4px">Cap ${$m(A.cap)}, set by you</div></div></nav>`;
+ const cards=A.st.map((s,i)=>s==='todo'?'':agCard(i)).join('')+(doneAll?agSummary():'');
+ return `<div class="view stack">${head2}<div class="agrid">${steps}<div class="stack" style="gap:14px;min-width:0">${cards}</div>${agSide()}</div></div>`;
+}
+function agWhy(t,conf,src){return `<details class="agwhy"><summary>${ic('spark',13)}Why EdgeAI chose this <span class="pill ${conf[1]}" style="margin-left:6px">${conf[0]} confidence</span></summary><p>${t}</p>${src?`<div class="row" style="gap:6px;margin-top:8px">${src.map(x=>`<span class="pill">${x}</span>`).join('')}</div>`:''}</details>`}
+function agCard(i){
+ const A=S.ag,s=A.st[i],act=i===A.step&&s!=='done';
+ const hd=(extra)=>`<div class="card-h" style="margin-bottom:10px"><div class="row" style="gap:10px">${agStepIcon(s)}<h2>${AG_STEPS[i]}</h2></div>${extra||''}</div>`;
+ const lines=A.lines[i].length?`<ul class="aglines">${A.lines[i].map(l=>`<li>${l}</li>`).join('')}${s==='working'?'<li class="faint">…</li>':''}</ul>`:(s==='working'?'<ul class="aglines"><li class="faint">Starting…</li></ul>':'');
+ if(s==='working'||s==='paused')return `<section class="card agcard ${act?'on':''}">${hd(s==='paused'?'<span class="pill warn">Paused</span>':'<span class="pill">EdgeAI is working</span>')}${lines}</section>`;
+ const B=A.brief;
+ if(i===0)return `<section class="card agcard done">${hd(`<span class="faint" style="font-size:12.5px">5 sources</span>`)}${lines}</section>`;
+ if(i===1){
+  if(s==='review')return `<section class="card agcard on">${hd('<span class="pill acc">Needs your review</span>')}
+   <div class="stack" style="gap:10px">${[['goal','Goal'],['aud','Audience'],['del','Deliverables'],['talk','Talking points'],['use','Usage rights'],['excl','Exclusivity']].map(f=>`<label class="f agf"><span>${f[1]}</span><input class="inp" id="br-${f[0]}" value="${esc(B[f[0]])}"></label>`).join('')}</div>
+   ${agWhy('Fall Trail ’26 used the same structure and reached 124% of its sales target. The goal comes from the forecast for a $30,000 launch (1,350–1,700 orders). Usage rights are shorter than Fall Trail’s 90 days because launch sales peak in the first 3 weeks.',['High','ok'],['Fall Trail ’26 brief','Launch forecast','Fernway catalog'])}
+   <div class="dft agact"><span class="faint" style="font-size:12.5px;margin-right:auto">Edit any field. EdgeAI will use your changes in later steps.</span><button class="btn pri" data-act="agbrief">${ic('check',16)}Approve brief</button></div></section>`;
+  return `<section class="card agcard done">${hd(A.edited?'<span class="pill">You edited</span>':'<span class="pill">Approved</span>')}<div class="agsum"><b>${esc(B.goal)}</b><span class="faint">${esc(B.del)} · ${esc(B.use)}</span></div></section>`;
+ }
+ if(i===2&&s==='done'&&A.step>3)return `<section class="card agcard done">${hd(`<span class="faint" style="font-size:12.5px">${A.list.length} creators</span>`)}<div class="row" style="gap:6px">${A.list.map(c=>`<span class="pill">${c.n}${c.src?' · your audience':''}</span>`).join('')}</div></section>`;
+ if(i===3&&s==='done'&&A.step>4)return `<section class="card agcard done">${hd('<span class="pill">Approved</span>')}<div class="agsum"><b>${$m(agFees())} in creator fees to ${A.list.length} creators</b><span class="faint">${$m(agPlanned())} planned of your ${$m(A.cap)} cap, including commission and paid amplification</span></div></section>`;
+ if(i===2){
+  const rows=A.list.map(c=>`<div class="agrow"><span class="ava" style="width:30px;height:30px;font-size:11px">${inits(c.n)}</span><div class="grow" style="min-width:0"><b>${c.n}</b> <span class="faint" style="font-size:12.5px">${c.h} · ${c.f} · ${c.tier}</span>${c.src?' <span class="pill f-grow fam">From your audience</span>':''}${c.repl?' <span class="pill acc">Replacement</span>':''}<div class="faint" style="font-size:12.5px">${c.why}</div></div><span class="fit">${c.fit}%</span>${A.st[3]==='todo'||A.st[3]==='working'||i===A.step?`<button class="iconbtn" style="width:30px;height:30px" data-agrm="${c.id}" aria-label="Remove ${c.n}">${ic('x',14)}</button>`:''}</div>`).join('');
+  const ex=A.excluded?`<div class="note" style="display:flex;gap:10px;align-items:center;background:var(--warn-soft);color:var(--warn)">${ic('alert',16)}<span style="flex:1"><b>Gray Holloway</b> (230K, 84% fit) was left out: a 2025 post criticized a competitor’s recall and needs a brand-safety review first.</span><button class="btn sm" data-act="aginclude">Include anyway</button></div>`:`<div class="note">You added Gray Holloway despite the brand-safety flag. <button class="linkbtn" data-act="agexclude" style="color:var(--accent)">Undo</button></div>`;
+  return `<section class="card agcard ${s==='review'?'on':'done'}">${hd(`<span class="faint" style="font-size:12.5px">${A.list.length} creators${A.excluded?' · 1 excluded':''}</span>`)}
+   <div class="aglist">${rows}</div><div style="margin-top:12px">${ex}</div>
+   ${agWhy('Fit combines audience match, past results in your category and purchase data from Later Creator links. Two picks come from your own audience because fans recruited that way converted 2.1× better in Spring Trail ’26. Lena Tor is a rebook for continuity and her strong halo.',['High','ok'],['412 creators scored','Your audience','Fall Trail ’26 halo'])}
+   ${s==='review'?`<div class="dft agact"><button class="btn pri" data-act="aglist">${ic('check',16)}Keep this shortlist</button></div>`:''}</section>`;
+ }
+ if(i===3){
+  const fees=agFees(),plan=agPlanned(),over=plan>A.cap;
+  const rows=A.list.map(c=>`<tr><td><b>${c.n}</b><div class="faint" style="font-size:12px">${c.tier}</div></td><td class="faint" style="white-space:nowrap">$${c.adv[0].toLocaleString()}–${c.adv[1].toLocaleString()}</td><td>${s==='review'?`<div class="moneyin"><span>$</span><input type="number" step="50" min="0" id="off-${c.id}" value="${c.off}" aria-label="Offer for ${c.n}"></div>`:'$'+c.off.toLocaleString()}${c.off<c.adv[0]||c.off>c.adv[1]?`<div class="${c.off>c.adv[1]?'down':'faint'}" style="font-size:11.5px">${c.off>c.adv[1]?'Above':'Below'} fair range</div>`:''}</td><td>${c.comm?c.comm+'%':'Flat'}</td></tr>`).join('');
+  return `<section class="card agcard ${s==='review'?'on':'done'}">${hd(s==='review'?'<span class="pill acc">Needs your approval</span>':'<span class="pill">Approved</span>')}
+   <div class="scrollx"><table class="tbl" style="min-width:520px"><thead><tr><th>Creator</th><th>Fair range</th><th>Offer</th><th>Commission</th></tr></thead><tbody>${rows}</tbody></table></div>
+   <div class="agbud"><div><span class="eyebrow">Creator fees</span><b id="ag-fees">${$m(fees)}</b></div><div><span class="eyebrow">Est. commission</span><b>${$m(AG_COMM)}</b></div><div><span class="eyebrow">Paid amplification</span><b>${$m(AG_PAID)}</b></div><div><span class="eyebrow">Total vs cap</span><b id="ag-tot" class="${over?'down':''}">${$m(plan)} / ${$m(A.cap)}</b></div></div>
+   <p id="ag-over" class="agerr" ${over?'':'hidden'}>Over your ${$m(A.cap)} cap by ${$m(plan-A.cap)}. Lower an offer, or raise the cap in Guardrails.</p>
+   ${agWhy('Each offer sits inside the fair range for the creator’s size, category and engagement. Projected result at these offers: 1,350–1,700 orders against your goal of 1,500.',['Medium','warn'],['Incentive advisor','Launch forecast'])}
+   ${s==='review'?`<div class="dft agact"><span class="faint" style="font-size:12.5px;margin-right:auto">Approving commits up to ${$m(plan)} of the budget. Nothing is sent to creators yet.</span><button class="btn pri" id="ag-approve" data-act="agoffers" ${over?'disabled':''}>${ic('check',16)}Approve offers</button></div>`:''}</section>`;
+ }
+ if(i===4){
+  if(s==='blocked')return `<section class="card agcard on bad">${hd('<span class="pill bad">Blocked</span>')}${lines}
+   <div class="agfail"><div class="row" style="gap:10px;align-items:flex-start;flex-wrap:nowrap">${ic('alert',18)}<div><b>Kofi Mensah can’t take this campaign.</b><p class="muted" style="margin-top:2px">His Later Creator profile shows an exclusive deal with a competing outdoor brand until Jan 20. EdgeAI won’t contact him while that’s active.</p></div></div>
+    <div class="agopts">
+     <button class="agopt" data-agres="replace"><b>Replace with Dana Holt</b><span>64K · Mid · 87% fit · $1,400 offer. Closest audience to Kofi’s. Saves $1,000.</span></button>
+     <button class="agopt" data-agres="delay"><b>Invite Kofi for after Jan 20</b><span>He’d post in the last 3 weeks of the launch, when sales are lower.</span></button>
+     <button class="agopt" data-agres="remove"><b>Remove Kofi</b><span>Run with 5 creators. Frees $2,400 for paid amplification.</span></button>
+    </div></div>
+   <div class="note" style="margin-top:12px;display:flex;gap:8px;align-items:flex-start">${ic('clock',16)}<span><b>Heads up:</b> Lu Andersen’s audience data is 41 days old, so her fit score has lower confidence. EdgeAI will refresh it before invites go out.</span></div></section>`;
+  const r={replace:'Replaced Kofi Mensah with Dana Holt',delay:'Kofi Mensah invited for after Jan 20',remove:'Removed Kofi Mensah',none:'No conflicts found'}[A.res];
+  return `<section class="card agcard done">${hd('<span class="pill">Resolved by you</span>')}<div class="agsum"><b>${r}</b><span class="faint">5 creators clear · Lu Andersen’s audience data refreshed</span></div></section>`;
+ }
+ if(i===5){
+  const first=A.list[0];
+  if(!A.sent)return `<section class="card agcard on">${hd('<span class="pill acc">Needs your go-ahead</span>')}
+   <p class="muted" style="font-size:13.5px">EdgeAI never messages creators without you. Here’s what each of ${A.list.length} creators will get, personalized with their offer:</p>
+   <div class="agmsg"><div class="faint" style="font-size:12px;margin-bottom:6px">To ${first.n} · in Later Opportunities</div>Hi ${first.n.split(' ')[0]}, Fernway is launching the Alder jacket in a new winter colorway (Jan 12 – Feb 8). We’d love you to post ${esc(A.brief.del.charAt(0).toLowerCase()+A.brief.del.slice(1))}. Offer: $${first.off.toLocaleString()}${first.comm?` + ${first.comm}% commission on sales through your link`:''}. The full brief is attached.</div>
+   <div class="row" style="gap:6px;margin-top:10px">${A.list.map(c=>`<span class="pill">${c.n}</span>`).join('')}</div>
+   <div class="dft agact"><button class="btn" data-act="agnotyet">Edit message</button><button class="btn pri" data-act="agsend">${ic('send',16)}Send ${A.list.length} invites</button></div></section>`;
+  return `<section class="card agcard done">${hd(`<span class="pill ok">Sent</span>`)}<div class="agsum"><b>${A.list.length} invites sent through Later Opportunities</b><span class="faint">You can withdraw any invite until the creator opens it.</span></div><div class="row" style="margin-top:10px"><button class="btn sm" data-act="agwithdraw">Withdraw all</button></div></section>`;
+ }
+ return '';
+}
+function agSummary(){
+ const A=S.ag;
+ return `<section class="card agsumcard"><h2>Winter Layers drop is ready for creators</h2><p class="muted" style="margin-top:6px">EdgeAI did the research, drafting and checking. You made the calls that involved judgment, money and messages.</p>
+  <div class="g2e" style="margin-top:14px;gap:14px"><div><span class="eyebrow">EdgeAI did</span><ul class="aglines">${['Read 5 data sources','Drafted the brief','Scored 412 creators','Priced 6 offers in fair range','Caught an exclusivity conflict','Refreshed stale audience data'].map(x=>`<li>${x}</li>`).join('')}</ul></div>
+  <div><span class="eyebrow">You decided</span><ul class="aglines">${A.decisions.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>
+  <div class="row" style="margin-top:14px"><button class="btn pri" data-camp="">Back to campaigns</button><span class="faint" style="font-size:12.5px">Replies will show up in the campaign’s Creators tab.</span></div></section>`;
+}
+function agSide(){
+ const A=S.ag,seg=(k,v)=>`<span class="miniseg"><button class="${!A.auto[k]?'on':''}" data-agauto="${k}" data-v="0">Ask me</button><button class="${A.auto[k]?'on':''}" data-agauto="${k}" data-v="1">Continue</button></span>`;
+ return `<aside class="stack agside" style="gap:14px"><section class="card"><h2>Guardrails</h2><p class="faint" style="font-size:12.5px;margin:4px 0 10px">What EdgeAI can do without asking. Changes apply to the next step.</p>
+  <div class="gr"><span>Draft the brief</span>${seg('brief')}</div>
+  <div class="gr"><span>Build the shortlist</span>${seg('list')}</div>
+  <div class="gr"><span>Commit budget</span><span class="pill">${ic('lock',12)}Always asks</span></div>
+  <div class="gr"><span>Message creators</span><span class="pill">${ic('lock',12)}Always asks</span></div>
+  <div class="gr"><span>Budget cap</span><div class="moneyin sm"><span>$</span><input type="number" step="1000" min="0" id="ag-cap" value="${A.cap}" aria-label="Budget cap"></div></div>
+  <div class="gr"><span>Leave out creators with brand-safety flags</span><span class="pill ok">On</span></div></section>
+  <section class="card"><h2>Activity</h2><ol class="aglog">${A.log.slice().reverse().slice(0,12).map(l=>`<li class="${l.who==='you'?'you':''}"><span class="faint">${l.at}</span>${l.who==='you'?'<b>You:</b> ':''}${l.t}</li>`).join('')||'<li class="faint">Nothing yet.</li>'}</ol></section></aside>`;
+}
+
 /* ---------- INSIGHTS ---------- */
 const AUD=[
  {id:'a1',n:'Kai Morales',h:'@wanderwithkai',f:'12.4K',fit:93,ugc:4,inbox:true,sold:1840,rate:'$300–450',risk:'none',ov:'31%',why:'Posted about Fernway 4 times this year, already sells the Ridge 28 through Later links, and asked a sizing question in your inbox'},
@@ -1348,6 +1542,7 @@ function overlay(){
  if(S.aiOpen)h+=`<div class="drawer f-grow" role="dialog" aria-modal="true" aria-label="Ask EdgeAI"><div class="dhd"><div><span class="famtag"><i></i>Assistant</span><h2 style="margin-top:4px">Ask EdgeAI</h2></div><button class="iconbtn" data-act="close" aria-label="Close">${ic('x')}</button></div>
   <div class="dbd"><p class="muted" style="font-size:13.5px">Answers draw on everything you can see in Later One: posts, inbox, analytics, campaigns and earnings.</p>
   ${S.ai.map(a=>`<div class="stack" style="gap:8px"><div class="msg me" style="max-width:100%">${a[0]}</div><div class="ai-a">${a[1]}</div></div>`).join('')}
+  ${S.role==='brand'?`<span class="eyebrow">Hand off a task</span><button class="ai-q agq" data-act="agstart">${ic('spark',15)}<span><b>Plan the Winter Layers drop for me</b><small>EdgeAI drafts the brief, picks creators and sets offers. It checks with you before spending or messaging anyone.</small></span></button>`:''}
   <span class="eyebrow">Try asking</span>${AIQ[S.role].map((q,i)=>`<button class="ai-q" data-aiq="${i}">${q[0]}</button>`).join('')}</div></div>`;
  if(S.palette)h+=`<div class="palette" role="dialog" aria-label="Search"><input id="pal" placeholder="Search posts, creators and links" autocomplete="off"><div class="plist" id="plist"></div></div>`;
  if(S.menu==='create'&&S.mpos)h+=`<div class="rel fxm" style="left:${S.mpos.l}px;top:${S.mpos.t}px">${createMenu()}</div>`;
@@ -1405,7 +1600,7 @@ function tabbar(){
 }
 function tagKpis(root){root.querySelectorAll('.kpi:not([style])').forEach(k=>{const l=(k.querySelector('.eyebrow')||{}).textContent||'',t=l.toLowerCase(),v=(k.querySelector('.v')||{}).textContent||'';
  const n=/roas|rate|click-through|health|conversion/.test(t)?4:/click/.test(t)?3:/creator|follower|people|orders|matches|worked|groups/.test(t)?5:/sale|budget|spent|commission|earning|payout|pending|october/.test(t)||v.trim().startsWith('$')?1:2;k.dataset.ki=n})}
-function render(){drawProto();app.className='app'+(S.auth==='out'?' locked blank':'')+(S.navOpen?' navopen':'');if(S.auth==='out')app.setAttribute('aria-hidden','true');else app.removeAttribute('aria-hidden');app.innerHTML=rail()+`<div class="main">${top()}<main id="view">${VIEWS[S.view]()}</main></div>${tabbar()}<div class="navscrim" data-act="navclose"></div><button class="help" data-act="ai">${ic('spark',18)}<span>Ask EdgeAI</span></button>`;overlay();tagKpis(app);if(document.getElementById('hh'))drawHH()}
+function render(){drawProto();app.className='app'+(S.auth==='out'?' locked blank':'')+(S.navOpen?' navopen':'');if(S.auth==='out')app.setAttribute('aria-hidden','true');else app.removeAttribute('aria-hidden');app.innerHTML=rail()+`<div class="main">${top()}<main id="view">${VIEWS[S.view]()}</main></div>${tabbar()}<div class="navscrim" data-act="navclose"></div><button class="help" data-act="ai">${ic('spark',18)}<span>Ask EdgeAI</span></button>`;overlay();tagKpis(app);if(S.camp==='agent'&&S.ag&&S.view==='campaigns'){const k=S.ag.step+':'+S.ag.st[S.ag.step];if(S.ag.sk!==k){S.ag.sk=k;const el=document.querySelector('.agcard.on');if(el&&el.getBoundingClientRect().bottom>innerHeight-40)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'})}}if(document.getElementById('hh'))drawHH()}
 function go(v){S.view=v;S.navOpen=false;S.menu=null;S.drawer=null;try{history.replaceState(null,'','#'+v)}catch(e){}render();window.scrollTo({top:0})}
 function findPost(id){return POSTS[team()].find(p=>p.id===id)||POSTS.team.find(p=>p.id===id)}
 function openPost(id){const p=findPost(id);if(!p)return;S.view='plan';S.drawer={...p};render()}
@@ -1428,6 +1623,10 @@ document.addEventListener('click',e=>{
  if(ds.q!=null){const q=QUEUE[S.role][+ds.q];if(q.flt)S.filter=q.flt;if(q.itab)S.itab=q.itab;if(q.go==='campaigns'){S.camp=q.camp||null;S.ctab=q.tab||'overview';S.prof=q.prof||null}if(q.open){openPost(q.open)}else go(q.go);return}
  if(ds.open){S.palette=false;S.prof=null;openPost(ds.open);return}
  if(ds.camp!=null){S.camp=ds.camp||null;S.ctab='overview';S.prof=null;if(S.camp==='new')S.nb={goal:'sales',budget:40000,prods:['Alder jacket'],aud:['Hikers 25–34'],name:''};go('campaigns');return}
+ if(ds.agrm){const c=S.ag.list.find(x=>x.id===ds.agrm);S.ag.list=S.ag.list.filter(x=>x.id!==ds.agrm);if(ds.agrm==='d3')S.ag.excluded=true;agLog('Removed '+c.n+' from the shortlist','you');render();return}
+ if(ds.agauto){S.ag.auto[ds.agauto]=ds.v==='1';agLog((ds.agauto==='brief'?'Brief':'Shortlist')+': '+(ds.v==='1'?'continue automatically':'ask me first'),'you');render();return}
+ if(ds.agres){const A=S.ag,r=ds.agres;if(r==='replace'){A.list=A.list.map(c=>c.id==='d2'?{...AG_REPL,repl:true}:c)}else if(r==='remove'){A.list=A.list.filter(c=>c.id!=='d2')}else{A.list=A.list.map(c=>c.id==='d2'?{...c,why:'Invited for after Jan 20, when his exclusivity ends'}:c)}
+  A.res=r;A.conflict=false;A.st[4]='done';A.decisions.push({replace:'Replaced Kofi with Dana Holt',delay:'Moved Kofi to after Jan 20',remove:'Removed Kofi'}[r]);agLog({replace:'Chose to replace Kofi Mensah with Dana Holt',delay:'Chose to invite Kofi for after Jan 20',remove:'Removed Kofi Mensah'}[r],'you');A.step=5;A.st[5]='review';agLog('Refreshed Lu Andersen’s audience data');agLog('Ready to send invites. Waiting for you');render();return}
  if(ds.itab){S.itab=ds.itab;render();return}
  if(ds.af){S.af=ds.af;render();return}
  if(ds.ctab){S.ctab=ds.ctab;render();return}
@@ -1467,6 +1666,18 @@ document.addEventListener('click',e=>{
  if(a==='signin'){signIn();return}
  if(a==='signout'){S.pick=S.role;S.auth='out';S.drawer=null;S.aiOpen=false;S.palette=false;S.menu=null;S.view='hub';render();return}
  if(a==='close'){S.drawer=null;S.palette=false;S.aiOpen=false;S.prof=null;overlay();return}
+ if(a==='agstart'){agReset();S.aiOpen=false;S.camp='agent';go('campaigns');S.agT.push(setTimeout(()=>agRun(0),500));return}
+ if(a==='agrestart'){agReset();render();S.agT.push(setTimeout(()=>agRun(0),400));return}
+ if(a==='agpause'){(S.agT||[]).forEach(clearTimeout);S.agT=[];const i=S.ag.st.indexOf('working');if(i>-1){S.ag.st[i]='paused';agLog('Paused','you')}render();return}
+ if(a==='agresume'){const i=S.ag.st.indexOf('paused');if(i>-1){agLog('Resumed','you');agRun(i)}return}
+ if(a==='agbrief'){const B=S.ag.brief;let ch=false;['goal','aud','del','talk','use','excl'].forEach(k=>{const v=document.getElementById('br-'+k).value.trim();if(v&&v!==B[k]){B[k]=v;ch=true}});S.ag.edited=ch;S.ag.st[1]='done';S.ag.decisions.push(ch?'Approved the brief with your edits':'Approved the brief');agLog(ch?'Approved the brief with edits. EdgeAI will carry them forward.':'Approved the brief','you');agRun(2);return}
+ if(a==='aglist'){S.ag.st[2]='done';S.ag.decisions.push('Kept a shortlist of '+S.ag.list.length+' creators');agLog('Kept the shortlist','you');agRun(3);return}
+ if(a==='aginclude'){S.ag.excluded=false;S.ag.list.push({id:'d3',n:'Gray Holloway',h:'@grayholloway',f:'230K',tier:'Mid',fit:84,adv:[3200,4000],off:3400,comm:8,why:'Included by you despite the brand-safety flag'});agLog('Included Gray Holloway despite the brand-safety flag','you');render();return}
+ if(a==='agexclude'){S.ag.excluded=true;S.ag.list=S.ag.list.filter(c=>c.id!=='d3');agLog('Undid: removed Gray Holloway again','you');render();return}
+ if(a==='agoffers'){if(agPlanned()>S.ag.cap)return;S.ag.st[3]='done';S.ag.decisions.push('Approved '+$m(agFees())+' in creator offers ('+$m(agPlanned())+' planned)');agLog('Approved offers: '+$m(agPlanned())+' of '+$m(S.ag.cap),'you');agRun(4);return}
+ if(a==='agsend'){const w=CAMPS.find(x=>x.id==='wl');if(w){w.st='planning';w.cr=S.ag.list.length+' invited'}S.ag.sent=true;S.ag.st[5]='done';S.ag.decisions.push('Sent '+S.ag.list.length+' invites');agLog('Sent '+S.ag.list.length+' invites','you');render();toast('Sent '+S.ag.list.length+' invites');return}
+ if(a==='agwithdraw'){S.ag.sent=false;S.ag.st[5]='review';S.ag.decisions.pop();agLog('Withdrew all invites before anyone opened them','you');render();toast('Invites withdrawn');return}
+ if(a==='agnotyet'){toast('Message editing isn’t built in this prototype yet');return}
  if(a==='mkcamp'){const n=S.nb;if(!n.prods.length){toast('Pick at least one product first');return}const id='c'+Date.now();
   CAMPS.splice(1,0,{id,n:n.name.trim()||'Untitled campaign',st:'draft',goal:{sales:'Drive sales',launch:'Launch a product',aware:'Build awareness'}[n.goal],dates:'Not scheduled',mode:'Self-run',budget:n.budget,spent:0,sales:0,roas:'—',cr:'Not started',nb:{...n,prods:[...n.prods],aud:[...n.aud]}});
   S.camp=id;render();toast('Draft campaign created');return}
@@ -1514,6 +1725,14 @@ document.addEventListener('submit',e=>{e.preventDefault();
  if(e.target.id==='reply'){const i=document.getElementById('reply-in');const v=i.value.trim();if(!v){i.focus();return}const c=CONVOS[team()].find(x=>x.id===S.conv);c.msgs.push(['me',v,'Just now']);c.un=false;render();toast('Reply sent');}
  if(e.target.id==='svc'){toast('Sent. Dana from the strategy team will reply within 1 business day.');e.target.reset()}
 });
+ document.addEventListener('input',e=>{if(e.target.id&&e.target.id.startsWith('off-')&&S.ag){const c=S.ag.list.find(x=>'off-'+x.id===e.target.id);c.off=Math.max(0,+e.target.value||0);agUpd();return}
+ if(e.target.id==='ag-cap'&&S.ag){S.ag.cap=Math.max(0,+e.target.value||0);agUpd();return}
+});
+function agUpd(){const A=S.ag,plan=agPlanned(),over=plan>A.cap,set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v};
+ set('ag-fees',$m(agFees()));set('ag-tot',$m(plan)+' / '+$m(A.cap));const t=document.getElementById('ag-tot');if(t)t.className=over?'down':'';
+ const o=document.getElementById('ag-over');if(o){o.hidden=!over;o.textContent='Over your '+$m(A.cap)+' cap by '+$m(plan-A.cap)+'. Lower an offer, or raise the cap in Guardrails.'}
+ const b=document.getElementById('ag-approve');if(b)b.disabled=over}
+document.addEventListener('change',e=>{if(e.target.id&&(e.target.id.startsWith('off-')||e.target.id==='ag-cap')&&S.ag)render()});
 document.addEventListener('input',e=>{if(e.target.id==='hh-s'){cancelAnimationFrame(hhRAF);S.hh.playing=false;S.hh.t=+e.target.value/1000;drawHH();return}
  if(e.target.id==='pal')palList(e.target.value);
  if(e.target.id==='nb-name')S.nb.name=e.target.value;

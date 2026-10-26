@@ -37,6 +37,7 @@ Each role gets its own "Needs you now" queue and tool order. Tools outside a rol
 - In Engage, see campaign context next to a creator's comment, or (as Jules) reply to a shopping question with an affiliate link.
 - As Maya, open Campaigns: plan a new campaign with the EdgeAI forecast, then open Fall Trail '26 and work through its Overview, Brief, Creators, Content, Payments and Results tabs. Select any creator name for their full profile.
 - As the brand marketer, open Insights. **Creator halo** estimates sales creators drove through the brand's own Link in bio, beyond their tracked links. Start on "What links see," press **Reveal what links can't see**, then press play under the chart to watch each creator post ripple out day by day. **From your audience** finds fans who already post about, message and sell the brand's products, as creator candidates.
+- As the brand marketer, open **Ask EdgeAI** and choose **Plan the Winter Layers drop for me** (or open the draft in Campaigns and choose **Let EdgeAI plan it**). The agent drafts the brief, builds a shortlist and prices offers, and stops for you to review the brief, approve spend, resolve a creator conflict and send invites. Try editing the brief, raising an offer past the budget cap, or switching a guardrail to Continue.
 - As Priya, open Listen to preview a plan-locked tool instead of having it hidden.
 - Press ⌘K / Ctrl+K to search across posts, creators, links and conversations.
 
