@@ -1,6 +1,6 @@
-# Later Unified
+# Later One
 
-An unofficial concept prototype that brings Later's products into one account and one interface, organized as a role-aware hub with feature spokes.
+An unofficial concept prototype, working name **Later One**, that brings Later's products into one account and one interface, organized as a role-aware hub with feature spokes.
 
 > Not affiliated with Later. All people, brands and figures in the prototype are fictional.
 
