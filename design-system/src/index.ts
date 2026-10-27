@@ -7,3 +7,7 @@ export { SegmentedControl, type SegmentedControlProps } from './components/Segme
 export { MetricCard, type MetricCardProps, type MetricKind } from './components/MetricCard/MetricCard';
 export { CreatorRow, type CreatorRowProps } from './components/CreatorRow/CreatorRow';
 export { AgentStepCard, type AgentStepCardProps, type AgentStepStatus } from './components/AgentStepCard/AgentStepCard';
+export { Card, type CardProps } from './components/Card/Card';
+export { Tabs, type TabsProps, type TabItem } from './components/Tabs/Tabs';
+export { Avatar } from './components/Avatar/Avatar';
+export { IconButton } from './components/IconButton/IconButton';

@@ -6,7 +6,28 @@ An unofficial concept prototype, working name **Later One**, that brings Later's
 
 ## Run it
 
-Open `index.html` in a browser. It is a single self-contained file with no build step. If GitHub Pages is enabled on this repo, it serves from the root.
+Open `index.html` in a browser. It's the built app in one self-contained file, so GitHub Pages can serve it from the root.
+
+## What's where
+
+| Folder | What it is |
+| --- | --- |
+| `app/` | The Later One app in React, built only from the design system's components and tokens |
+| `design-system/` | Tokens, components and patterns in Storybook |
+| `legacy/` | The first hand-coded prototype, which still has the full versions of tools not yet rebuilt in React |
+| `docs/` | Feature inventory and design decisions |
+
+To work on the app:
+
+```
+cd app
+npm install
+npm run dev
+```
+
+`npm run build` writes the single-file app to `app/dist/index.html`. On Windows PowerShell, use `npm.cmd` if scripts are blocked.
+
+The React rebuild covers sign-in, the home screen, Campaigns, Insights (creator halo and audience) and the EdgeAI agent run. Plan, Engage, Analyze, Listen, Create, Link in bio, Earn and Services have simpler pages for now; their full versions are in `legacy/`.
 
 ## What it shows
 
