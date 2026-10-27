@@ -37,6 +37,10 @@ const PATHS = {
   refresh: 'M20 11a8 8 0 1 0-2.3 5.6M20 4v7h-7',
   logout: 'M9 4H5v16h4M14 8l4 4-4 4M18 12H9',
   clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2',
+  heart: 'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z',
+  bolt: 'M13 3L5 13h6l-1 8 8-10h-6z',
+  folder: 'M3 6h6l2 2h10v11H3z',
+  tag: 'M3 12V4h8l9 9-8 8zM7.5 8h.01',
 } as const;
 
 export type IconName = keyof typeof PATHS;

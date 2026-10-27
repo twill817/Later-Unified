@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Card, CreatorRow, Icon, MetricCard, Pill, Tabs } from '@ds';
-import { CAMPAIGNS, CAMP_STATUS, OPPORTUNITIES, PIPELINE, RECOMMENDED, RESULTS, STAGES, findCreator, money, type CampTab } from '../data';
+import { BOOSTS, BRANDS, CAMPAIGNS, CAMP_STATUS, OPPORTUNITIES, PROMOS, PIPELINE, RECOMMENDED, RESULTS, STAGES, findCreator, money, type CampTab } from '../data';
 import { useStore } from '../store';
 
 function Crumbs({ name }: { name: string }) {
@@ -191,13 +191,20 @@ export function CampaignDetail({ id, tab = 'overview' }: { id: string; tab?: Cam
 }
 
 function Opportunities() {
-  const { say } = useStore();
+  const { say, route, makeLink } = useStore();
+  const fromRoute = (route.page === 'tool' && route.tab) as OppTab | undefined;
+  const [tab, setTab] = useState<OppTab>(fromRoute || 'deals');
+  useEffect(() => { if (fromRoute) setTab(fromRoute); }, [route]); // eslint-disable-line react-hooks/exhaustive-deps
   const [status, setStatus] = useState<Record<string, string>>(Object.fromEntries(OPPORTUNITIES.map(o => [o.id, o.status])));
+  const [openBoost, setOpenBoost] = useState<string | null>('b1');
   const act = (id: string, s: string, msg: string) => { setStatus(x => ({ ...x, [id]: s })); say(msg); };
+  const brand = (name: string) => BRANDS.find(b => b.name === name)!;
+  const usd = (n: number) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   return (
     <div className="stack">
-      <div className="head"><div><h1>Brand opportunities</h1><p className="muted">Campaigns matched to your audience and past results. Accepted deals show up in Plan for posting and in Earn for payment.</p></div></div>
-      {OPPORTUNITIES.map(o => {
+      <div className="head"><div><h1>Opportunities</h1><p className="muted">Paid brand deals, commission boosts and promotions in one place. Accepted deals land in Plan for posting; everything pays out through Earn.</p></div></div>
+      <Tabs label="Opportunities" value={tab} onChange={setTab} tabs={[{ value: 'deals', label: 'Brand deals', count: Object.values(status).filter(s => s === 'invite').length }, { value: 'boosts', label: `Boosts · ${BOOSTS.length} live` }, { value: 'promos', label: 'Promotions' }]} />
+      {tab === 'deals' && OPPORTUNITIES.map(o => {
         const s = status[o.id];
         return (
           <Card key={o.id} title={o.name} subtitle={`${o.brand} · ${o.pay} · ${o.due}`} actions={<>
@@ -209,6 +216,42 @@ function Opportunities() {
           </>} />
         );
       })}
+      {tab === 'boosts' && <>
+        <p className="faint small" style={{ margin: 0 }}>Boosts add to a brand’s base commission for a limited time on qualifying products. Make a link to any listed product to take part.</p>
+        <div className="boosts">
+          {BOOSTS.map(b => {
+            const isOpen = openBoost === b.id;
+            return (
+              <Card key={b.id} title={b.name} subtitle={`${b.brand} · ${b.dates}`} selected={isOpen} actions={b.isNew ? <Pill tone="success">New</Pill> : undefined}>
+                <div className="rates">
+                  <div><span className="lbl">Base</span><b className="num">{b.base}%</b></div>
+                  <div className="rates__boost"><span className="lbl">Boost</span><b className="num">+{b.boost}%</b></div>
+                  <div><span className="lbl">Total</span><b className="num">up to {+(b.base + b.boost).toFixed(1)}%</b></div>
+                </div>
+                {isOpen ? <div className="stack" style={{ gap: 8, marginTop: 14 }}>
+                  <span className="lbl">Your earnings from this boost</span>
+                  <div className="rates rates--sm"><div><span className="lbl">Base</span><b className="num">{usd(b.earned[0])}</b></div><div className="rates__boost"><span className="lbl">Boost</span><b className="num">+{usd(b.earned[1])}</b></div><div><span className="lbl">Total</span><b className="num">{usd(b.earned[0] + b.earned[1])}</b></div></div>
+                  <span className="lbl" style={{ marginTop: 6 }}>Qualifying products</span>
+                  {b.items.map(it => <div key={it} className="li"><span className="grow">{it}</span><Button size="sm" icon="bolt" onClick={() => makeLink(brand(b.brand), it, b.base + b.boost)}>Quick link</Button></div>)}
+                  <span className="faint small">Subject to returns and reversals.</span>
+                </div> : <Button size="sm" variant="ghost" icon="chevronDown" onClick={() => setOpenBoost(b.id)}>Details and products</Button>}
+              </Card>
+            );
+          })}
+        </div>
+      </>}
+      {tab === 'promos' && <Card title="Featured promotions" subtitle="Brand sales worth posting about. A Quick link copies a link to the sale straight away." flush>
+        {PROMOS.map(p => (
+          <div key={p.brand} className="li li--pad">
+            <span className="brand__logo" aria-hidden="true">{p.brand[0]}</span>
+            <div className="grow"><b>{p.brand}</b><div className="small">{p.text}</div></div>
+            <Pill tone={['Oct 29', 'Oct 31'].includes(p.ends) ? 'warning' : 'neutral'}>Ends {p.ends}</Pill>
+            <Button size="sm" icon="bolt" onClick={() => makeLink(brand(p.brand), `${p.brand} sale`)}>Quick link</Button>
+          </div>
+        ))}
+      </Card>}
     </div>
   );
 }
+
+type OppTab = 'deals' | 'boosts' | 'promos';

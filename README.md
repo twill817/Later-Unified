@@ -27,7 +27,7 @@ npm run dev
 
 `npm run build` writes the single-file app to `app/dist/index.html`. On Windows PowerShell, use `npm.cmd` if scripts are blocked.
 
-Every screen is built in React on the design system: sign-in, the home screen, Campaigns, Insights (creator halo and audience), the EdgeAI agent run, Plan, Engage, Analyze, Listen, Create, Link in bio, Earn and Services. Posts and inbox conversations live in one shared store, so changes carry across roles. Try it: as Brand marketer, open the Jules × Fernway post and request changes; switch to Creator to see the note, edit and send it back; switch back to approve.
+Every screen is built in React on the design system: sign-in, the home screen, Campaigns, Insights (creator halo and audience), the EdgeAI agent run, Plan, Engage, Analyze, Listen, Create, Link in bio, Earn and Services. Posts and inbox conversations live in one shared store, so changes carry across roles. The Creator view follows Later Creator (formerly Mavely): a paste-a-URL link bar, quick stats by date range, monthly bonus tiers, a brand catalog with commission rates and cookie windows, commission boosts and promotions, and one payout statement that combines commission, bonuses, brand deal fees and referrals. Try it: as Brand marketer, open the Jules × Fernway post and request changes; switch to Creator to see the note, edit and send it back; switch back to approve.
 
 ## What it shows
 

@@ -42,7 +42,7 @@ export const toolLabel = (id: ToolId, role: Role) => (id === 'campaigns' && role
 export type Route =
   | { page: 'home' }
   | { page: 'workspace' }
-  | { page: 'tool'; tool: ToolId }
+  | { page: 'tool'; tool: ToolId; tab?: string }
   | { page: 'campaign'; id: string; tab?: CampTab }
   | { page: 'agent' }
   | { page: 'insights'; tab: 'halo' | 'audience' };
@@ -68,6 +68,7 @@ export const QUEUE: Record<Role, QueueItem[]> = {
   creator: [
     { group: 'creators', icon: 'calendar', title: 'Your Fernway draft is with Maya for review', meta: 'Summit morning · Tue 12:00 PM · you’ll see any notes on the post', to: { page: 'tool', tool: 'plan' }, post: 'p3' },
     { group: 'creators', icon: 'people', title: 'New invite: Northline Coffee', meta: '$1,200 + 15% commission · 92% match · reply by Oct 30', to: { page: 'tool', tool: 'campaigns' } },
+    { group: 'creators', icon: 'wallet', title: 'You’re $487.60 from a $500 bonus', meta: 'Tier 4 closes Oct 31 · the Fernway layers boost pays 14% through Nov 30', to: { page: 'tool', tool: 'earn' } },
     { group: 'grow', icon: 'alert', tone: 'warning', title: '2 links point to expired promos', meta: 'Altus Optics and Pinecrest Supply · swap to live offers', to: { page: 'tool', tool: 'earn' } },
     { group: 'grow', icon: 'inbox', title: '2 followers asked where your jacket is from', meta: 'Reply with your Alder jacket link in one tap', to: { page: 'tool', tool: 'engage' } },
   ],
@@ -223,11 +224,66 @@ export const BLOCKS: Record<'team' | 'creator', Block[]> = {
 };
 
 /* ---------- Earn ---------- */
-export interface AffLink { id: string; brand: string; product: string; url: string; clicks: number; orders: number; commission: number; live: boolean }
+export interface AffLink { id: string; brand: string; product: string; url: string; clicks: number; orders: number; commission: number; live: boolean; rate: number; folder?: string; isNew?: boolean }
 export const LINKS: AffLink[] = [
-  { id: 'l1', brand: 'Fernway Outdoor', product: 'Ridge 28 pack', url: 'later.link/jules/ridge28', clicks: 3214, orders: 188, commission: 1128.4, live: true },
-  { id: 'l2', brand: 'Fernway Outdoor', product: 'Alder insulated jacket', url: 'later.link/jules/alder', clicks: 2876, orders: 141, commission: 1269.0, live: true },
-  { id: 'l3', brand: 'Northline Coffee', product: 'Cold brew camp kit', url: 'later.link/jules/coldbrew', clicks: 1540, orders: 96, commission: 432.0, live: true },
-  { id: 'l4', brand: 'Altus Optics', product: 'Polar trail sunglasses', url: 'later.link/jules/polar', clicks: 902, orders: 37, commission: 288.6, live: false },
-  { id: 'l5', brand: 'Pinecrest Supply', product: 'Ultralight stove', url: 'later.link/jules/stove', clicks: 611, orders: 22, commission: 143.0, live: false },
+  { id: 'l1', brand: 'Fernway Outdoor', product: 'Ridge 28 pack', url: 'later.link/jules/ridge28', clicks: 3214, orders: 188, commission: 1128.4, live: true, rate: 14, folder: 'Fall kit' },
+  { id: 'l2', brand: 'Fernway Outdoor', product: 'Alder insulated jacket', url: 'later.link/jules/alder', clicks: 2876, orders: 141, commission: 1269.0, live: true, rate: 14, folder: 'Fall kit' },
+  { id: 'l3', brand: 'Northline Coffee', product: 'Cold brew camp kit', url: 'later.link/jules/coldbrew', clicks: 1540, orders: 96, commission: 432.0, live: true, rate: 15, folder: 'Coffee' },
+  { id: 'l4', brand: 'Altus Optics', product: 'Polar trail sunglasses', url: 'later.link/jules/polar', clicks: 902, orders: 37, commission: 288.6, live: false, rate: 9.8 },
+  { id: 'l5', brand: 'Pinecrest Supply', product: 'Ultralight stove', url: 'later.link/jules/stove', clicks: 611, orders: 22, commission: 143.0, live: false, rate: 7, folder: 'Fall kit' },
 ];
+
+/* ---------- Later Creator (affiliate) ---------- */
+export type Range = '1d' | '1w' | '1m' | 'mtd';
+/** sales, commission, clicks, orders */
+export const QUICK: Record<Range, [number, number, number, number]> = {
+  '1d': [1284, 141.2, 612, 31], '1w': [7920, 862.75, 2410, 129], '1m': [29740, 3268.9, 9960, 521], mtd: [27380, 3012.4, 9143, 484],
+};
+export const COMMISSION_MTD = 3012.4;
+export const TIERS: [number, number][] = [[125, 30], [500, 100], [1500, 250], [3500, 500], [5000, 900]];
+
+export interface Brand { id: string; name: string; site: string; cats: string[]; base: number; tiers: [string, number][]; cookie: number; about: string; promo?: string; isNew?: boolean }
+export const BRANDS: Brand[] = [
+  { id: 'fernway', name: 'Fernway Outdoor', site: 'fernway.example', cats: ['Outdoor', 'Apparel'], base: 8, tiers: [['Insulated layers boost', 14], ['Fall Trail ’26 creators', 12], ['Base commission', 8], ['Gift cards', 0]], cookie: 30, about: 'Packs, layers and shelters built for shoulder season.', promo: 'Fall drop: 20% off layers with code TRAIL20' },
+  { id: 'northline', name: 'Northline Coffee', site: 'northline.example', cats: ['Food & Drinks'], base: 10, tiers: [['Camp brew season invitees', 15], ['Base commission', 10], ['Subscriptions, first order', 20]], cookie: 14, about: 'Small-batch coffee and cold brew kits for the road.', promo: 'Free camp mug with any cold brew kit' },
+  { id: 'altus', name: 'Altus Optics', site: 'altus.example', cats: ['Accessories', 'Outdoor'], base: 9.8, tiers: [['Base commission', 9.8], ['Prescription lenses', 4]], cookie: 30, about: 'Polarized eyewear for trail, water and snow.', promo: 'Holiday offer goes live Nov 1' },
+  { id: 'pinecrest', name: 'Pinecrest Supply', site: 'pinecrest.example', cats: ['Outdoor'], base: 7, tiers: [['Base commission', 7], ['Fuel and consumables', 2]], cookie: 7, about: 'Ultralight stoves, cookware and camp kitchen gear.' },
+  { id: 'harbor', name: 'Harbor & Pine', site: 'harborpine.example', cats: ['Home & Garden'], base: 6.5, tiers: [['Cozy season boost', 10.5], ['Base commission', 6.5]], cookie: 30, about: 'Throws, candles and cast iron for cabin weekends.', isNew: true },
+  { id: 'lumen', name: 'Lumen Skin', site: 'lumenskin.example', cats: ['Beauty'], base: 10, tiers: [['Cold-weather skincare boost', 14], ['Base commission', 10]], cookie: 30, about: 'Barrier-repair skincare for wind, sun and cold.', promo: 'Buy 2, get 1 on the winter repair set' },
+  { id: 'kestrel', name: 'Kestrel Bikes', site: 'kestrel.example', cats: ['Outdoor', 'Sports'], base: 5.6, tiers: [['Base commission', 5.6], ['Accessories', 8]], cookie: 45, about: 'Gravel and commuter bikes, plus winter trainers.' },
+  { id: 'trailhead', name: 'Trailhead Kids', site: 'trailheadkids.example', cats: ['Kids', 'Apparel'], base: 8.4, tiers: [['Base commission', 8.4]], cookie: 30, about: 'Rain shells and hiking boots that kids grow into.', isNew: true },
+];
+export const BRAND_CATS = ['Outdoor', 'Apparel', 'Accessories', 'Food & Drinks', 'Beauty', 'Home & Garden', 'Kids', 'Sports'];
+export const topRate = (b: Brand) => Math.max(...b.tiers.map(t => t[1]));
+
+export interface Boost { id: string; brand: string; name: string; base: number; boost: number; dates: string; items: string[]; earned: [number, number]; isNew?: boolean }
+export const BOOSTS: Boost[] = [
+  { id: 'b1', brand: 'Fernway Outdoor', name: 'Insulated layers', base: 8, boost: 6, dates: 'Oct 20 – Nov 30', items: ['Alder insulated jacket', 'Ridge fleece hoodie', 'Basin down vest'], earned: [412.1, 309.08] },
+  { id: 'b2', brand: 'Harbor & Pine', name: 'Cozy season', base: 6.5, boost: 4, dates: 'Oct 25 – Dec 15', items: ['Wool camp throw', 'Cast iron skillet set', 'Balsam candle'], earned: [0, 0], isNew: true },
+  { id: 'b3', brand: 'Lumen Skin', name: 'Cold-weather skincare', base: 10, boost: 4, dates: 'Oct 15 – Nov 15', items: ['Winter repair balm', 'SPF 30 face stick'], earned: [38.4, 15.36] },
+  { id: 'b4', brand: 'Kestrel Bikes', name: 'Winter trainers', base: 5.6, boost: 3.5, dates: 'Nov 1 – Dec 31', items: ['Rollway smart trainer', 'Trainer mat'], earned: [0, 0], isNew: true },
+];
+export const PROMOS = [
+  { brand: 'Pinecrest Supply', text: 'Stove and fuel bundle is $20 off.', ends: 'Oct 29' },
+  { brand: 'Northline Coffee', text: 'Free camp mug with any cold brew kit.', ends: 'Oct 31' },
+  { brand: 'Lumen Skin', text: 'Buy 2, get 1 on the winter repair set.', ends: 'Nov 2' },
+  { brand: 'Fernway Outdoor', text: 'Fall drop: 20% off layers with code TRAIL20.', ends: 'Nov 3' },
+  { brand: 'Altus Optics', text: 'Holiday offer goes live Nov 1. Swap your expired links to it.', ends: 'Nov 30' },
+];
+
+/** pay date, status, commission, bonus, campaigns, other (referrals), adjustments (returns) */
+export const STATEMENTS: [string, 'Scheduled' | 'Paid', number, number, number, number, number][] = [
+  ['Nov 1', 'Scheduled', 1651.4, 100, 1800, 25, 0],
+  ['Oct 1', 'Paid', 2710.35, 250, 0, 18.5, -74.75],
+  ['Sep 1', 'Paid', 1342.1, 100, 700, 12, -35.35],
+];
+
+/** Find the brand for a pasted product URL. */
+export function parseProductUrl(raw: string): { brand: Brand; product: string } | null {
+  const u = raw.trim().toLowerCase().replace(/^https?:\/\//, '');
+  const brand = BRANDS.find(b => u.startsWith(b.site) || u.startsWith('www.' + b.site) || u.includes(b.id));
+  if (!brand) return null;
+  const slug = u.split(/[?#]/)[0].split('/').filter(Boolean).slice(1).pop();
+  const product = slug ? slug.replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : `${brand.name} storefront`;
+  return { brand, product };
+}

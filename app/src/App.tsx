@@ -8,8 +8,9 @@ import { Insights } from './pages/Insights';
 import { AgentRun } from './pages/Agent';
 import { Workspace } from './pages/Tool';
 import { Plan } from './pages/Plan';
+import { Earn } from './pages/Earn';
 import { Engage } from './pages/Engage';
-import { Analyze, Create, Earn, LinkInBio, Listen, Services } from './pages/Tools';
+import { Analyze, Create, LinkInBio, Listen, Services } from './pages/Tools';
 
 function Page() {
   const { route } = useStore();

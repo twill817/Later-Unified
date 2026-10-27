@@ -2,6 +2,7 @@ import { Button, Card, Icon, Pill } from '@ds';
 import { QUEUE, ROLES, TILES, TOOLS, toolLabel } from '../data';
 import { useStore } from '../store';
 import { toolRoute } from '../shell/Shell';
+import { BonusTracker } from './Earn';
 
 function Spark({ values }: { values: number[] }) {
   const W = 200, H = 44, mx = Math.max(...values), mn = Math.min(...values);
@@ -41,7 +42,8 @@ function Summary() {
       <Card title="October earnings" actions={<Pill tone="success">+38% vs Sept</Pill>}>
         <div className="cu num" style={{ fontSize: 34, lineHeight: 1, fontWeight: 600 }}>$4,812.40</div>
         <div style={{ margin: '12px 0' }}><Spark values={[2.1, 2.6, 2.2, 3.0, 3.4, 3.1, 3.8, 4.0, 3.7, 4.4, 4.8]} /></div>
-        {[['Next payout · Nov 1', '$3,576.40'], ['Pending (in return window)', '$1,236.00'], ['From Fernway campaign', '$1,800 + 12%']].map(([l, v]) => <div key={l} className="li"><span className="grow">{l}</span><b className="num">{v}</b></div>)}
+        {[['Next payout · Nov 1', '$3,576.40'], ['Pending (in return window)', '$1,236.00'], ['Commission + Fernway fee', '$3,012 + $1,800']].map(([l, v]) => <div key={l} className="li"><span className="grow">{l}</span><b className="num">{v}</b></div>)}
+        <div style={{ marginTop: 14 }}><BonusTracker compact /></div>
       </Card>
     );
   }

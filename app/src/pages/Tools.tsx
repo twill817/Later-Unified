@@ -217,55 +217,6 @@ export function LinkInBio() {
   );
 }
 
-/* ---------- Earn ---------- */
-export function Earn() {
-  const { role, links, setLinks, say, go } = useStore();
-  if (role !== 'creator') {
-    return (
-      <div className="stack">
-        <Head title="Earn is for creators" desc="Creators use Earn to share affiliate links, track sales and get paid. Your creators’ sales from these links show up in Campaigns and Analyze." />
-        <Card title="How creator sales reach you">
-          <div className="three">
-            {[['Creator posts', 'Plan', 'plan'], ['Shopper buys', 'Link in bio', 'linkinbio'], ['You see ROI', 'Campaigns', 'campaigns']].map(([a, b, t]) => (
-              <button key={a} className="note linkbtn" style={{ background: 'var(--lo-color-creators-subtle)', fontWeight: 500 }} onClick={() => go({ page: 'tool', tool: t as 'plan' })}><span style={{ color: 'var(--lo-color-creators)', fontWeight: 600 }}>{a}</span><div style={{ fontSize: 16, fontWeight: 700 }}>{b}</div></button>
-            ))}
-          </div>
-        </Card>
-      </div>
-    );
-  }
-  const copy = (u: string) => navigator.clipboard?.writeText(`https://${u}`).then(() => say('Link copied'), () => say(u));
-  return (
-    <div className="stack">
-      <Head title="Earnings" desc="Every click, order and commission as it happens. Links you make here appear in Link in bio and can go straight into replies in Engage."
-        actions={<Button variant="primary" icon="plus" onClick={() => say('Paste any product URL to make a link')}>New link</Button>} />
-      <div className="metrics">
-        <MetricCard kind="money" label="October" value="$4,812.40" delta="+38%" note="vs September" />
-        <MetricCard kind="money" label="Pending" value="$1,236.00" note="In the return window" />
-        <MetricCard kind="money" label="Next payout" value="$3,576.40" note="Nov 1" />
-        <MetricCard kind="volume" label="Orders" value="484" delta="+29%" />
-      </div>
-      <div className="g2">
-        <Card title="Your links" actions={<span className="faint small">October</span>} flush>
-          <div className="scrollx"><table className="tbl"><thead><tr><th>Product</th><th className="r">Clicks</th><th className="r">Orders</th><th className="r">Commission</th><th /></tr></thead><tbody>
-            {links.map(l => (
-              <tr key={l.id}>
-                <td><b>{l.product}</b><div className="faint small">{l.brand}{!l.live && <> · <span className="down">promo expired</span></>}</div></td>
-                <td className="r">{l.clicks.toLocaleString()}</td><td className="r">{l.orders}</td><td className="r">{money(l.commission)}</td>
-                <td className="r">{l.live ? <Button size="sm" icon="copy" onClick={() => copy(l.url)}>Copy</Button> : <Button size="sm" variant="primary" onClick={() => { setLinks(ls => ls.map(x => (x.id === l.id ? { ...x, live: true, product: `${x.product} (holiday offer)` } : x))); say('Swapped to a live offer. Link in bio updated.'); }}>Swap offer</Button>}</td>
-              </tr>
-            ))}
-          </tbody></table></div>
-        </Card>
-        <Card title="Payouts">
-          {[['Nov 1', '$3,576.40', 'Scheduled'], ['Oct 1', '$2,904.10', 'Paid'], ['Sep 1', '$2,118.75', 'Paid']].map(([d, a, s]) => <div key={d} className="li"><span className="grow">{d}</span><b className="num">{a}</b><Pill tone={s === 'Paid' ? 'success' : 'neutral'}>{s}</Pill></div>)}
-          <div className="note" style={{ marginTop: 12 }}><b>Your strategist, Dana,</b> has office hours Thursday. Ask about the Northline invite.</div>
-        </Card>
-      </div>
-    </div>
-  );
-}
-
 /* ---------- Services ---------- */
 export function Services() {
   const { role, say, go } = useStore();

@@ -3,6 +3,7 @@ import { Avatar, Button, CountBadge, Icon, IconButton, Pill, Wordmark } from '@d
 import { CAMPAIGNS, QUEUE, ROLES, TOOLS, allCreators, findCreator, toolLabel, type Role, type Route, type ToolId } from '../data';
 import { useStore } from '../store';
 import { PostEditor } from '../pages/Plan';
+import { LinkMaker } from '../pages/Earn';
 
 const isActive = (route: Route, id: ToolId | 'home' | 'workspace') => {
   if (id === 'home') return route.page === 'home';
@@ -51,7 +52,7 @@ export function Sidebar() {
   const createItems: Record<Role, [string, string, () => void][]> = {
     brand: [['Campaign with EdgeAI', 'EdgeAI plans it and checks with you before spending', () => go({ page: 'campaign', id: 'wl' })], ['Creator shortlist', 'Find best-fit creators', () => go({ page: 'campaign', id: 'ft', tab: 'creators' })], ['Post', 'Schedule to Fernway profiles', () => go({ page: 'tool', tool: 'plan' })]],
     smm: [['Post', 'Schedule to any connected profile', () => go({ page: 'tool', tool: 'plan' })], ['Link in bio block', 'Add a banner, product or form', () => go({ page: 'tool', tool: 'linkinbio' })], ['Report', 'Share analytics with a link', () => say('Report link copied')]],
-    creator: [['Affiliate link', 'Link any product from thousands of brands', () => go({ page: 'tool', tool: 'earn' })], ['Post', 'Schedule to your profiles', () => go({ page: 'tool', tool: 'plan' })]],
+    creator: [['Affiliate link', 'Paste a product URL, or browse 3,000+ brands', () => go({ page: 'tool', tool: 'earn', tab: 'brands' })], ['Post', 'Schedule to your profiles', () => go({ page: 'tool', tool: 'plan' })]],
   };
 
   return (
@@ -109,6 +110,7 @@ export function TopBar() {
       <IconButton className="m-only" icon="menu" label="Open menu" size={38} onClick={() => setNavOpen(true)} />
       <span className="m-only top__mark"><Wordmark /></span>
       <button className="search d-only" onClick={() => open({ kind: 'search' })}><Icon name="search" size={16} /><span>Search posts, creators and links</span><kbd>Ctrl K</kbd></button>
+      {role === 'creator' && <LinkMaker className="d-only top__lm" />}
       <IconButton className="m-only" icon="search" label="Search" size={38} onClick={() => open({ kind: 'search' })} />
       <span className="m-only"><Avatar name={ROLES[role].name} size={32} /></span>
     </div>

@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from 'react';
-import { BLOCKS, CONVOS, LINKS, POSTS, type AffLink, type Block, type Convo, type Post, type Role, type Route, type ToolId } from './data';
+import { BLOCKS, CONVOS, LINKS, POSTS, topRate, type AffLink, type Block, type Brand, type Convo, type Post, type Role, type Route, type ToolId } from './data';
 import { useAgentRun, type AgentRun } from './agent';
 
 export type Auth = 'out' | 'signing' | 'revealing' | 'in';
@@ -44,6 +44,10 @@ interface Store {
   listenPreview: boolean;
   setListenPreview: (b: boolean) => void;
   badge: (id: ToolId) => number;
+  favs: Set<string>;
+  toggleFav: (id: string) => void;
+  /** Make an affiliate link, copy it and show it at the top of Links. */
+  makeLink: (brand: Brand, product: string, rate?: number) => void;
 }
 
 const Ctx = createContext<Store | null>(null);
@@ -63,6 +67,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [blocks, setBlocks] = useState(() => ({ team: BLOCKS.team.map(b => ({ ...b })), creator: BLOCKS.creator.map(b => ({ ...b })) }));
   const [credits, setCredits] = useState<Record<Role, number>>({ brand: 88, smm: 31, creator: 12 });
   const [listenPreview, setListenPreview] = useState(false);
+  const [favs, setFavs] = useState<Set<string>>(new Set(['fernway', 'northline']));
   const timer = useRef<number | undefined>(undefined);
   const agent = useAgentRun();
 
@@ -104,6 +109,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return true;
   };
 
+  const toggleFav = (id: string) => setFavs(s => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+  const makeLink = (brand: Brand, product: string, rate = topRate(brand)) => {
+    const slug = product.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 24) || brand.id;
+    const url = `later.link/jules/${slug}`;
+    setLinks(ls => [{ id: `n${Date.now()}`, brand: brand.name, product, url, clicks: 0, orders: 0, commission: 0, live: true, rate, isNew: true }, ...ls.filter(l => l.url !== url)]);
+    navigator.clipboard?.writeText(`https://${url}`).catch(() => undefined);
+    say(`Link copied: ${url} · earns up to ${rate}%`);
+  };
+
   const badge = (id: ToolId) => {
     const v = viewOf(role);
     if (id === 'plan') {
@@ -119,7 +133,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   return (
     <Ctx.Provider value={{
       auth, setAuth, pick, setPick, role, setRole, route, go, overlay, open, navOpen, setNavOpen, toast, say, invited, invite, agent,
-      posts, savePost, convos, updateConvo, links, setLinks, blocks, toggleBlock, credits, spendCredit, listenPreview, setListenPreview, badge,
+      posts, savePost, convos, updateConvo, links, setLinks, blocks, toggleBlock, credits, spendCredit, listenPreview, setListenPreview, badge, favs, toggleFav, makeLink,
     }}>
       {children}
     </Ctx.Provider>
