@@ -12,3 +12,4 @@ export { Tabs, type TabsProps, type TabItem } from './components/Tabs/Tabs';
 export { Avatar } from './components/Avatar/Avatar';
 export { IconButton } from './components/IconButton/IconButton';
 export { Switch, type SwitchProps } from './components/Switch/Switch';
+export { BenchmarkBar, BenchmarkChip, BAND_LABEL, bandOf, percentileOf, type BenchBand, type BenchmarkBarProps, type Percentiles } from './components/Benchmark/Benchmark';

@@ -4,6 +4,7 @@ import { CAMPAIGNS, QUEUE, ROLES, TOOLS, allCreators, findCreator, toolLabel, ty
 import { useStore } from '../store';
 import { PostEditor } from '../pages/Plan';
 import { LinkMaker } from '../pages/Earn';
+import { Customize } from './Customize';
 
 const isActive = (route: Route, id: ToolId | 'home' | 'workspace') => {
   if (id === 'home') return route.page === 'home';
@@ -29,8 +30,9 @@ function NavItem({ id, dim }: { id: ToolId; dim?: boolean }) {
 }
 
 export function Sidebar() {
-  const { role, route, go, open, say } = useStore();
+  const { role, route, go, open, say, pinned } = useStore();
   const r = ROLES[role];
+  const more = (Object.keys(TOOLS) as ToolId[]).filter(id => !pinned.includes(id));
   const [menu, setMenu] = useState<null | { kind: 'create' | 'user'; x: number; y: number; up?: boolean }>(null);
   const showMenu = (kind: 'create' | 'user', el: HTMLElement) => {
     const b = el.getBoundingClientRect();
@@ -63,10 +65,10 @@ export function Sidebar() {
       </div>
       <div className="rail__list">
         <button className="nav" aria-current={route.page === 'home' ? 'page' : undefined} onClick={() => go({ page: 'home' })}><Icon name="home" /><span>Home</span></button>
-        <div className="rail__sect">Your tools</div>
-        {r.order.map(id => <NavItem key={id} id={id} />)}
-        <div className="rail__sect">More from Later</div>
-        {r.more.map(id => <NavItem key={id} id={id} dim />)}
+        <div className="rail__sect rail__sect--act"><span>Your tools</span><button className="rail__edit" onClick={() => open({ kind: 'tools' })}>Customize</button></div>
+        {pinned.map(id => <NavItem key={id} id={id} />)}
+        {more.length > 0 && <div className="rail__sect">More from Later</div>}
+        {more.map(id => <NavItem key={id} id={id} dim />)}
       </div>
       <div className="rail__foot">
         <button className="nav" onClick={() => go({ page: 'home' })}><Icon name="bell" /><span>Notifications</span><CountBadge count={QUEUE[role].length} label="notifications" /></button>
@@ -118,8 +120,8 @@ export function TopBar() {
 }
 
 export function TabBar() {
-  const { role, route, go, setNavOpen } = useStore();
-  const ids = ROLES[role].order.slice(0, 3);
+  const { role, route, go, setNavOpen, pinned } = useStore();
+  const ids = pinned.slice(0, 3);
   const short: Partial<Record<ToolId, string>> = { plan: 'Plan', engage: 'Inbox', campaigns: role === 'creator' ? 'Deals' : 'Campaigns' };
   return (
     <nav className="tabbar" aria-label="Primary">
@@ -227,6 +229,7 @@ export function Overlays() {
   if (!overlay) return null;
 
   if (overlay.kind === 'search') return <><div className="scrim" onClick={() => open(null)} /><SearchPalette /></>;
+  if (overlay.kind === 'tools') return <><div className="scrim" onClick={() => open(null)} /><Customize /></>;
   if (overlay.kind === 'post') return <><div className="scrim" onClick={() => open(null)} /><PostEditor key={overlay.id ?? 'new'} id={overlay.id} draft={overlay.draft} /></>;
 
   if (overlay.kind === 'ai') {

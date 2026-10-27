@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Icon } from '../Icon/Icon';
 import './MetricCard.css';
 
@@ -15,9 +16,11 @@ export interface MetricCardProps {
   /** Comparison or context, e.g. "vs prior 30 days". */
   note?: string;
   compact?: boolean;
+  /** A short verdict after the note, such as a BenchmarkChip. */
+  badge?: ReactNode;
 }
 
-export function MetricCard({ label, value, kind, delta, direction = 'up', note, compact }: MetricCardProps) {
+export function MetricCard({ label, value, kind, delta, direction = 'up', note, compact, badge }: MetricCardProps) {
   return (
     <div className={`lo-metric ${compact ? 'lo-metric--compact' : ''}`}>
       <span className="lo-metric__tile" style={{ gridRow: '1 / span 3' }}>
@@ -25,7 +28,7 @@ export function MetricCard({ label, value, kind, delta, direction = 'up', note, 
       </span>
       <span className="lo-metric__label">{label}</span>
       <span className="lo-metric__value">{value}</span>
-      {(delta || note) && (
+      {(delta || note || badge) && (
         <span className="lo-metric__note">
           {delta && (
             <span className={`lo-metric__delta lo-metric__delta--${direction}`}>
@@ -35,6 +38,7 @@ export function MetricCard({ label, value, kind, delta, direction = 'up', note, 
             </span>
           )}
           {note}
+          {badge}
         </span>
       )}
     </div>

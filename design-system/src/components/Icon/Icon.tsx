@@ -34,6 +34,7 @@ const PATHS = {
   chevronRight: 'M9 6l6 6-6 6',
   chevronLeft: 'M15 6l-6 6 6 6',
   chevronDown: 'M6 9l6 6 6-6',
+  chevronUp: 'M6 15l6-6 6 6',
   refresh: 'M20 11a8 8 0 1 0-2.3 5.6M20 4v7h-7',
   logout: 'M9 4H5v16h4M14 8l4 4-4 4M18 12H9',
   clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2',

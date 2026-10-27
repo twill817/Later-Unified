@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button, Card, Icon, MetricCard, Pill, SegmentedControl, Switch } from '@ds';
 import { BEST, IDEAS, MEDIA, money } from '../data';
 import { useStore, viewOf } from '../store';
+import { BenchChip, HowYouCompare } from './Benchmarks';
 
 const Head = ({ title, desc, actions }: { title: string; desc: string; actions?: React.ReactNode }) => (
   <div className="head"><div><h1>{title}</h1><p className="muted">{desc}</p></div>{actions && <div className="row">{actions}</div>}</div>
@@ -44,8 +45,8 @@ export function Analyze() {
         actions={!creator && <SegmentedControl label="Reach view" value={mode} onChange={setMode} options={[{ value: 'organic', label: 'Organic' }, { value: 'paid', label: 'Organic + paid' }, { value: 'creators', label: 'Organic + creators' }]} />} />
       <div className="metrics">
         {creator ? <>
-          <MetricCard kind="people" label="Followers" value="184.2K" delta="+3.1K" note="vs prior 30 days" />
-          <MetricCard kind="rate" label="Engagement rate" value="6.8%" delta="+0.6 pts" />
+          <MetricCard kind="people" label="Followers" value="184.2K" delta="+3.1K" note="vs prior 30 days" badge={<BenchChip id="growth" />} />
+          <MetricCard kind="rate" label="Engagement rate" value="6.8%" delta="+0.6 pts" badge={<BenchChip id="eng" />} />
           <MetricCard kind="volume" label="Saves" value="21.4K" delta="+18%" />
           <MetricCard kind="clicks" label="Link clicks" value="9,143" delta="+22%" />
         </> : <>
@@ -64,6 +65,7 @@ export function Analyze() {
           <div className="note" style={{ marginTop: 12 }}>{creator ? 'TikTok drives reach; Instagram drives 64% of your link clicks.' : 'Creator collabs are 22% of reach but 41% of attributed sales.'}</div>
         </Card>
       </div>
+      {creator && <HowYouCompare ids={['eng', 'growth']} />}
       <Card title="Top posts" flush>
         <div className="scrollx">
           <table className="tbl">

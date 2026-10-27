@@ -1,0 +1,18 @@
+.lo-bench { display: flex; flex-direction: column; gap: 4px; padding-top: 2px; }
+.lo-bench__track { position: relative; height: 10px; border-radius: 99px; overflow: visible; background: var(--lo-color-surface-sunken); }
+.lo-bench__seg { position: absolute; top: 0; bottom: 0; }
+.lo-bench__seg--below { background: var(--lo-color-warning-subtle); border-radius: 99px 0 0 99px; }
+.lo-bench__seg--typical { background: var(--lo-color-surface-sunken); box-shadow: inset 0 0 0 1px var(--lo-color-border); }
+.lo-bench__seg--good { background: var(--lo-color-success-subtle); }
+.lo-bench__seg--top { background: color-mix(in srgb, var(--lo-color-success) 32%, var(--lo-color-surface)); border-radius: 0 99px 99px 0; }
+.lo-bench__median { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--lo-color-text-tertiary); border-radius: 2px; }
+.lo-bench__ref { position: absolute; top: -5px; bottom: -5px; margin-left: -1px; border-left: 2px dashed var(--lo-color-text-secondary); }
+.lo-bench__you { position: absolute; top: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 99px; background: var(--lo-color-ink); border: 3px solid var(--lo-color-surface); box-shadow: 0 0 0 1px var(--lo-color-ink); }
+.lo-bench__labels { position: relative; height: 18px; font-size: 11.5px; color: var(--lo-color-text-tertiary); }
+.lo-bench__labels > * { position: absolute; transform: translateX(-50%); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.lo-bench__labels b { color: var(--lo-color-text); font-weight: 700; top: 0; }
+.lo-bench__legend { display: flex; flex-wrap: wrap; gap: 2px 14px; font-size: 11.5px; color: var(--lo-color-text-tertiary); font-variant-numeric: tabular-nums; }
+.lo-bench__legend span { display: inline-flex; align-items: center; gap: 5px; }
+.lo-bench__key { display: inline-block; height: 10px; }
+.lo-bench__key--median { width: 2px; background: var(--lo-color-text-tertiary); }
+.lo-bench__key--ref { width: 0; border-left: 2px dashed var(--lo-color-text-secondary); }

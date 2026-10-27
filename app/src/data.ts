@@ -69,6 +69,7 @@ export const QUEUE: Record<Role, QueueItem[]> = {
     { group: 'creators', icon: 'calendar', title: 'Your Fernway draft is with Maya for review', meta: 'Summit morning · Tue 12:00 PM · you’ll see any notes on the post', to: { page: 'tool', tool: 'plan' }, post: 'p3' },
     { group: 'creators', icon: 'people', title: 'New invite: Northline Coffee', meta: '$1,200 + 15% commission · 92% match · reply by Oct 30', to: { page: 'tool', tool: 'campaigns' } },
     { group: 'creators', icon: 'wallet', title: 'You’re $487.60 from a $500 bonus', meta: 'Tier 4 closes Oct 31 · the Fernway layers boost pays 14% through Nov 30', to: { page: 'tool', tool: 'earn' } },
+    { group: 'creators', icon: 'trend', title: 'You may be undercharging for brand deals', meta: 'Your engagement and conversion are top 10% for creators your size; your fee is below their median', to: { page: 'tool', tool: 'campaigns', tab: 'deals' } },
     { group: 'grow', icon: 'alert', tone: 'warning', title: '2 links point to expired promos', meta: 'Altus Optics and Pinecrest Supply · swap to live offers', to: { page: 'tool', tool: 'earn' } },
     { group: 'grow', icon: 'inbox', title: '2 followers asked where your jacket is from', meta: 'Reply with your Alder jacket link in one tap', to: { page: 'tool', tool: 'engage' } },
   ],
@@ -287,3 +288,43 @@ export function parseProductUrl(raw: string): { brand: Brand; product: string } 
   const product = slug ? slug.replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : `${brand.name} storefront`;
   return { brand, product };
 }
+
+/* ---------- Benchmarks (creator) ---------- */
+export type Cohort = 'niche' | 'size' | 'nicheAll';
+export const COHORTS: Record<Cohort, { label: string; short: string; n: string }> = {
+  niche: { label: 'Outdoor and travel creators, 100–250K followers', short: 'Outdoor · 100–250K', n: '2,140' },
+  size: { label: 'All creators, 100–250K followers', short: 'All niches · 100–250K', n: '18,600' },
+  nicheAll: { label: 'Outdoor and travel creators, all sizes', short: 'Outdoor · all sizes', n: '9,870' },
+};
+type P = { p10: number; p25: number; p50: number; p75: number; p90: number };
+const pp = (p10: number, p25: number, p50: number, p75: number, p90: number): P => ({ p10, p25, p50, p75, p90 });
+export type BenchId = 'conv' | 'epc' | 'rate' | 'eng' | 'growth' | 'fee';
+export interface BenchMetric { id: BenchId; label: string; value: number; fmt: (n: number) => string; how: string; peers: Record<Cohort, P>; reference?: { value: number; label: string }; tip: Partial<Record<Cohort, string>> & { default: string } }
+const pct1 = (n: number) => `${n.toFixed(1)}%`;
+export const BENCH: Record<BenchId, BenchMetric> = {
+  conv: { id: 'conv', label: 'Link conversion', value: 5.3, fmt: pct1, how: 'Orders ÷ clicks on your links, month to date',
+    peers: { niche: pp(1.1, 1.8, 2.5, 3.4, 4.4), size: pp(0.9, 1.5, 2.2, 3.1, 4.2), nicheAll: pp(1.0, 1.7, 2.6, 3.6, 4.8) },
+    reference: { value: 1.74, label: 'Online store median' },
+    tip: { default: 'Your audience buys. Put this in your media kit, and ask brands for a higher commission rate instead of only a flat fee.' } },
+  epc: { id: 'epc', label: 'Earnings per click', value: 0.33, fmt: n => `$${n.toFixed(2)}`, how: 'Commission ÷ clicks, month to date',
+    peers: { niche: pp(0.12, 0.19, 0.29, 0.42, 0.61), size: pp(0.10, 0.17, 0.27, 0.40, 0.62), nicheAll: pp(0.09, 0.16, 0.26, 0.39, 0.58) },
+    tip: { default: 'Conversion is top tier but earnings per click is only typical, so your commission rate is the limit. Moving your top links to the Fernway layers boost (14%) would put you near the top quarter.' } },
+  rate: { id: 'rate', label: 'Average commission rate', value: 11.0, fmt: pct1, how: 'Commission ÷ sales, month to date',
+    peers: { niche: pp(6, 8, 10, 12.5, 14), size: pp(5, 7, 9.5, 12, 15), nicheAll: pp(6, 8, 10, 12, 14) },
+    tip: { default: 'Brands in Earn → Brands paying 14% or more in your categories: Fernway (boost), Lumen Skin (boost), Northline Coffee (invite).' } },
+  eng: { id: 'eng', label: 'Engagement rate', value: 6.8, fmt: pct1, how: 'Likes, comments, saves and shares ÷ followers, last 30 days',
+    peers: { niche: pp(1.6, 2.4, 3.4, 4.8, 6.2), size: pp(1.3, 2.0, 3.0, 4.4, 6.0), nicheAll: pp(2.0, 3.0, 4.3, 6.0, 7.9) },
+    reference: { value: 0.48, label: 'Instagram brand-account average' },
+    tip: { default: 'Top tier for your size. Brands see this in your media kit, and it supports a higher rate.', nicheAll: 'Smaller outdoor creators engage more, as is typical for small accounts. Against creators your size you’re in the top 10%.' } },
+  growth: { id: 'growth', label: 'Follower growth', value: 1.7, fmt: pct1, how: 'Net new followers ÷ followers, last 30 days',
+    peers: { niche: pp(0.4, 0.9, 1.9, 3.1, 4.6), size: pp(0.3, 0.8, 1.7, 2.9, 4.4), nicheAll: pp(0.6, 1.2, 2.4, 3.9, 5.8) },
+    tip: { default: 'Typical, just under the median. Reels brought in 70% of your new followers this month, and you posted 3. Peers in the top quarter post a median of 8.' } },
+  fee: { id: 'fee', label: 'Fee per sponsored post', value: 1800, fmt: n => `$${Math.round(n).toLocaleString()}`, how: 'Your flat fee on Fall Trail ’26 compared with peers’ accepted deals',
+    peers: { niche: pp(900, 1400, 2100, 2900, 3800), size: pp(800, 1300, 2000, 2800, 3900), nicheAll: pp(300, 600, 1100, 2000, 3000) },
+    tip: { default: 'You charge less than half of creators your size. With top-10% engagement and conversion, creators like you usually get $2,600–3,200. Consider quoting $2,600 for Northline.', nicheAll: 'Above most outdoor creators, but this group includes much smaller accounts. Compare with creators your size before setting a rate.' } },
+};
+export const BENCH_SOURCES = [
+  { label: 'Online store conversion: median 1.74%, top quarter 3.39% (Shopify stores, Jan–Jun 2026)', src: 'Shogun via Blend Commerce', url: 'https://blendcommerce.com/blogs/shopify/ecommerce-conversion-rate-benchmarks-2026' },
+  { label: 'Engagement by followers: Instagram brand accounts 0.48%, TikTok about 3.7%', src: 'Socialinsider 2026', url: 'https://www.socialinsider.io/social-media-benchmarks-2026' },
+  { label: 'E-commerce affiliate earnings per click: typically $0.10–0.60', src: 'Track360 2026', url: 'https://track360.io/blog/affiliate-epc-calculator-benchmarks-2026' },
+];

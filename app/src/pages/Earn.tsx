@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { Button, Card, Icon, IconButton, MetricCard, Pill, SegmentedControl, Tabs } from '@ds';
 import { BOOSTS, BRAND_CATS, BRANDS, COMMISSION_MTD, QUICK, STATEMENTS, TIERS, parseProductUrl, topRate, type Brand, type Range } from '../data';
 import { useStore } from '../store';
+import { BenchChip, HowYouCompare } from './Benchmarks';
 
 const usd = (n: number) => (n < 0 ? '−' : '') + '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const reached = TIERS.filter(t => COMMISSION_MTD >= t[0]);
@@ -83,8 +84,9 @@ function Overview({ setTab }: { setTab: (t: EarnTab) => void }) {
         <MetricCard kind="money" label="Sales" value={usd(sales)} note="from your links" />
         <MetricCard kind="money" label="Commission" value={usd(com)} delta={range === 'mtd' ? '+38%' : undefined} note={range === 'mtd' ? 'vs September' : undefined} />
         <MetricCard kind="clicks" label="Clicks" value={clicks.toLocaleString()} />
-        <MetricCard kind="rate" label="Conversion" value={`${((orders / clicks) * 100).toFixed(1)}%`} note={`${orders} orders`} />
+        <MetricCard kind="rate" label="Conversion" value={`${((orders / clicks) * 100).toFixed(1)}%`} note={`${orders} orders`} badge={range === 'mtd' ? <BenchChip id="conv" /> : undefined} />
       </div>
+      <HowYouCompare ids={['conv', 'epc', 'rate']} />
       <div className="g2">
         <Card title="Bonus tracker" actions={<Pill tone="action">Live</Pill>}><BonusTracker /></Card>
         <Card title="Next payout" actions={<Button size="sm" variant="ghost" onClick={() => setTab('payouts')}>All statements</Button>}>

@@ -58,7 +58,7 @@ function Summary() {
 }
 
 export function Home() {
-  const { role, go, open } = useStore();
+  const { role, go, open, pinned } = useStore();
   const r = ROLES[role];
   const q = QUEUE[role];
   return (
@@ -79,9 +79,9 @@ export function Home() {
         <Summary />
       </div>
       <section className="stack" style={{ gap: 10 }}>
-        <div className="row" style={{ justifyContent: 'space-between' }}><h2 style={{ margin: 0, fontSize: 16 }}>Your tools</h2><span className="faint small">Ordered for {r.title.toLowerCase()}s. Everything else is under More.</span></div>
+        <div className="row" style={{ justifyContent: 'space-between' }}><h2 style={{ margin: 0, fontSize: 16 }}>Your tools</h2><Button size="sm" variant="ghost" icon="sliders" onClick={() => open({ kind: 'tools' })}>Customize</Button></div>
         <div className="tiles">
-          {r.order.map(id => {
+          {pinned.map(id => {
             const t = TILES[role][id];
             return (
               <button key={id} className="tile" onClick={() => go(toolRoute(id))}>

@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from 'react';
-import { BLOCKS, CONVOS, LINKS, POSTS, topRate, type AffLink, type Block, type Brand, type Convo, type Post, type Role, type Route, type ToolId } from './data';
+import { BLOCKS, CONVOS, LINKS, POSTS, ROLES, topRate, type Cohort, type AffLink, type Block, type Brand, type Convo, type Post, type Role, type Route, type ToolId } from './data';
 import { useAgentRun, type AgentRun } from './agent';
 
 export type Auth = 'out' | 'signing' | 'revealing' | 'in';
@@ -8,6 +8,7 @@ export type Overlay =
   | { kind: 'post'; id?: string; draft?: Partial<Post> }
   | { kind: 'ai' }
   | { kind: 'search' }
+  | { kind: 'tools' }
   | null;
 
 /** Which posts and conversations a role sees: the brand team shares one workspace, the creator has their own. */
@@ -44,6 +45,12 @@ interface Store {
   listenPreview: boolean;
   setListenPreview: (b: boolean) => void;
   badge: (id: ToolId) => number;
+  /** The tools pinned to the sidebar, in order. Any tool can be pinned; roles only set the starting point. */
+  pinned: ToolId[];
+  setPinned: (fn: (t: ToolId[]) => ToolId[]) => void;
+  resetPinned: (preset: Role) => void;
+  cohort: Cohort;
+  setCohort: (c: Cohort) => void;
   favs: Set<string>;
   toggleFav: (id: string) => void;
   /** Make an affiliate link, copy it and show it at the top of Links. */
@@ -67,6 +74,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [blocks, setBlocks] = useState(() => ({ team: BLOCKS.team.map(b => ({ ...b })), creator: BLOCKS.creator.map(b => ({ ...b })) }));
   const [credits, setCredits] = useState<Record<Role, number>>({ brand: 88, smm: 31, creator: 12 });
   const [listenPreview, setListenPreview] = useState(false);
+  const [pinnedBy, setPinnedBy] = useState<Record<Role, ToolId[]>>(() => ({ brand: [...ROLES.brand.order], smm: [...ROLES.smm.order], creator: [...ROLES.creator.order] }));
+  const [cohort, setCohort] = useState<Cohort>('niche');
   const [favs, setFavs] = useState<Set<string>>(new Set(['fernway', 'northline']));
   const timer = useRef<number | undefined>(undefined);
   const agent = useAgentRun();
@@ -109,6 +118,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return true;
   };
 
+  const pinned = pinnedBy[role];
+  const setPinned = (fn: (t: ToolId[]) => ToolId[]) => setPinnedBy(p => ({ ...p, [role]: fn(p[role]) }));
+  const resetPinned = (preset: Role) => setPinnedBy(p => ({ ...p, [role]: [...ROLES[preset].order] }));
   const toggleFav = (id: string) => setFavs(s => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   const makeLink = (brand: Brand, product: string, rate = topRate(brand)) => {
     const slug = product.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 24) || brand.id;
@@ -133,7 +145,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   return (
     <Ctx.Provider value={{
       auth, setAuth, pick, setPick, role, setRole, route, go, overlay, open, navOpen, setNavOpen, toast, say, invited, invite, agent,
-      posts, savePost, convos, updateConvo, links, setLinks, blocks, toggleBlock, credits, spendCredit, listenPreview, setListenPreview, badge, favs, toggleFav, makeLink,
+      posts, savePost, convos, updateConvo, links, setLinks, blocks, toggleBlock, credits, spendCredit, listenPreview, setListenPreview, badge, pinned, setPinned, resetPinned, cohort, setCohort, favs, toggleFav, makeLink,
     }}>
       {children}
     </Ctx.Provider>
