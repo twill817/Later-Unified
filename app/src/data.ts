@@ -1,4 +1,4 @@
-import type { IconName, MetricKind } from '@ds';
+import type { IconName } from '@ds';
 
 /* Fictional demo data. Numbers line up across pages: halo, campaign results and the agent run all describe Fernway Outdoor. */
 
@@ -49,24 +49,24 @@ export type Route =
 
 export type CampTab = 'overview' | 'creators' | 'results';
 
-export interface QueueItem { group: Group; icon: IconName; tone?: 'warning' | 'danger'; title: string; meta: string; to: Route; profile?: string }
+export interface QueueItem { group: Group; icon: IconName; tone?: 'warning' | 'danger'; title: string; meta: string; to: Route; profile?: string; post?: string }
 
 export const QUEUE: Record<Role, QueueItem[]> = {
   brand: [
-    { group: 'creators', icon: 'calendar', title: 'Jules Ortiz sent a draft for your review', meta: 'Fall Trail ’26 · approves in Plan, publishes from Jules’s account', to: { page: 'campaign', id: 'ft', tab: 'creators' }, profile: 'jo' },
+    { group: 'creators', icon: 'calendar', title: 'Jules Ortiz sent a draft for your review', meta: 'Fall Trail ’26 · approves in Plan, publishes from Jules’s account', to: { page: 'tool', tool: 'plan' }, post: 'p3' },
     { group: 'creators', icon: 'alert', tone: 'warning', title: '1 recommended creator needs a brand-safety review', meta: '@grayholloway · flagged by EdgeAI', to: { page: 'campaign', id: 'ft', tab: 'creators' }, profile: 'd3' },
     { group: 'grow', icon: 'trend', title: 'Creators drove an estimated $38–52K beyond their links', meta: 'Fall Trail ’26 · sales through your own Link in bio after creator posts', to: { page: 'insights', tab: 'halo' } },
     { group: 'grow', icon: 'people', title: '6 fans already sell your products and could be creators', meta: 'Found across UGC, your inbox and Later Creator links', to: { page: 'insights', tab: 'audience' } },
     { group: 'creators', icon: 'spark', title: 'Winter Layers drop is still a draft', meta: 'EdgeAI can plan it for you and check with you before spending', to: { page: 'campaign', id: 'wl' } },
   ],
   smm: [
-    { group: 'publish', icon: 'calendar', title: '3 posts are waiting for approval', meta: '2 from your team and 1 creator collab from Jules Ortiz', to: { page: 'tool', tool: 'plan' } },
-    { group: 'publish', icon: 'alert', tone: 'danger', title: 'A TikTok post failed to publish', meta: 'Tent pitch speedrun · Thu 7:00 PM · reconnect TikTok to retry', to: { page: 'tool', tool: 'plan' } },
+    { group: 'publish', icon: 'calendar', title: '2 posts are waiting for approval', meta: '1 from your team and 1 creator collab from Jules Ortiz', to: { page: 'tool', tool: 'plan' } },
+    { group: 'publish', icon: 'alert', tone: 'danger', title: 'A TikTok post failed to publish', meta: 'Tent pitch speedrun · Thu 7:00 PM · reconnect TikTok to retry', to: { page: 'tool', tool: 'plan' }, post: 'p7' },
     { group: 'grow', icon: 'inbox', title: '3 unread conversations', meta: '1 TikTok comment flagged as negative sentiment', to: { page: 'tool', tool: 'engage' } },
     { group: 'grow', icon: 'radar', title: '#shoulderseason is up 212% this week', meta: 'Trend from Listen · included in the Scale plan', to: { page: 'tool', tool: 'listen' } },
   ],
   creator: [
-    { group: 'creators', icon: 'calendar', title: 'Fernway asked for a small revision', meta: 'Summit morning · name the pack first and add #ad · due Wed', to: { page: 'tool', tool: 'plan' } },
+    { group: 'creators', icon: 'calendar', title: 'Your Fernway draft is with Maya for review', meta: 'Summit morning · Tue 12:00 PM · you’ll see any notes on the post', to: { page: 'tool', tool: 'plan' }, post: 'p3' },
     { group: 'creators', icon: 'people', title: 'New invite: Northline Coffee', meta: '$1,200 + 15% commission · 92% match · reply by Oct 30', to: { page: 'tool', tool: 'campaigns' } },
     { group: 'grow', icon: 'alert', tone: 'warning', title: '2 links point to expired promos', meta: 'Altus Optics and Pinecrest Supply · swap to live offers', to: { page: 'tool', tool: 'earn' } },
     { group: 'grow', icon: 'inbox', title: '2 followers asked where your jacket is from', meta: 'Reply with your Alder jacket link in one tap', to: { page: 'tool', tool: 'engage' } },
@@ -77,27 +77,6 @@ export const TILES: Record<Role, Partial<Record<ToolId, [string, string]>>> = {
   brand: { campaigns: ['6.3×', 'ROAS, Fall Trail ’26'], insights: ['$38–52K', 'creator halo sales'], analyze: ['$186K', 'creator-attributed sales'], listen: ['78', 'brand health'], plan: ['2', 'awaiting approval'], engage: ['3', 'unread'], services: ['1', 'program in planning'] },
   smm: { plan: ['8', 'scheduled this week'], engage: ['3', 'unread'], analyze: ['412K', 'reach, 30 days'], create: ['248', 'assets'], linkinbio: ['26.6%', 'click-through'], listen: ['+212%', 'top trend'], campaigns: ['9', 'creators live or in content'] },
   creator: { earn: ['$4,812', 'October earnings'], campaigns: ['1', 'new invite'], linkinbio: ['9.1K', 'clicks this month'], plan: ['3', 'scheduled'], analyze: ['184K', 'followers'], create: ['96', 'assets'], engage: ['3', 'unread'] },
-};
-
-export const BADGES: Record<Role, Partial<Record<ToolId, number>>> = {
-  brand: { plan: 2, engage: 3 },
-  smm: { plan: 3, engage: 3 },
-  creator: { campaigns: 1, earn: 2, plan: 1, engage: 3 },
-};
-
-export interface Metric { label: string; value: string; kind: MetricKind; delta?: string; down?: boolean; note?: string }
-
-/** Headline numbers for tools that keep a simpler page in this first pass. */
-export const TOOL_METRICS: Partial<Record<ToolId, Metric[]>> = {
-  plan: [{ label: 'Scheduled this week', value: '8', kind: 'volume' }, { label: 'Awaiting approval', value: '3', kind: 'people' }, { label: 'Best time today', value: '6:30 PM', kind: 'rate', note: 'Instagram' }],
-  engage: [{ label: 'Unread conversations', value: '3', kind: 'volume' }, { label: 'Median reply time', value: '42 min', kind: 'rate', delta: '-18%', note: 'vs last week' }, { label: 'Flagged', value: '1', kind: 'people', note: 'Negative sentiment' }],
-  analyze: [{ label: 'Reach', value: '412K', kind: 'volume', delta: '+11%', note: 'vs prior 30 days' }, { label: 'Engagement rate', value: '4.2%', kind: 'rate', delta: '+0.3 pts' }, { label: 'Link clicks', value: '4,906', kind: 'clicks', delta: '+12%' }, { label: 'Attributed sales', value: '$207K', kind: 'money', delta: '+19%' }],
-  listen: [{ label: 'Brand health', value: '78 / 100', kind: 'rate' }, { label: 'Top trend', value: '+212%', kind: 'volume', note: '#shoulderseason' }, { label: 'Competitors tracked', value: '3 of 20', kind: 'people' }],
-  create: [{ label: 'Assets', value: '248', kind: 'volume' }, { label: 'UGC with rights', value: '31', kind: 'people' }, { label: 'AI credits left', value: '88', kind: 'rate' }],
-  linkinbio: [{ label: 'Page views', value: '18,420', kind: 'volume', delta: '+9%' }, { label: 'Clicks', value: '4,906', kind: 'clicks', delta: '+12%' }, { label: 'Click-through', value: '26.6%', kind: 'rate', delta: '+0.8 pts' }, { label: 'Attributed sales', value: '$21,380', kind: 'money', delta: '+15%' }],
-  earn: [{ label: 'October', value: '$4,812.40', kind: 'money', delta: '+38%' }, { label: 'Pending', value: '$1,236.00', kind: 'money', note: 'Return window' }, { label: 'Orders', value: '484', kind: 'volume', delta: '+29%' }],
-  services: [{ label: 'Programs', value: '2', kind: 'volume', note: '1 planning, 1 complete' }, { label: 'Spring Trail ’26 sales', value: '$241,000', kind: 'money' }],
-  campaigns: [{ label: 'Active deals', value: '1', kind: 'volume' }, { label: 'New invites', value: '1', kind: 'people' }, { label: 'Campaign earnings, Oct', value: '$2,089', kind: 'money' }],
 };
 
 export interface Campaign { id: string; name: string; status: 'live' | 'planning' | 'draft' | 'complete'; goal: string; dates: string; mode: string; budget: number; spent: number; sales: number; roas: string }
@@ -160,3 +139,95 @@ export const OPPORTUNITIES = [
 
 export const money = (n: number) => '$' + n.toLocaleString('en-US', { maximumFractionDigits: 2 });
 export const findCreator = (id: string) => allCreators().find(c => c.id === id);
+
+/* ---------- Plan ---------- */
+export const DAYS = ['Mon 26', 'Tue 27', 'Wed 28', 'Thu 29', 'Fri 30', 'Sat 31', 'Sun 1'];
+export const BEST = ['6:30 PM', '12:15 PM', '6:00 PM', '7:00 PM', '11:30 AM', '9:00 AM', '4:00 PM'];
+export const PLATFORMS = ['IG', 'TT', 'FB', 'TH', 'YT', 'PIN', 'LI', 'SC'];
+export type PostStatus = 'published' | 'scheduled' | 'approval' | 'draft' | 'failed' | 'changes';
+export const POST_STATUS: Record<PostStatus, [string, 'success' | 'neutral' | 'action' | 'danger' | 'warning']> = {
+  published: ['Published', 'success'], scheduled: ['Scheduled', 'neutral'], approval: ['Needs approval', 'action'],
+  draft: ['Draft', 'neutral'], failed: ['Failed', 'danger'], changes: ['Changes requested', 'warning'],
+};
+export interface Comment { who: string; text: string; when: string }
+export interface Post { id: string; day: number; time: string; title: string; platforms: string[]; status: PostStatus; by: string; caption: string; views: ('team' | 'creator')[]; collab?: boolean; error?: string; comments: Comment[] }
+export const POSTS: Post[] = [
+  { id: 'p1', day: 0, time: '9:00 AM', title: 'Trail-ready layers: the fall drop', platforms: ['IG', 'FB'], status: 'published', by: 'Priya', caption: 'Shoulder season calls for layers that pack down small. The fall drop is live.', views: ['team'], comments: [] },
+  { id: 'p2', day: 0, time: '6:30 PM', title: 'Reel: 3 ways to pack the Ridge 28', platforms: ['IG', 'TT'], status: 'approval', by: 'Priya', caption: 'Three packing setups for one 28L pack. Which one are you?', views: ['team'], comments: [{ who: 'Sam Park', text: 'Cover frame swapped to the blue jacket shot.', when: 'Today 9:40 AM' }] },
+  { id: 'p3', day: 1, time: '12:00 PM', title: 'Jules × Fernway: summit morning', platforms: ['IG'], status: 'approval', by: 'Jules Ortiz', collab: true, caption: '5:40am, 4,200 ft, and the Ridge 28 carrying everything. Partnered with @fernwayoutdoor.', views: ['team', 'creator'], comments: [] },
+  { id: 'p4', day: 2, time: '8:15 AM', title: 'Fall camp checklist', platforms: ['PIN'], status: 'scheduled', by: 'Priya', caption: 'Save this for your next overnight.', views: ['team'], comments: [] },
+  { id: 'p5', day: 2, time: '5:00 PM', title: 'Behind the stitch: factory visit', platforms: ['YT', 'LI'], status: 'scheduled', by: 'Sam', caption: 'How the Ridge line gets made.', views: ['team'], comments: [] },
+  { id: 'p6', day: 3, time: '11:00 AM', title: 'UGC repost: @wanderwithkai', platforms: ['IG'], status: 'scheduled', by: 'Priya', caption: 'Kai took the Ridge 28 up Rainier. Rights granted.', views: ['team'], comments: [] },
+  { id: 'p7', day: 3, time: '7:00 PM', title: 'Tent pitch speedrun', platforms: ['TT'], status: 'failed', by: 'Sam', caption: 'Can we pitch the Basecamp 2 in under 90 seconds?', error: 'TikTok needs reconnecting. The access token expired on Oct 24.', views: ['team'], comments: [] },
+  { id: 'p8', day: 4, time: '10:00 AM', title: 'Weekend forecast + gear picks', platforms: ['TH', 'FB'], status: 'draft', by: 'Priya', caption: '', views: ['team'], comments: [] },
+  { id: 'p9', day: 5, time: '9:30 AM', title: 'Story poll: lake or summit?', platforms: ['IG'], status: 'scheduled', by: 'Priya', caption: 'Vote in stories.', views: ['team'], comments: [] },
+  { id: 'p10', day: 6, time: '4:00 PM', title: 'Sunday reset: gear care', platforms: ['IG', 'TT'], status: 'draft', by: 'Sam', caption: '', views: ['team'], comments: [] },
+  { id: 'c1', day: 0, time: '7:00 AM', title: 'Sunrise on Mt. Si', platforms: ['IG'], status: 'published', by: 'Jules', caption: 'Worth the 4am alarm.', views: ['creator'], comments: [] },
+  { id: 'c3', day: 2, time: '6:00 PM', title: 'Fall layers haul (affiliate)', platforms: ['TT'], status: 'scheduled', by: 'Jules', caption: 'Everything I am wearing this fall, links in bio.', views: ['creator'], comments: [] },
+  { id: 'c4', day: 4, time: '8:00 AM', title: 'Trail mix, three ways', platforms: ['IG', 'YT'], status: 'draft', by: 'Jules', caption: '', views: ['creator'], comments: [] },
+  { id: 'c5', day: 5, time: '10:00 AM', title: 'Q&A in stories', platforms: ['IG'], status: 'scheduled', by: 'Jules', caption: 'Ask me anything about solo overnights.', views: ['creator'], comments: [] },
+];
+
+/* ---------- Engage ---------- */
+export type ConvoContext =
+  | { kind: 'customer'; orders: number; note: string }
+  | { kind: 'creator'; campaign: string; sales: string; creatorId: string }
+  | { kind: 'risk'; note: string }
+  | { kind: 'ugc'; note: string }
+  | { kind: 'brand'; campaign: string; note: string }
+  | { kind: 'shop'; note: string }
+  | { kind: 'fan'; note: string };
+export interface Message { me: boolean; text: string; at: string }
+export interface Convo { id: string; who: string; platform: string; type: string; unread: boolean; flag?: boolean; done?: boolean; messages: Message[]; ctx: ConvoContext; view: 'team' | 'creator' }
+export const CONVOS: Convo[] = [
+  { id: 'k1', view: 'team', who: '@kai.wanders', platform: 'IG', type: 'DM', unread: true, messages: [{ me: false, text: 'Is the Ridge 28 carry-on size for most airlines?', at: '11:02 AM' }], ctx: { kind: 'customer', orders: 2, note: 'Bought a Basecamp 2 in August.' } },
+  { id: 'k2', view: 'team', who: '@julesoutside', platform: 'IG', type: 'Comment', unread: true, messages: [{ me: false, text: 'So stoked on how this one turned out!!', at: '10:48 AM' }], ctx: { kind: 'creator', campaign: 'Fall Trail ’26', sales: '$2,410', creatorId: 'jo' } },
+  { id: 'k3', view: 'team', who: '@tentlife_tyler', platform: 'TT', type: 'Comment', unread: true, flag: true, messages: [{ me: false, text: 'zipper broke after 2 trips. not cool', at: '9:15 AM' }], ctx: { kind: 'risk', note: 'Negative sentiment. 1.1K likes on the comment.' } },
+  { id: 'k4', view: 'team', who: 'Dana Whitfield', platform: 'FB', type: 'DM', unread: false, messages: [{ me: false, text: 'Do you ship to Canada?', at: 'Yesterday' }, { me: true, text: 'We do. Duties are included at checkout.', at: 'Yesterday' }], ctx: { kind: 'customer', orders: 0, note: 'New contact.' } },
+  { id: 'k5', view: 'team', who: '@sierrahikes', platform: 'IG', type: 'Mention', unread: false, messages: [{ me: false, text: 'Tagged @fernwayoutdoor in a story: “best $90 I spent this year”', at: 'Sat' }], ctx: { kind: 'ugc', note: 'Ask for rights to repost this in Create.' } },
+  { id: 'j1', view: 'creator', who: 'Maya Chen · Fernway', platform: 'Later', type: 'Brand', unread: true, messages: [{ me: false, text: 'Thanks for the summit draft. Notes are on the post in Plan if I have any.', at: '10:13 AM' }], ctx: { kind: 'brand', campaign: 'Fall Trail ’26', note: 'Active campaign. $1,800 flat + 12% commission.' } },
+  { id: 'j2', view: 'creator', who: '@hannah.on.trail', platform: 'IG', type: 'Comment', unread: true, messages: [{ me: false, text: 'where is that jacket from?? need it', at: '9:51 AM' }], ctx: { kind: 'shop', note: 'Matches a product you have a link for.' } },
+  { id: 'j3', view: 'creator', who: '@mtnmarco', platform: 'TT', type: 'Comment', unread: true, messages: [{ me: false, text: 'jacket link pls', at: '9:30 AM' }], ctx: { kind: 'shop', note: 'Matches a product you have a link for.' } },
+  { id: 'j4', view: 'creator', who: '@liz_outdoors', platform: 'IG', type: 'DM', unread: false, messages: [{ me: false, text: 'Your Mt. Si post got me out the door this morning', at: 'Yesterday' }], ctx: { kind: 'fan', note: 'Follower for 2 years.' } },
+];
+
+/* ---------- Create ---------- */
+export const MEDIA = [
+  { title: 'Ridge 28 on granite', source: 'Upload', group: 'publish' }, { title: 'Factory: stitching', source: 'Upload', group: 'publish' }, { title: 'Summit morning (Jules)', source: 'Creator', group: 'creators' },
+  { title: '@wanderwithkai on Rainier', source: 'UGC', group: 'grow', rights: 'Granted' }, { title: 'Fall drop carousel', source: 'Canva', group: 'publish' }, { title: '@sierrahikes story', source: 'UGC', group: 'grow', rights: 'Not requested' },
+  { title: 'Tent pitch b-roll', source: 'Upload', group: 'publish' }, { title: 'Gear care graphic', source: 'Canva', group: 'publish' }, { title: '@lenatrails reel', source: 'Creator', group: 'creators' }, { title: 'Lake camp at dusk', source: 'Upload', group: 'publish' },
+] as const;
+export const IDEAS: [string, string][] = [
+  ['Reel: “What I pack for a 40°F morning”', 'Ride #shoulderseason (+212%). Show the Alder jacket packing into its own pocket.'],
+  ['Carousel: quiet hiking spots near you', 'Rising +148%. Ask followers to drop their spot; collect replies as UGC.'],
+  ['Story series: gear care in 60 seconds', 'Answers the zipper complaints from Engage before they spread.'],
+];
+
+/* ---------- Link in bio ---------- */
+export interface Block { name: string; desc: string; on: boolean; stat: string }
+export const BLOCKS: Record<'team' | 'creator', Block[]> = {
+  team: [
+    { name: 'Featured banner', desc: 'Fall drop: layers that pack small', on: true, stat: '1,912 clicks' },
+    { name: 'Linked posts', desc: 'Shoppable feed of your IG and TikTok posts', on: true, stat: '2,204 clicks' },
+    { name: 'Product carousel', desc: 'Ridge 28, Alder jacket, Basecamp 2', on: true, stat: '640 clicks' },
+    { name: 'Email signup', desc: 'Trail notes newsletter', on: true, stat: '150 signups' },
+    { name: 'Social links', desc: 'Instagram, TikTok, YouTube, Pinterest', on: false, stat: '—' },
+  ],
+  creator: [
+    { name: 'Featured banner', desc: 'My fall kit, all in one place', on: true, stat: '1,377 clicks' },
+    { name: 'Affiliate links', desc: '5 links, synced from Earn', on: true, stat: '9,143 clicks' },
+    { name: 'Linked posts', desc: 'Tap a post to shop it', on: true, stat: '3,021 clicks' },
+    { name: 'Brand partner', desc: 'Fernway Outdoor collab', on: true, stat: '812 clicks' },
+    { name: 'Email signup', desc: 'Weekend trail drops', on: false, stat: '—' },
+  ],
+};
+
+/* ---------- Earn ---------- */
+export interface AffLink { id: string; brand: string; product: string; url: string; clicks: number; orders: number; commission: number; live: boolean }
+export const LINKS: AffLink[] = [
+  { id: 'l1', brand: 'Fernway Outdoor', product: 'Ridge 28 pack', url: 'later.link/jules/ridge28', clicks: 3214, orders: 188, commission: 1128.4, live: true },
+  { id: 'l2', brand: 'Fernway Outdoor', product: 'Alder insulated jacket', url: 'later.link/jules/alder', clicks: 2876, orders: 141, commission: 1269.0, live: true },
+  { id: 'l3', brand: 'Northline Coffee', product: 'Cold brew camp kit', url: 'later.link/jules/coldbrew', clicks: 1540, orders: 96, commission: 432.0, live: true },
+  { id: 'l4', brand: 'Altus Optics', product: 'Polar trail sunglasses', url: 'later.link/jules/polar', clicks: 902, orders: 37, commission: 288.6, live: false },
+  { id: 'l5', brand: 'Pinecrest Supply', product: 'Ultralight stove', url: 'later.link/jules/stove', clicks: 611, orders: 22, commission: 143.0, live: false },
+];

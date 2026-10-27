@@ -1,9 +1,17 @@
 import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from 'react';
-import type { Role, Route } from './data';
+import { BLOCKS, CONVOS, LINKS, POSTS, type AffLink, type Block, type Convo, type Post, type Role, type Route, type ToolId } from './data';
 import { useAgentRun, type AgentRun } from './agent';
 
 export type Auth = 'out' | 'signing' | 'revealing' | 'in';
-export type Overlay = { kind: 'profile'; id: string } | { kind: 'ai' } | { kind: 'search' } | null;
+export type Overlay =
+  | { kind: 'profile'; id: string }
+  | { kind: 'post'; id?: string; draft?: Partial<Post> }
+  | { kind: 'ai' }
+  | { kind: 'search' }
+  | null;
+
+/** Which posts and conversations a role sees: the brand team shares one workspace, the creator has their own. */
+export const viewOf = (r: Role) => (r === 'creator' ? 'creator' : 'team') as 'team' | 'creator';
 
 interface Store {
   auth: Auth;
@@ -23,6 +31,19 @@ interface Store {
   invited: Set<string>;
   invite: (id: string, name: string, rate?: string) => void;
   agent: AgentRun;
+  posts: Post[];
+  savePost: (p: Post) => void;
+  convos: Convo[];
+  updateConvo: (id: string, fn: (c: Convo) => Convo) => void;
+  links: AffLink[];
+  setLinks: (fn: (l: AffLink[]) => AffLink[]) => void;
+  blocks: Record<'team' | 'creator', Block[]>;
+  toggleBlock: (i: number) => void;
+  credits: Record<Role, number>;
+  spendCredit: () => boolean;
+  listenPreview: boolean;
+  setListenPreview: (b: boolean) => void;
+  badge: (id: ToolId) => number;
 }
 
 const Ctx = createContext<Store | null>(null);
@@ -36,6 +57,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [navOpen, setNavOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [invited, setInvited] = useState<Set<string>>(new Set());
+  const [posts, setPosts] = useState<Post[]>(() => POSTS.map(p => ({ ...p, comments: [...p.comments] })));
+  const [convos, setConvos] = useState<Convo[]>(() => CONVOS.map(c => ({ ...c })));
+  const [links, setLinks] = useState<AffLink[]>(() => LINKS.map(l => ({ ...l })));
+  const [blocks, setBlocks] = useState(() => ({ team: BLOCKS.team.map(b => ({ ...b })), creator: BLOCKS.creator.map(b => ({ ...b })) }));
+  const [credits, setCredits] = useState<Record<Role, number>>({ brand: 88, smm: 31, creator: 12 });
+  const [listenPreview, setListenPreview] = useState(false);
   const timer = useRef<number | undefined>(undefined);
   const agent = useAgentRun();
 
@@ -65,8 +92,35 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     say(`${name} invited${rate ? ` at ${rate}` : ''}`);
   };
 
+  const savePost = (p: Post) => setPosts(list => (list.some(x => x.id === p.id) ? list.map(x => (x.id === p.id ? p : x)) : [...list, p]));
+  const updateConvo = (id: string, fn: (c: Convo) => Convo) => setConvos(list => list.map(c => (c.id === id ? fn(c) : c)));
+  const toggleBlock = (i: number) => {
+    const v = viewOf(role);
+    setBlocks(b => ({ ...b, [v]: b[v].map((x, k) => (k === i ? { ...x, on: !x.on } : x)) }));
+  };
+  const spendCredit = () => {
+    if (credits[role] < 1) { say('No AI credits left this month'); return false; }
+    setCredits(c => ({ ...c, [role]: c[role] - 1 }));
+    return true;
+  };
+
+  const badge = (id: ToolId) => {
+    const v = viewOf(role);
+    if (id === 'plan') {
+      const mine = posts.filter(p => p.views.includes(v));
+      return v === 'creator' ? mine.filter(p => p.status === 'changes').length : mine.filter(p => p.status === 'approval' || p.status === 'failed').length;
+    }
+    if (id === 'engage') return convos.filter(c => c.view === v && c.unread).length;
+    if (id === 'earn' && role === 'creator') return links.filter(l => !l.live).length;
+    if (id === 'campaigns' && role === 'creator') return 1;
+    return 0;
+  };
+
   return (
-    <Ctx.Provider value={{ auth, setAuth, pick, setPick, role, setRole, route, go, overlay, open, navOpen, setNavOpen, toast, say, invited, invite, agent }}>
+    <Ctx.Provider value={{
+      auth, setAuth, pick, setPick, role, setRole, route, go, overlay, open, navOpen, setNavOpen, toast, say, invited, invite, agent,
+      posts, savePost, convos, updateConvo, links, setLinks, blocks, toggleBlock, credits, spendCredit, listenPreview, setListenPreview, badge,
+    }}>
       {children}
     </Ctx.Provider>
   );

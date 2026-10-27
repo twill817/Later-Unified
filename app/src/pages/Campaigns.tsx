@@ -113,7 +113,7 @@ function FallTrail({ tab }: { tab: CampTab }) {
             return (
               <div key={stage} style={{ marginBottom: 8 }}>
                 <div className="lbl" style={{ marginTop: 8 }}>{stage} · {list.length}</div>
-                {list.map(c => <CreatorRow key={c.id} name={c.name} handle={c.handle} followers={c.followers} tier={c.tier} fit={c.fit} reason={c.note ?? 'Invited today'} onOpen={() => open({ kind: 'profile', id: c.id })} />)}
+                {list.map(c => <CreatorRow key={c.id} name={c.name} handle={c.handle} followers={c.followers} tier={c.tier} fit={c.fit} reason={c.note ?? 'Invited today'} onOpen={() => open({ kind: 'profile', id: c.id })} trailing={c.id === 'jo' ? <Button size="sm" variant="primary" onClick={() => open({ kind: 'post', id: 'p3' })}>Review draft</Button> : undefined} />)}
               </div>
             );
           })}

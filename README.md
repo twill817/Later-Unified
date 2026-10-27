@@ -14,7 +14,7 @@ Open `index.html` in a browser. It's the built app in one self-contained file, s
 | --- | --- |
 | `app/` | The Later One app in React, built only from the design system's components and tokens |
 | `design-system/` | Tokens, components and patterns in Storybook |
-| `legacy/` | The first hand-coded prototype, which still has the full versions of tools not yet rebuilt in React |
+| `legacy/` | The original hand-coded prototype, kept for reference |
 | `docs/` | Feature inventory and design decisions |
 
 To work on the app:
@@ -27,7 +27,7 @@ npm run dev
 
 `npm run build` writes the single-file app to `app/dist/index.html`. On Windows PowerShell, use `npm.cmd` if scripts are blocked.
 
-The React rebuild covers sign-in, the home screen, Campaigns, Insights (creator halo and audience) and the EdgeAI agent run. Plan, Engage, Analyze, Listen, Create, Link in bio, Earn and Services have simpler pages for now; their full versions are in `legacy/`.
+Every screen is built in React on the design system: sign-in, the home screen, Campaigns, Insights (creator halo and audience), the EdgeAI agent run, Plan, Engage, Analyze, Listen, Create, Link in bio, Earn and Services. Posts and inbox conversations live in one shared store, so changes carry across roles. Try it: as Brand marketer, open the Jules × Fernway post and request changes; switch to Creator to see the note, edit and send it back; switch back to approve.
 
 ## What it shows
 

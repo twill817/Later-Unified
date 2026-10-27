@@ -66,7 +66,7 @@ export function Home() {
         <Card title="Needs you now" actions={<Pill tone="action">{q.length} items</Pill>}>
           <div className="queue">
             {q.map((item, i) => (
-              <button key={item.title} className="qi" style={{ ['--i' as string]: i }} onClick={() => { go(item.to); if (item.profile) window.setTimeout(() => open({ kind: 'profile', id: item.profile! }), 0); }}>
+              <button key={item.title} className="qi" style={{ ['--i' as string]: i }} onClick={() => { go(item.to); if (item.profile) window.setTimeout(() => open({ kind: 'profile', id: item.profile! }), 0); if (item.post) window.setTimeout(() => open({ kind: 'post', id: item.post! }), 0); }}>
                 <span className={`qi__ico bg-${item.tone ?? item.group}`}><Icon name={item.icon} /></span>
                 <span><span className="qi__t">{item.title}</span><br /><span className="qi__m">{item.meta}</span></span>
                 <Icon name="arrow" size={16} />

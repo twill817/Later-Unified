@@ -6,7 +6,10 @@ import { Home } from './pages/Home';
 import { CampaignDetail, CampaignList } from './pages/Campaigns';
 import { Insights } from './pages/Insights';
 import { AgentRun } from './pages/Agent';
-import { ToolPage, Workspace } from './pages/Tool';
+import { Workspace } from './pages/Tool';
+import { Plan } from './pages/Plan';
+import { Engage } from './pages/Engage';
+import { Analyze, Create, Earn, LinkInBio, Listen, Services } from './pages/Tools';
 
 function Page() {
   const { route } = useStore();
@@ -16,7 +19,11 @@ function Page() {
     case 'insights': return <Insights tab={route.tab} />;
     case 'campaign': return <CampaignDetail id={route.id} tab={route.tab} />;
     case 'agent': return <AgentRun />;
-    case 'tool': return route.tool === 'campaigns' ? <CampaignList /> : <ToolPage tool={route.tool} />;
+    case 'tool': {
+      const pages = { campaigns: CampaignList, plan: Plan, engage: Engage, analyze: Analyze, listen: Listen, create: Create, linkinbio: LinkInBio, earn: Earn, services: Services, insights: () => <Insights tab="halo" /> };
+      const P = pages[route.tool];
+      return <P />;
+    }
   }
 }
 

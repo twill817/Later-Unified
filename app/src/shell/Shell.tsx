@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Avatar, Button, CountBadge, Icon, IconButton, Pill, Wordmark } from '@ds';
-import { BADGES, CAMPAIGNS, QUEUE, ROLES, TOOLS, allCreators, findCreator, toolLabel, type Role, type Route, type ToolId } from '../data';
+import { CAMPAIGNS, QUEUE, ROLES, TOOLS, allCreators, findCreator, toolLabel, type Role, type Route, type ToolId } from '../data';
 import { useStore } from '../store';
+import { PostEditor } from '../pages/Plan';
 
 const isActive = (route: Route, id: ToolId | 'home' | 'workspace') => {
   if (id === 'home') return route.page === 'home';
@@ -14,9 +15,9 @@ const isActive = (route: Route, id: ToolId | 'home' | 'workspace') => {
 export const toolRoute = (id: ToolId): Route => (id === 'insights' ? { page: 'insights', tab: 'halo' } : { page: 'tool', tool: id });
 
 function NavItem({ id, dim }: { id: ToolId; dim?: boolean }) {
-  const { role, route, go } = useStore();
+  const { role, route, go, badge } = useStore();
   const t = TOOLS[id];
-  const n = BADGES[role][id] ?? 0;
+  const n = badge(id);
   return (
     <button className={`nav ${dim ? 'nav--dim' : ''}`} aria-current={isActive(route, id) ? 'page' : undefined} onClick={() => go(toolRoute(id))}>
       <Icon name={t.icon} />
@@ -224,6 +225,7 @@ export function Overlays() {
   if (!overlay) return null;
 
   if (overlay.kind === 'search') return <><div className="scrim" onClick={() => open(null)} /><SearchPalette /></>;
+  if (overlay.kind === 'post') return <><div className="scrim" onClick={() => open(null)} /><PostEditor key={overlay.id ?? 'new'} id={overlay.id} draft={overlay.draft} /></>;
 
   if (overlay.kind === 'ai') {
     return (

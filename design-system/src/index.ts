@@ -11,3 +11,4 @@ export { Card, type CardProps } from './components/Card/Card';
 export { Tabs, type TabsProps, type TabItem } from './components/Tabs/Tabs';
 export { Avatar } from './components/Avatar/Avatar';
 export { IconButton } from './components/IconButton/IconButton';
+export { Switch, type SwitchProps } from './components/Switch/Switch';

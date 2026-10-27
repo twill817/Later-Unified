@@ -1,26 +1,6 @@
-import { Card, MetricCard, Pill } from '@ds';
-import { ROLES, TOOLS, TOOL_METRICS, toolLabel, type ToolId } from '../data';
+import { Card, Pill } from '@ds';
+import { ROLES } from '../data';
 import { useStore } from '../store';
-
-/** A simpler page for tools that haven't moved to the component library yet. */
-export function ToolPage({ tool }: { tool: ToolId }) {
-  const { role } = useStore();
-  const t = TOOLS[tool];
-  const metrics = TOOL_METRICS[tool] ?? [];
-  return (
-    <div className="stack">
-      <div className="head"><div><h1>{toolLabel(tool, role)}</h1><p className="muted">{t.desc}</p></div></div>
-      {metrics.length > 0 && (
-        <div className="metrics">
-          {metrics.map(m => <MetricCard key={m.label} kind={m.kind} label={m.label} value={m.value} delta={m.delta} direction={m.down || m.delta?.startsWith('-') ? 'down' : 'up'} note={m.note} />)}
-        </div>
-      )}
-      <Card title="Coming to the React build" actions={<Pill>Second pass</Pill>}>
-        <p className="muted">The full {toolLabel(tool, role)} experience from the original prototype moves onto the component library in the next pass. Home, Campaigns, Insights and the EdgeAI agent run are rebuilt now.</p>
-      </Card>
-    </div>
-  );
-}
 
 export function Workspace() {
   const { role } = useStore();
