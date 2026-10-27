@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
-import { Button, Card, Icon, IconButton, MetricCard, Pill, SegmentedControl, Tabs } from '@ds';
+import { Button, Card, Icon, IconButton, MetricCard, Pill, SegmentedControl, TabPanel, Tabs } from '@ds';
 import { BOOSTS, BRAND_CATS, BRANDS, COMMISSION_MTD, QUICK, STATEMENTS, TIERS, parseProductUrl, topRate, type Brand, type Range } from '../data';
 import { useStore } from '../store';
 import { BenchChip, HowYouCompare } from './Benchmarks';
@@ -224,11 +224,13 @@ function CreatorEarn() {
     <div className="stack">
       <div className="head"><div><h1>Earn</h1><p className="muted">Affiliate links for 3,000+ brands, brand deal fees and bonuses, paid out together. Links you make here show up in Link in bio and as one-tap replies in Engage.</p></div></div>
       <LinkMaker className="m-only" />
-      <Tabs label="Earn" value={tab} onChange={setTab} tabs={[{ value: 'overview', label: 'Overview' }, { value: 'links', label: 'Links', count: links.filter(l => !l.live).length }, { value: 'brands', label: 'Brands' }, { value: 'payouts', label: 'Payouts' }]} />
+      <Tabs idBase="earn" label="Earn" value={tab} onChange={setTab} tabs={[{ value: 'overview', label: 'Overview' }, { value: 'links', label: 'Links', count: links.filter(l => !l.live).length }, { value: 'brands', label: 'Brands' }, { value: 'payouts', label: 'Payouts' }]} />
+      <TabPanel idBase="earn" value={tab}>
       {tab === 'overview' && <Overview setTab={setTab} />}
       {tab === 'links' && <Links />}
       {tab === 'brands' && <Brands />}
       {tab === 'payouts' && <Payouts />}
+      </TabPanel>
     </div>
   );
 }

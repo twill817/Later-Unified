@@ -56,7 +56,8 @@ const preview: Preview = {
     options: {
       storySort: { order: ['Foundations', ['Introduction', 'Color', 'Typography', 'Spacing and radius', 'Icons'], 'Components', 'Patterns'] },
     },
-    a11y: { test: 'todo' },
+    // Accessibility violations fail the story tests. Fix them; don't downgrade this.
+    a11y: { test: 'error' },
   },
 };
 

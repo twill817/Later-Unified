@@ -1,4 +1,4 @@
-import { Meta, Typeset } from '@storybook/addon-docs/blocks';
+import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Foundations/Typography" />
 
@@ -8,12 +8,14 @@ One family, Inter, for everything. Hierarchy comes from size and weight, not fro
 
 ## Scale
 
-<Typeset
-  fontFamily='"Inter", "Helvetica Neue", "Segoe UI", system-ui, sans-serif'
-  fontSizes={['26px', '24px', '16px', '14px', '12.5px', '11.5px']}
-  fontWeight={600}
-  sampleText="Creators drove an estimated $38–52K beyond their links"
-/>
+<div className="lo-root" style={{ display: 'grid', gap: 14, margin: '16px 0 24px' }}>
+  {[['h1', '26px', 700], ['metric', '24px', 600], ['h2', '16px', 700], ['body', '14px', 400], ['sm', '12.5px', 400], ['xs', '11.5px', 400]].map(([name, size, weight]) => (
+    <div key={name} style={{ display: 'grid', gridTemplateColumns: '120px 1fr', alignItems: 'baseline', gap: 16 }}>
+      <code style={{ fontSize: 12.5, color: 'var(--lo-color-text-secondary)' }}>{name} · {size}</code>
+      <span style={{ fontSize: size, fontWeight: weight, color: 'var(--lo-color-text)' }}>Creators drove an estimated $38–52K beyond their links</span>
+    </div>
+  ))}
+</div>
 
 | Token | Size | Weight | Use |
 | --- | --- | --- | --- |

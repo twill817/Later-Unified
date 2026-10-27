@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Card, CreatorRow, Icon, MetricCard, Pill, Tabs } from '@ds';
+import { Button, Card, CreatorRow, Icon, MetricCard, Pill, TabPanel, Tabs } from '@ds';
 import { BOOSTS, BRANDS, CAMPAIGNS, CAMP_STATUS, OPPORTUNITIES, PROMOS, PIPELINE, RECOMMENDED, RESULTS, STAGES, findCreator, money, type CampTab } from '../data';
 import { useStore } from '../store';
 import { HowYouCompare } from './Benchmarks';
@@ -83,7 +83,8 @@ function FallTrail({ tab }: { tab: CampTab }) {
         <div><h1>Fall Trail ’26</h1><p className="muted"><Pill tone="success">Live</Pill>&nbsp; Drive sales · Oct 8 – Nov 7 · Self-run</p></div>
         <div className="row"><Button icon="copy" onClick={() => say('Shareable campaign report link created')}>Share report</Button><Button variant="primary" icon="plus" onClick={() => setTab('creators')}>Add creators</Button></div>
       </div>
-      <Tabs label="Campaign sections" value={tab} onChange={setTab} tabs={[{ value: 'overview', label: 'Overview' }, { value: 'creators', label: 'Creators', count: 1 }, { value: 'results', label: 'Results' }]} />
+      <Tabs idBase="camp" label="Campaign sections" value={tab} onChange={setTab} tabs={[{ value: 'overview', label: 'Overview' }, { value: 'creators', label: 'Creators', count: 1 }, { value: 'results', label: 'Results' }]} />
+      <TabPanel idBase="camp" value={tab}>
       {tab === 'overview' && <>
         <div className="metrics">
           <MetricCard kind="money" label="Budget" value="$48,000" note="Flight day 18 of 30" />
@@ -145,6 +146,7 @@ function FallTrail({ tab }: { tab: CampTab }) {
           </div>
         </Card>
       )}
+      </TabPanel>
     </div>
   );
 }
@@ -204,7 +206,8 @@ function Opportunities() {
   return (
     <div className="stack">
       <div className="head"><div><h1>Opportunities</h1><p className="muted">Paid brand deals, commission boosts and promotions in one place. Accepted deals land in Plan for posting; everything pays out through Earn.</p></div></div>
-      <Tabs label="Opportunities" value={tab} onChange={setTab} tabs={[{ value: 'deals', label: 'Brand deals', count: Object.values(status).filter(s => s === 'invite').length }, { value: 'boosts', label: `Boosts · ${BOOSTS.length} live` }, { value: 'promos', label: 'Promotions' }]} />
+      <Tabs idBase="opps" label="Opportunities" value={tab} onChange={setTab} tabs={[{ value: 'deals', label: 'Brand deals', count: Object.values(status).filter(s => s === 'invite').length }, { value: 'boosts', label: `Boosts · ${BOOSTS.length} live` }, { value: 'promos', label: 'Promotions' }]} />
+      <TabPanel idBase="opps" value={tab}>
       {tab === 'deals' && <HowYouCompare ids={['fee']} title="Your rate" />}
       {tab === 'deals' && OPPORTUNITIES.map(o => {
         const s = status[o.id];
@@ -252,6 +255,7 @@ function Opportunities() {
           </div>
         ))}
       </Card>}
+      </TabPanel>
     </div>
   );
 }

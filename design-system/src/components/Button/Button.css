@@ -16,3 +16,4 @@
 .lo-btn--ink { background: var(--lo-color-ink); border-color: var(--lo-color-ink); color: var(--lo-color-on-ink); border-radius: var(--lo-radius-pill); }
 .lo-btn:disabled { opacity: .45; cursor: not-allowed; }
 .lo-btn:focus-visible { outline: 2px solid var(--lo-color-action); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .lo-btn { transition: none; } }

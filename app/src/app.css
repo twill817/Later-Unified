@@ -404,3 +404,4 @@ select.inp { font-weight: 400; }
 .bench__cohort { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; min-width: 0; }
 .bench__cohort .scrollx { min-width: 0; }
 .bench__cohort .lo-seg { white-space: nowrap; }
+.conv[aria-selected='true'] .faint { color: var(--lo-color-text-secondary); }

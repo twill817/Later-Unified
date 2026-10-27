@@ -11,7 +11,7 @@
 .lo-step__dot--working { color: var(--lo-color-action); }
 .lo-spin { width: 14px; height: 14px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: lo-spin .7s linear infinite; }
 @keyframes lo-spin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { .lo-spin { animation-duration: 2.4s; } }
+@media (prefers-reduced-motion: reduce) { .lo-spin { animation: none; border-right-color: currentColor; border-style: dotted; } }
 .lo-step__lines { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 13.5px; color: var(--lo-color-text-secondary); }
 .lo-why { margin-top: 14px; border-radius: 10px; background: var(--lo-color-surface-sunken); padding: 10px 12px; font-size: 13px; }
 .lo-why summary { cursor: pointer; font-weight: var(--lo-font-weight-semibold); display: flex; align-items: center; gap: 6px; color: var(--lo-color-action); list-style: none; flex-wrap: wrap; }

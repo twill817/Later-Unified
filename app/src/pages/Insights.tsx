@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, Card, CreatorRow, Icon, MetricCard, Pill, SegmentedControl, Tabs } from '@ds';
+import { Button, Card, CreatorRow, Icon, MetricCard, Pill, SegmentedControl, TabPanel, Tabs } from '@ds';
 import { AUDIENCE, HALO, findCreator, money } from '../data';
 import { useStore } from '../store';
 
@@ -202,8 +202,10 @@ export function Insights({ tab }: { tab: 'halo' | 'audience' }) {
   return (
     <div className="stack">
       <div className="head"><div><h1>Insights</h1><p className="muted">Answers that need your social, creator and sales data together. Each one shows how it was worked out.</p></div></div>
-      <Tabs label="Insights" value={tab} onChange={t => go({ page: 'insights', tab: t })} tabs={[{ value: 'halo', label: 'Creator halo' }, { value: 'audience', label: 'From your audience' }]} />
+      <Tabs idBase="insights" label="Insights" value={tab} onChange={t => go({ page: 'insights', tab: t })} tabs={[{ value: 'halo', label: 'Creator halo' }, { value: 'audience', label: 'From your audience' }]} />
+      <TabPanel idBase="insights" value={tab}>
       {tab === 'halo' ? <HaloTab /> : <AudienceTab />}
+      </TabPanel>
     </div>
   );
 }

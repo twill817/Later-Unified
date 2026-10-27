@@ -3,3 +3,5 @@
 .lo-tab:hover { background: var(--lo-color-surface-sunken); }
 .lo-tab[aria-selected='true'] { background: var(--lo-color-action-subtle); color: var(--lo-color-action); }
 .lo-tab:focus-visible { outline: 2px solid var(--lo-color-action); outline-offset: -2px; }
+.lo-tabpanel { display: flex; flex-direction: column; gap: inherit; }
+.lo-tabpanel:focus-visible { outline-offset: 4px; border-radius: var(--lo-radius-md); }

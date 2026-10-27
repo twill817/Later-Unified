@@ -8,7 +8,7 @@ export { MetricCard, type MetricCardProps, type MetricKind } from './components/
 export { CreatorRow, type CreatorRowProps } from './components/CreatorRow/CreatorRow';
 export { AgentStepCard, type AgentStepCardProps, type AgentStepStatus } from './components/AgentStepCard/AgentStepCard';
 export { Card, type CardProps } from './components/Card/Card';
-export { Tabs, type TabsProps, type TabItem } from './components/Tabs/Tabs';
+export { Tabs, TabPanel, type TabsProps, type TabItem, type TabPanelProps } from './components/Tabs/Tabs';
 export { Avatar } from './components/Avatar/Avatar';
 export { IconButton } from './components/IconButton/IconButton';
 export { Switch, type SwitchProps } from './components/Switch/Switch';

@@ -49,3 +49,11 @@ Always paired with a label or icon.
 One color per series, in this order. Social platforms keep the same color everywhere.
 
 <ColorPalette>{group(['chart-1', 'chart-2', 'chart-3', 'chart-4', 'chart-5'])}</ColorPalette>
+
+## Contrast
+
+Every text and status color meets WCAG AA (4.5:1) on the backgrounds it's used on, in both themes, and switch and benchmark states meet 3:1. Storybook checks this on every story: accessibility violations fail the story tests (`a11y: { test: 'error' }` in `.storybook/preview.tsx`).
+
+- In dark mode the action color is a lighter purple, so primary buttons use dark text (`on-action`) rather than white.
+- Group colors (publish, grow, creators) and status colors were darkened slightly in light mode so their text passes on the matching `-subtle` backgrounds.
+- `text-tertiary` is the lightest gray allowed for text. Don't go lighter for captions or placeholders.

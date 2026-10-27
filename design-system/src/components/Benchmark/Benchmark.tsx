@@ -26,7 +26,7 @@ export interface BenchmarkChipProps { percentile: number }
 /** A compact verdict for a metric card or table cell. */
 export function BenchmarkChip({ percentile }: BenchmarkChipProps) {
   const band = bandOf(percentile);
-  return <Pill tone={BAND_TONE[band]} title={`${ordinal(percentile)} percentile among peers`}>{BAND_LABEL[band]}</Pill>;
+  return <Pill tone={BAND_TONE[band]} title={`${ordinal(percentile)} percentile among peers`}>{BAND_LABEL[band]}<span className="lo-sr-only">, {ordinal(percentile)} percentile among peers</span></Pill>;
 }
 
 export interface BenchmarkBarProps {

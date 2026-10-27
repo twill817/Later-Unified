@@ -17,9 +17,10 @@ export function SegmentedControl<T extends string>({ options, value, onChange, l
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
   const onKey = (e: KeyboardEvent, i: number) => {
     const step = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
-    if (!step) return;
+    const jump = e.key === 'Home' ? 0 : e.key === 'End' ? options.length - 1 : -1;
+    if (!step && jump < 0) return;
     e.preventDefault();
-    const n = (i + step + options.length) % options.length;
+    const n = jump >= 0 ? jump : (i + step + options.length) % options.length;
     onChange(options[n].value);
     refs.current[n]?.focus();
   };
